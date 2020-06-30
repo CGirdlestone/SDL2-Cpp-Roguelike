@@ -21,11 +21,6 @@ Console::Console(int width, int height, char* title, char* path, int fontSize)
     m_renderer = nullptr;
     m_font = nullptr;
     m_texture = nullptr;
-    m_glyphs = nullptr;
-    m_chr_offset = 32;
-    m_wall = nullptr;
-    m_space = nullptr;
-    m_at = nullptr;
     m_tileSize = fontSize;
     init(path, fontSize);
 }
@@ -47,15 +42,6 @@ Console::~Console()
 
     delete m_font;
     m_font = nullptr;
-
-    delete m_wall;
-    m_wall = nullptr;
-
-    delete m_space;
-    m_space = nullptr;
-
-    delete m_at;
-    m_at = nullptr;
 
 }
 
@@ -171,13 +157,16 @@ bool Console::loadMedia(char* path)
 
 void Console::createTiles()
 {
-    m_wall = new Tile(3, 2, 16);
-    m_space = new Tile(0, 2, 16);
-    m_at = new Tile(0, 4 ,16);
+    int textureSize = m_tileSize * m_tileSize;
+
+    for(int i = 0; i < textureSize; i++){
+        m_glyphs.push_back(Tile(i%m_tileSize, i/m_tileSize, m_tileSize));
+    }
 }
 
 void Console::render(char* c, int x, int y)
 {
+    int i = static_cast<int>((*c));
 
     SDL_Rect dstrect;
     dstrect.x = x  * m_tileSize;
@@ -189,16 +178,8 @@ void Console::render(char* c, int x, int y)
     srcrect.w = m_tileSize;
     srcrect.h = m_tileSize;
 
-    if ((*c) == '#'){
-        srcrect.x = m_wall->m_x;
-        srcrect.y = m_wall->m_y;
-    } else if ((*c) == '.'){
-        srcrect.x = m_space->m_x;
-        srcrect.y = m_space->m_y;
-    } else if ((*c) == '@'){
-        srcrect.x = m_at->m_x;
-        srcrect.y = m_at->m_y;
-    }
+    srcrect.x = m_glyphs.at(i).m_x;
+    srcrect.y = m_glyphs.at(i).m_y;
 
     SDL_RenderCopy(m_renderer, m_texture, &srcrect, &dstrect);
 

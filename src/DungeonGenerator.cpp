@@ -30,7 +30,7 @@ void DungeonGenerator::initialiseMap(int threshold){
     for (int i = 0; i < m_width * m_height; i++){
         chance = std::rand()%100 + 1;
         if(chance >= threshold){
-            m_level[i] = '.';
+            m_level[i] = ' ';
         } else {
             m_level[i] = '#';
         }
@@ -171,7 +171,7 @@ void DungeonGenerator::simulationStep(int underPop, int overPop){
         if (wallCount <= underPop || wallCount > overPop){
             new_level[i] = '#';
         } else {
-            new_level[i] = '.';
+            new_level[i] = ' ';
         }
     }
     delete[] m_level;
@@ -308,14 +308,14 @@ void DungeonGenerator::floodFill(){
     for (int i = 0; i < m_width * m_height; i++){
         if (m_level[i] == '#'){
             continue;
-        } else if (m_level[i] == '.'){
+        } else if (m_level[i] == ' '){
             getNeighbours(neighbours, i);
             while (neighbours->size() > 0){
 
                 j = neighbours->back();
                 neighbours->pop_back();
 
-                if (m_level[j] == '.'){
+                if (m_level[j] == ' '){
                     m_level[j] = letter;
                     getNeighbours(neighbours, j);
                 }

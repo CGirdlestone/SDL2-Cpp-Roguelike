@@ -3,6 +3,7 @@
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_ttf.h"
+#include <vector>
 
 #include "Tile.h"
 
@@ -47,11 +48,7 @@ class Console
         int m_textHeight;
         int m_fullscreen;
         int m_tileSize;
-        int m_chr_offset;
-        Tile *m_glyphs;
-        Tile *m_wall;
-        Tile *m_space;
-        Tile *m_at;
+        std::vector<Tile> m_glyphs;
 };
 
 #endif // CONSOLE_H

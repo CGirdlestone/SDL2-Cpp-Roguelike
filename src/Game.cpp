@@ -42,7 +42,7 @@ Game::~Game()
 
 bool Game::init(int width, int height, int tileSize, char* title){
     m_dungeon = new DungeonGenerator(width, height);
-    m_console = new Console(width, height, title, "./resources/Cheepicus_8x8x2.png", tileSize);
+    m_console = new Console(width+10, height+5, title, "./resources/Cheepicus_8x8x2.png", tileSize);
     m_input = new InputHandler();
     m_width = width;
     m_height = height;
@@ -59,7 +59,7 @@ void Game::drawMap(){
     int x;
     int y = 0;
     char *wall = new char[1]{'#'};
-    char *space = new char[1]{'.'};
+    char *space = new char[1]{' '};
 
     for (int i = 0; i < m_dungeon->Getm_width() * m_dungeon->Getm_height(); i++){
         x = i % m_dungeon->Getm_width();
