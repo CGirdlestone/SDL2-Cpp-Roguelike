@@ -10,7 +10,7 @@
 class Console
 {
     public:
-        Console(int width, int height, char* title, char* path, int fontSize);
+        Console(int width, int height, char* title, char* path, int tileSize);
         virtual ~Console();
 
         int Getm_width() { return m_width; }
@@ -18,12 +18,10 @@ class Console
         int Getm_height() { return m_height; }
         void Setm_height(int val) { m_height = val; }
 
-        bool init(char* path, int fontSize);
+        bool init(char* path);
         bool createWindow();
         bool createRenderer();
-        bool initFont(char* path, int fontSize);
         bool initImage();
-        bool setFont(char* path, int fontSize);
         bool loadMedia(char* path);
         void createTiles();
         void render(char* c, int x, int y, SDL_Color colour);
@@ -39,13 +37,11 @@ class Console
         SDL_Window *m_root;
         SDL_Surface *m_rootSurface;
         SDL_Renderer *m_renderer;
-        TTF_Font *m_font;
         SDL_Texture *m_texture;
         SDL_Color m_defaultColour;
         int m_width;
         int m_height;
         char *m_title;
-        int m_fontSize;
         int m_textWidth;
         int m_textHeight;
         int m_fullscreen;

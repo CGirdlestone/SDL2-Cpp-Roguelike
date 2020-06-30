@@ -8,6 +8,8 @@
 #include "InputHandler.h"
 #include "KeyPressSurfaces.h"
 #include "Components.h"
+#include "Message.h"
+#include "MessageLog.h"
 #include "Game.h"
 
 
@@ -33,6 +35,9 @@ Game::~Game()
     delete m_input;
     m_input = nullptr;
 
+    delete m_messageLog;
+    m_messageLog = nullptr;
+
     delete m_playerPos;
     m_playerPos = nullptr;
 
@@ -40,10 +45,12 @@ Game::~Game()
     m_playerRender = nullptr;
 }
 
-bool Game::init(int width, int height, int tileSize, char* title){
+bool Game::init(int width, int height, int tileSize, char* title)
+{
     m_dungeon = new DungeonGenerator(width, height);
     m_console = new Console(width, height, title, "./resources/Cheepicus_8x8x2.png", tileSize);
     m_input = new InputHandler();
+    m_messageLog = new MessageLog(width, 9);
     m_width = width;
     m_height = height;
     m_tileSize = tileSize;
@@ -55,7 +62,24 @@ bool Game::init(int width, int height, int tileSize, char* title){
     }
 }
 
-void Game::drawMap(){
+void Game::drawLog()
+{
+    std::vector<Message> messages = m_messageLog->getMessages();
+
+    if (messages.size() > 0){
+        for(int j = 0; j < messages.size(); j++){
+            Message msg = messages.at(j);
+
+            for(int i = 0; i < msg.m_msg.length(); i++){
+                m_console->render(&msg.m_msg[i], i, j + m_height + 1, msg.m_colour);
+                std::cout << msg.m_msg[i] << " " << i << " " << j + m_height << std::endl;
+            }
+        }
+    }
+}
+
+void Game::drawMap()
+{
     int x;
     int y = 0;
     char *wall = new char[1]{'#'};
@@ -87,7 +111,8 @@ void Game::drawMap(){
     space = nullptr;
 }
 
-void Game::createPlayer(){
+void Game::createPlayer()
+{
     int i;
     int x;
     int y;
@@ -114,8 +139,8 @@ void Game::createPlayer(){
     m_playerPos->y = y;
 }
 
-bool Game::checkMove(int dx, int dy){
-
+bool Game::checkMove(int dx, int dy)
+{
     if (m_playerPos->x + dx>= 0 && m_playerPos->x + dx < m_width && m_playerPos->y + dy >= 0 && m_playerPos->y + dy < m_height){
         if (m_dungeon->m_level[(m_playerPos->x + dx) + m_dungeon->Getm_width() * (m_playerPos->y + dy)] == '#'){
           return false;
@@ -127,15 +152,18 @@ bool Game::checkMove(int dx, int dy){
     }
 }
 
-void Game::movePlayer(int dx, int dy){
+void Game::movePlayer(int dx, int dy)
+{
     if (checkMove(dx, dy)){
       m_playerPos->x = m_playerPos->x + dx;
       m_playerPos->y = m_playerPos->y + dy;
+
+      m_messageLog->addMessage("Moved!");
     }
 }
 
-void Game::run(){
-
+void Game::run()
+{
     SDL_Event e;
     KeyPressSurfaces keyPress;
     m_isPlaying = true;
@@ -147,8 +175,8 @@ void Game::run(){
         m_console->flush();
         drawMap();
         m_console->render(&m_playerRender->chr, m_playerPos->x, m_playerPos->y, m_playerRender->colour);
+        drawLog();
         m_console->update();
-
 
         keyPress = m_input->getEvent(&e);
         if (keyPress == ESCAPE){
@@ -164,8 +192,6 @@ void Game::run(){
         } else if (keyPress == F1){
           m_console->setFullscreen();
         }
-
     }
-
     m_console->closeSDL();
 }

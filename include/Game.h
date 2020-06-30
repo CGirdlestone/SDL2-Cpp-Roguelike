@@ -6,6 +6,7 @@
 #include "InputHandler.h"
 #include "Components.h"
 #include "KeyPressSurfaces.h"
+#include "MessageLog.h"
 
 class Game
 {
@@ -16,6 +17,7 @@ class Game
         bool init(int width, int height, int tileSize, char* title);
         void run();
         void drawMap();
+        void drawLog();
         void createPlayer();
         void movePlayer(int dx, int dy);
         bool checkMove(int dx, int dy);
@@ -26,6 +28,7 @@ class Game
         DungeonGenerator* m_dungeon;
         Console* m_console;
         InputHandler* m_input;
+        MessageLog* m_messageLog;
         bool m_isPlaying;
         Position* m_playerPos;
         Renderable* m_playerRender;

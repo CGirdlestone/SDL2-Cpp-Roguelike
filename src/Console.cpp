@@ -10,7 +10,7 @@
 
 
 
-Console::Console(int width, int height, char* title, char* path, int fontSize)
+Console::Console(int width, int height, char* title, char* path, int tileSize)
 {
     //ctor
     m_width = width;
@@ -19,10 +19,9 @@ Console::Console(int width, int height, char* title, char* path, int fontSize)
     m_root = nullptr;
     m_rootSurface = nullptr;
     m_renderer = nullptr;
-    m_font = nullptr;
     m_texture = nullptr;
-    m_tileSize = fontSize;
-    init(path, fontSize);
+    m_tileSize = tileSize;
+    init(path);
 }
 
 Console::~Console()
@@ -39,23 +38,15 @@ Console::~Console()
 
     SDL_DestroyTexture(m_texture);
     m_texture = nullptr;
-
-    delete m_font;
-    m_font = nullptr;
-
 }
 
-bool Console::init(char* path, int fontSize)
+bool Console::init(char* path)
 {
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0){
         printf("SDL Coult not initialise! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
-
-    /*if(!initFont(path, fontSize)){
-        return false;
-    }*/
 
     if(!createWindow()){
         return false;
@@ -101,17 +92,6 @@ bool Console::createRenderer()
     }
 }
 
-bool Console::initFont(char* path, int fontSize)
-{
-    if (TTF_Init() == -1){
-        printf("Failed to initialise SDL_ttf! SDL_ttf Error: %s\n", TTF_GetError());
-        return false;
-    }
-
-    setFont(path, fontSize);
-    return true;
-}
-
 bool Console::initImage()
 {
     int imgFlags = IMG_INIT_PNG;
@@ -119,20 +99,6 @@ bool Console::initImage()
         printf("Failed to initialise SDL_Image! SDL_image Error: %s\n", IMG_GetError());
         return false;
     }
-    return true;
-}
-
-bool Console::setFont(char* path, int fontSize)
-{
-    m_fontSize = fontSize;
-    m_font = TTF_OpenFont(path, m_fontSize);
-
-    if (m_font == nullptr){
-        printf("Failed to load font! SDL_TTF_Error: %s\n", TTF_GetError());
-        return false;
-    }
-
-    TTF_SizeText(m_font, "#", &m_textWidth, &m_textHeight);
     return true;
 }
 
