@@ -42,7 +42,7 @@ Game::~Game()
 
 bool Game::init(int width, int height, int tileSize, char* title){
     m_dungeon = new DungeonGenerator(width, height);
-    m_console = new Console(width+10, height+5, title, "./resources/Cheepicus_8x8x2.png", tileSize);
+    m_console = new Console(width, height, title, "./resources/Cheepicus_8x8x2.png", tileSize);
     m_input = new InputHandler();
     m_width = width;
     m_height = height;
@@ -98,7 +98,7 @@ void Game::createPlayer(){
     m_playerPos = new Position();
     m_playerRender = new Renderable();
     m_playerRender->chr = '@';
-    m_playerRender->colour = {155, 188, 15};
+    m_playerRender->colour = {0xef, 0xac, 0x28};
 
     while(!playerPlaced){
         i = std::rand()%(m_dungeon->Getm_width() * m_dungeon->Getm_height());
@@ -146,7 +146,7 @@ void Game::run(){
     while(m_isPlaying){
         m_console->flush();
         drawMap();
-        m_console->render(&m_playerRender->chr, m_playerPos->x, m_playerPos->y);
+        m_console->render(&m_playerRender->chr, m_playerPos->x, m_playerPos->y, m_playerRender->colour);
         m_console->update();
 
 

@@ -21,6 +21,7 @@ class DungeonGenerator
         void getNeighbours(std::vector<int>*, int i);
         void floodFill();
         void removeLoneWalls(int j);
+        void fillBorder();
         void createMap(int threshold, int steps, int underPop, int overPop);
 
         char *m_level;

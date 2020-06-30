@@ -73,18 +73,18 @@ bool Console::init(char* path, int fontSize)
     createTiles();
 
     m_fullscreen = 0;
+    m_defaultColour = {0x18, 0x79, 0x87};
 
     return true;
 }
 
 bool Console::createWindow()
 {
-    m_root = SDL_CreateWindow(m_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_width*m_tileSize, m_height*m_tileSize, SDL_WINDOW_SHOWN);
+    m_root = SDL_CreateWindow(m_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (m_width+20)*m_tileSize, (m_height+10)*m_tileSize, SDL_WINDOW_SHOWN);
     if (m_root == nullptr){
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     } else {
-        std::cout << "Window created!" << std::endl;
         return true;
     }
 }
@@ -97,7 +97,6 @@ bool Console::createRenderer()
         return false;
     } else {
         SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0x00);
-        std::cout << "Renderer created!" << std::endl;
         return true;
     }
 }
@@ -120,7 +119,6 @@ bool Console::initImage()
         printf("Failed to initialise SDL_Image! SDL_image Error: %s\n", IMG_GetError());
         return false;
     }
-    std::cout << "Init Image!" << std::endl;
     return true;
 }
 
@@ -150,7 +148,6 @@ bool Console::loadMedia(char* path)
     m_texture = SDL_CreateTextureFromSurface(m_renderer, loadedSurface);
     SDL_FreeSurface(loadedSurface);
     loadedSurface = nullptr;
-    std::cout << "Loaded Texture!" << std::endl;
     return true;
   }
 }
@@ -181,8 +178,29 @@ void Console::render(char* c, int x, int y)
     srcrect.x = m_glyphs.at(i).m_x;
     srcrect.y = m_glyphs.at(i).m_y;
 
+    SDL_SetTextureColorMod(m_texture, m_defaultColour.r, m_defaultColour.g, m_defaultColour.b);
     SDL_RenderCopy(m_renderer, m_texture, &srcrect, &dstrect);
 
+}
+
+void Console::render(char* c, int x, int y, SDL_Color colour){
+    int i = static_cast<int>((*c));
+
+    SDL_Rect dstrect;
+    dstrect.x = x  * m_tileSize;
+    dstrect.y = y * m_tileSize;
+    dstrect.w = m_tileSize;
+    dstrect.h = m_tileSize;
+
+    SDL_Rect srcrect;
+    srcrect.w = m_tileSize;
+    srcrect.h = m_tileSize;
+
+    srcrect.x = m_glyphs.at(i).m_x;
+    srcrect.y = m_glyphs.at(i).m_y;
+
+    SDL_SetTextureColorMod(m_texture, colour.r, colour.g, colour.b);
+    SDL_RenderCopy(m_renderer, m_texture, &srcrect, &dstrect);
 }
 
 void Console::update()
@@ -199,7 +217,7 @@ void Console::setFullscreen()
 {
     if (!m_fullscreen){
       m_fullscreen = 1;
-      SDL_SetWindowFullscreen(m_root, SDL_WINDOW_FULLSCREEN);
+      SDL_SetWindowFullscreen(m_root, SDL_WINDOW_FULLSCREEN_DESKTOP);
     } else if (m_fullscreen){
       m_fullscreen = 0;
       SDL_SetWindowFullscreen(m_root, 0);

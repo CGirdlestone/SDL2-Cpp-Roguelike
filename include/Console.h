@@ -26,6 +26,7 @@ class Console
         bool setFont(char* path, int fontSize);
         bool loadMedia(char* path);
         void createTiles();
+        void render(char* c, int x, int y, SDL_Color colour);
         void render(char* c, int x, int y);
         void update();
         void closeSDL();
@@ -40,6 +41,7 @@ class Console
         SDL_Renderer *m_renderer;
         TTF_Font *m_font;
         SDL_Texture *m_texture;
+        SDL_Color m_defaultColour;
         int m_width;
         int m_height;
         char *m_title;

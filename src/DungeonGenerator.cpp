@@ -366,6 +366,14 @@ void DungeonGenerator::removeLoneWalls(int j){
 
 }
 
+void DungeonGenerator::fillBorder(){
+    for (int i = 0; i < m_width * m_height; i++){
+        if (i % m_width  == 0 || i % m_width == m_width - 1 || i < m_width || i > m_width * m_height - m_width){
+          m_level[i] = '#';
+        }
+    }
+}
+
 void DungeonGenerator::createMap(int threshold, int steps, int underPop, int overPop){
     initialiseMap(threshold);
     for (int i = 0; i < steps; i++){
@@ -381,5 +389,7 @@ void DungeonGenerator::createMap(int threshold, int steps, int underPop, int ove
     removeLoneWalls(3);
     removeLoneWalls(0);
     removeLoneWalls(2);
+
+    fillBorder();
 
 }
