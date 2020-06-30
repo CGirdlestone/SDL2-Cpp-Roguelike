@@ -8,6 +8,7 @@
 #include "InputHandler.h"
 #include "KeyPressSurfaces.h"
 #include "Components.h"
+#include "GameObject.h"
 #include "Message.h"
 #include "MessageLog.h"
 #include "Game.h"
@@ -43,6 +44,10 @@ Game::~Game()
 
     delete m_playerRender;
     m_playerRender = nullptr;
+
+    for (int i = 0; i < m_actors.size(); i++){
+      delete m_actors[i];
+    }
 }
 
 bool Game::init(int width, int height, int tileSize, char* title, int fps)
@@ -111,6 +116,15 @@ void Game::drawMap()
     space = nullptr;
 }
 
+void Game::drawActors()
+{
+  if (!m_actors.empty()){
+    for (int i = 0; i < m_actors.size(); i++){
+      m_console->render(&m_actors[i]->renderable->chr, m_actors[i]->position->x, m_actors[i]->position->y, m_actors[i]->renderable->colour);
+    }
+  }
+}
+
 void Game::createPlayer()
 {
     int i;
@@ -120,10 +134,10 @@ void Game::createPlayer()
 
     std::srand(time(0));
 
-    m_playerPos = new Position();
-    m_playerRender = new Renderable();
-    m_playerRender->chr = '@';
-    m_playerRender->colour = {0xef, 0xac, 0x28};
+    SDL_Color colour = {0xef, 0xac, 0x28};
+    char c = '@';
+
+    Renderable *r = new Renderable(c, colour);
 
     while(!playerPlaced){
         i = std::rand()%(m_dungeon->Getm_width() * m_dungeon->Getm_height());
@@ -135,14 +149,18 @@ void Game::createPlayer()
         playerPlaced = true;
     }
 
-    m_playerPos->x = x;
-    m_playerPos->y = y;
+    Position *p = new Position(x, y);
+
+    GameObject *player = new GameObject();
+    player->position = p;
+    player->renderable = r;
+    m_actors.push_back(player);
 }
 
 bool Game::checkMove(int dx, int dy)
 {
-    if (m_playerPos->x + dx>= 0 && m_playerPos->x + dx < m_width && m_playerPos->y + dy >= 0 && m_playerPos->y + dy < m_height){
-        if (m_dungeon->m_level[(m_playerPos->x + dx) + m_dungeon->Getm_width() * (m_playerPos->y + dy)] == '#'){
+    if (m_actors.at(0)->position->x + dx>= 0 && m_actors.at(0)->position->x + dx < m_width && m_actors.at(0)->position->y + dy >= 0 && m_actors.at(0)->position->y + dy < m_height){
+        if (m_dungeon->m_level[(m_actors.at(0)->position->x + dx) + m_dungeon->Getm_width() * (m_actors.at(0)->position->y + dy)] == '#'){
           return false;
         } else {
           return true;
@@ -155,8 +173,8 @@ bool Game::checkMove(int dx, int dy)
 void Game::movePlayer(int dx, int dy)
 {
     if (checkMove(dx, dy)){
-      m_playerPos->x = m_playerPos->x + dx;
-      m_playerPos->y = m_playerPos->y + dy;
+      m_actors.at(0)->position->x += dx;
+      m_actors.at(0)->position->y += dy;
 
       m_messageLog->addMessage("Moved!");
     }
@@ -180,7 +198,8 @@ void Game::run()
 
         m_console->flush();
         drawMap();
-        m_console->render(&m_playerRender->chr, m_playerPos->x, m_playerPos->y, m_playerRender->colour);
+        //m_console->render(&m_playerRender->chr, m_playerPos->x, m_playerPos->y, m_playerRender->colour);
+        drawActors();
         drawLog();
         m_console->update();
 
