@@ -21,6 +21,8 @@ Console::Console(int width, int height, char* title, char* path, int fontSize)
     m_renderer = nullptr;
     m_font = nullptr;
     m_texture = nullptr;
+    m_glyphs = nullptr;
+    m_chr_offset = 32;
     m_wall = nullptr;
     m_space = nullptr;
     m_at = nullptr;
@@ -108,7 +110,7 @@ bool Console::createRenderer()
         printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     } else {
-        SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0xFF);
+        SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0x00);
         std::cout << "Renderer created!" << std::endl;
         return true;
     }
@@ -169,9 +171,9 @@ bool Console::loadMedia(char* path)
 
 void Console::createTiles()
 {
-    m_wall = new Tile(30, 0, 10);
-    m_space = new Tile(0, 0, 10);
-    m_at = new Tile(0, 10 ,10);
+    m_wall = new Tile(3, 2, 16);
+    m_space = new Tile(0, 2, 16);
+    m_at = new Tile(0, 4 ,16);
 }
 
 void Console::render(char* c, int x, int y)

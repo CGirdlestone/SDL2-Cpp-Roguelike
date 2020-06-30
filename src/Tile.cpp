@@ -5,8 +5,8 @@
 #include "Tile.h"
 
 Tile::Tile(int x, int y, int tileSize){
-    m_x = x;
-    m_y = y;
+    m_x = x * tileSize;
+    m_y = y * tileSize;
     m_tileSize = tileSize;
 }
 

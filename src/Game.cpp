@@ -42,7 +42,7 @@ Game::~Game()
 
 bool Game::init(int width, int height, int tileSize, char* title){
     m_dungeon = new DungeonGenerator(width, height);
-    m_console = new Console(width, height, title, "./resources/arial10x10.png", tileSize);
+    m_console = new Console(width, height, title, "./resources/Cheepicus_8x8x2.png", tileSize);
     m_input = new InputHandler();
     m_width = width;
     m_height = height;
