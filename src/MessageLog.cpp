@@ -40,9 +40,30 @@ void MessageLog::addMessage(std::string msg)
 
     m_messageQueue.push_back(_msg);
 
-    if(m_messageQueue.size() >= m_y_buffer){
+    if(!(m_messageQueue.size() <= m_y_buffer)){
        m_messageQueue.erase(m_messageQueue.begin());
     }
+}
+
+void MessageLog::ageMessages(Uint32 ticks)
+{
+    std::vector<Message> aliveMessages;
+
+    if(m_messageQueue.size() > 0){
+        for(Message msg : m_messageQueue){
+            if (msg.m_lifetime < ticks){
+                msg.m_lifetime = 0;
+            } else {
+                msg.m_lifetime -= ticks;
+            }
+
+            if (msg.m_lifetime > 0){
+                aliveMessages.push_back(msg);
+            }
+        }
+    }
+
+    m_messageQueue = aliveMessages;
 }
 
 std::vector<Message> MessageLog::getMessages()

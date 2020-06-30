@@ -11,6 +11,7 @@ public:
       ~Message();
       std::string m_msg;
       SDL_Color m_colour;
+      Uint32 m_lifetime;
 };
 
 #endif

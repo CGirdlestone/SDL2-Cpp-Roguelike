@@ -16,6 +16,7 @@ public:
     void addMessage(std::string msg);
     std::vector<Message> getMessages();
     int getm_y_buffer(){return m_y_buffer;};
+    void ageMessages(Uint32 ticks);
 protected:
 
 private:

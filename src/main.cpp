@@ -10,7 +10,7 @@ using namespace std;
 int main()
 {
     Game* game = new Game();
-    if(game->init(100, 53, 16, (char*)"Game!")){
+    if(game->init(80, 40, 16, (char*)"Game!", 60)){
         game->run();
     }
     return 0;

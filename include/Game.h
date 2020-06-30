@@ -14,7 +14,7 @@ class Game
         Game();
         virtual ~Game();
 
-        bool init(int width, int height, int tileSize, char* title);
+        bool init(int width, int height, int tileSize, char* title, int fps);
         void run();
         void drawMap();
         void drawLog();
@@ -35,6 +35,7 @@ class Game
         int m_width;
         int m_height;
         int m_tileSize;
+        int m_fps;
 };
 
 #endif // GAME_H

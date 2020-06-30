@@ -45,15 +45,16 @@ Game::~Game()
     m_playerRender = nullptr;
 }
 
-bool Game::init(int width, int height, int tileSize, char* title)
+bool Game::init(int width, int height, int tileSize, char* title, int fps)
 {
     m_dungeon = new DungeonGenerator(width, height);
     m_console = new Console(width, height, title, "./resources/Cheepicus_8x8x2.png", tileSize);
     m_input = new InputHandler();
-    m_messageLog = new MessageLog(width, 9);
+    m_messageLog = new MessageLog(width, 10);
     m_width = width;
     m_height = height;
     m_tileSize = tileSize;
+    m_fps = fps;
 
     if (m_dungeon == nullptr || m_console == nullptr || m_input == nullptr){
         return false;
@@ -69,10 +70,9 @@ void Game::drawLog()
     if (messages.size() > 0){
         for(int j = 0; j < messages.size(); j++){
             Message msg = messages.at(j);
-
+            std::cout << "Age of message: " << msg.m_lifetime << std::endl;
             for(int i = 0; i < msg.m_msg.length(); i++){
-                m_console->render(&msg.m_msg[i], i, j + m_height + 1, msg.m_colour);
-                std::cout << msg.m_msg[i] << " " << i << " " << j + m_height << std::endl;
+                m_console->render(&msg.m_msg[i], i, j + m_height, msg.m_colour);
             }
         }
     }
@@ -171,7 +171,13 @@ void Game::run()
     m_dungeon->createMap(60, 6, 2, 5);
     createPlayer();
 
+    Uint32 currentTime;
+    Uint32 lastTime = 0;
+    Uint32 dt = 0;
+
     while(m_isPlaying){
+        currentTime = SDL_GetTicks();
+
         m_console->flush();
         drawMap();
         m_console->render(&m_playerRender->chr, m_playerPos->x, m_playerPos->y, m_playerRender->colour);
@@ -192,6 +198,11 @@ void Game::run()
         } else if (keyPress == F1){
           m_console->setFullscreen();
         }
+
+        dt = (currentTime - lastTime);
+        lastTime = currentTime;
+
+        m_messageLog->ageMessages(dt);
     }
     m_console->closeSDL();
 }
