@@ -4,6 +4,8 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_ttf.h"
 
+#include "Tile.h"
+
 class Console
 {
     public:
@@ -21,12 +23,13 @@ class Console
         bool initFont(char* path, int fontSize);
         bool initImage();
         bool setFont(char* path, int fontSize);
-        void render(char* c, int x, int y, SDL_Color colour);
+        bool loadMedia(char* path);
+        void createTiles();
+        void render(char* c, int x, int y);
         void update();
         void closeSDL();
         void flush();
         void setFullscreen();
-        void setBackgroundColour(Uint8 r, Uint8 g, Uint8 b);
 
     protected:
 
@@ -35,7 +38,7 @@ class Console
         SDL_Surface *m_rootSurface;
         SDL_Renderer *m_renderer;
         TTF_Font *m_font;
-        SDL_Color m_backgroundColour;
+        SDL_Texture *m_texture;
         int m_width;
         int m_height;
         char *m_title;
@@ -43,6 +46,10 @@ class Console
         int m_textWidth;
         int m_textHeight;
         int m_fullscreen;
+        int m_tileSize;
+        Tile *m_wall;
+        Tile *m_space;
+        Tile *m_at;
 };
 
 #endif // CONSOLE_H

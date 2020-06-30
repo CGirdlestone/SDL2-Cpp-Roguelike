@@ -24,7 +24,7 @@ void DungeonGenerator::initialiseMap(int threshold){
 
     std::srand(time(0));
 
-    // create array and initialise all elements to '#'
+    // create array
     m_level = new char[m_width * m_height];
 
     for (int i = 0; i < m_width * m_height; i++){

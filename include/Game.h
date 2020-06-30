@@ -31,6 +31,7 @@ class Game
         Renderable* m_playerRender;
         int m_width;
         int m_height;
+        int m_tileSize;
 };
 
 #endif // GAME_H

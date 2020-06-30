@@ -42,10 +42,11 @@ Game::~Game()
 
 bool Game::init(int width, int height, int tileSize, char* title){
     m_dungeon = new DungeonGenerator(width, height);
-    m_console = new Console(width, height, title, "./resources/DejaVuSansMono.ttf", tileSize);
+    m_console = new Console(width, height, title, "./resources/arial10x10.png", tileSize);
     m_input = new InputHandler();
     m_width = width;
     m_height = height;
+    m_tileSize = tileSize;
 
     if (m_dungeon == nullptr || m_console == nullptr || m_input == nullptr){
         return false;
@@ -57,7 +58,6 @@ bool Game::init(int width, int height, int tileSize, char* title){
 void Game::drawMap(){
     int x;
     int y = 0;
-    SDL_Color colour = {139, 172, 15};
     char *wall = new char[1]{'#'};
     char *space = new char[1]{'.'};
 
@@ -66,16 +66,16 @@ void Game::drawMap(){
 
         if (i % m_dungeon->Getm_width() == m_dungeon->Getm_width() - 1){
             if (m_dungeon->m_level[i] == '#'){
-                m_console->render(wall, x, y, colour);
+                m_console->render(wall, x, y);
             } else {
-              m_console->render(space, x, y, colour);
+              m_console->render(space, x, y);
             }
             y++;
         } else {
             if (m_dungeon->m_level[i] == '#'){
-                m_console->render(wall, x, y, colour);
+                m_console->render(wall, x, y);
             } else {
-              m_console->render(space, x, y, colour);
+              m_console->render(space, x, y);
             }
         }
     }
@@ -116,7 +116,7 @@ void Game::createPlayer(){
 
 bool Game::checkMove(int dx, int dy){
 
-    if (m_playerPos->x + dx >= 0 && m_playerPos->x + dx < m_width && m_playerPos->y + dy >= 0 && m_playerPos->y + dy < m_height){
+    if (m_playerPos->x + dx>= 0 && m_playerPos->x + dx < m_width && m_playerPos->y + dy >= 0 && m_playerPos->y + dy < m_height){
         if (m_dungeon->m_level[(m_playerPos->x + dx) + m_dungeon->Getm_width() * (m_playerPos->y + dy)] == '#'){
           return false;
         } else {
@@ -146,8 +146,9 @@ void Game::run(){
     while(m_isPlaying){
         m_console->flush();
         drawMap();
-        m_console->render(&m_playerRender->chr, m_playerPos->x, m_playerPos->y, m_playerRender->colour);
+        m_console->render(&m_playerRender->chr, m_playerPos->x, m_playerPos->y);
         m_console->update();
+
 
         keyPress = m_input->getEvent(&e);
         if (keyPress == ESCAPE){
