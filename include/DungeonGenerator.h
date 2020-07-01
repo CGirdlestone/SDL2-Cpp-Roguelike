@@ -23,8 +23,18 @@ class DungeonGenerator
         void removeLoneWalls(int j);
         void fillBorder();
         void createMap(int threshold, int steps, int underPop, int overPop);
+        float getGradient(float x1, float y1, float x2, float y2);
+        int transformX(int x, int y, int octant);
+        int transformY(int x, int y, int octant);
+        void castOctant(int x, int y, int radius, float bottomSlope, float topSlope, int step, int octant);
+        void shadowCast(int x, int y, int radius);
+        bool checkInMap(int x, int y);
+        void doRecomputeFOV(int x, int y, int radius);
 
         char *m_level;
+        int *m_fovMap;
+        int *m_exploredMap;
+        bool recomputeFOV;
 
     protected:
 

@@ -21,8 +21,9 @@ class Game
         void drawLog();
         void drawActors();
         void createPlayer();
-        void movePlayer(int dx, int dy);
-        bool checkMove(int dx, int dy);
+        void createEntities();
+        void movePlayer(int dx, int dy, int uid);
+        bool checkMove(int dx, int dy, int uid);
 
     protected:
 
