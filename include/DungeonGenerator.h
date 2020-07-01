@@ -22,7 +22,8 @@ class DungeonGenerator
     int floodFill();
     void removeLoneWalls(int j);
     void fillBorder();
-    void thinSolidChunks();
+    void hollowSolidChunks();
+    void tidyBorder();
     void createMap(int threshold, int steps, int underPop, int overPop);
     float getGradient(float x1, float y1, float x2, float y2);
     int transformX(int x, int y, int octant);

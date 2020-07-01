@@ -74,12 +74,12 @@ void Game::drawLog()
   std::vector<Message> messages = m_messageLog->getMessages();
 
   if (messages.size() > 0){
-      for(int j = 0; j < static_cast<int>(messages.size()); j++){
-          Message msg = messages.at(j);
-          for(int i = 0; i < static_cast<int>(msg.m_msg.length()); i++){
-              m_console->render(&msg.m_msg[i], i, j + m_height, msg.m_colour);
-          }
+    for(int j = 0; j < static_cast<int>(messages.size()); j++){
+      Message msg = messages.at(j);
+      for(int i = 0; i < static_cast<int>(msg.m_msg.length()); i++){
+        m_console->render(&msg.m_msg[i], i, j + m_height, msg.m_colour);
       }
+    }
   }
 }
 
@@ -146,13 +146,13 @@ void Game::createPlayer()
   Renderable *r = new Renderable(c, colour);
 
   while(!playerPlaced){
-      i = std::rand()%(m_dungeon->Getm_width() * m_dungeon->Getm_height());
-      if (m_dungeon->m_level[i] != '.'){
-        continue;
-      }
-      x = i % m_dungeon->Getm_width();
-      y = i / m_dungeon->Getm_width();
-      playerPlaced = true;
+    i = std::rand()%(m_dungeon->Getm_width() * m_dungeon->Getm_height());
+    if (m_dungeon->m_level[i] != '.'){
+      continue;
+    }
+    x = i % m_dungeon->Getm_width();
+    y = i / m_dungeon->Getm_width();
+    playerPlaced = true;
   }
 
   Position *p = new Position(x, y);
@@ -176,13 +176,13 @@ void Game::createEntities()
   Renderable *r = new Renderable(c, colour);
 
   while(!entityPlaced){
-      i = std::rand()%(m_dungeon->Getm_width() * m_dungeon->Getm_height());
-      if (m_dungeon->m_level[i] != '.'){
-        continue;
-      }
-      x = i % m_dungeon->Getm_width();
-      y = i / m_dungeon->Getm_width();
-      entityPlaced = true;
+    i = std::rand()%(m_dungeon->Getm_width() * m_dungeon->Getm_height());
+    if (m_dungeon->m_level[i] != '.'){
+      continue;
+    }
+    x = i % m_dungeon->Getm_width();
+    y = i / m_dungeon->Getm_width();
+    entityPlaced = true;
   }
 
   Position *p = new Position(x, y);
@@ -196,18 +196,18 @@ void Game::createEntities()
 bool Game::checkMove(int dx, int dy, int uid)
 {
   if (m_actors.at(uid)->position->x + dx>= 0 && m_actors.at(uid)->position->x + dx < m_width && m_actors.at(uid)->position->y + dy >= 0 && m_actors.at(uid)->position->y + dy < m_height){
-      if (m_dungeon->m_level[(m_actors.at(uid)->position->x + dx) + m_dungeon->Getm_width() * (m_actors.at(uid)->position->y + dy)] == '#'){
-        return false;
-      } else{
-        for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
-          if (i == uid){ continue; }
+    if (m_dungeon->m_level[(m_actors.at(uid)->position->x + dx) + m_dungeon->Getm_width() * (m_actors.at(uid)->position->y + dy)] == '#'){
+      return false;
+    } else{
+      for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
+        if (i == uid){ continue; }
 
-          if (m_actors.at(uid)->position->x + dx == m_actors.at(i)->position->x && m_actors.at(uid)->position->y + dy == m_actors.at(i)->position->y){
-            return false;
-          }
+        if (m_actors.at(uid)->position->x + dx == m_actors.at(i)->position->x && m_actors.at(uid)->position->y + dy == m_actors.at(i)->position->y){
+          return false;
         }
-        return true;
       }
+      return true;
+    }
   } else {
     return false;
   }
@@ -240,37 +240,37 @@ void Game::run()
   Uint32 dt = 0;
 
   while(m_isPlaying){
-      currentTime = SDL_GetTicks();
+    currentTime = SDL_GetTicks();
 
-      if (m_dungeon->recomputeFOV){
-        m_dungeon->doRecomputeFOV(m_actors.at(0)->position->x, m_actors.at(0)->position->y, 10);
-      }
+    if (m_dungeon->recomputeFOV){
+      m_dungeon->doRecomputeFOV(m_actors.at(0)->position->x, m_actors.at(0)->position->y, 10);
+    }
 
-      m_console->flush();
-      drawMap();
-      drawActors();
-      drawLog();
-      m_console->update();
+    m_console->flush();
+    drawMap();
+    drawActors();
+    drawLog();
+    m_console->update();
 
-      keyPress = m_input->getEvent(&e);
-      if (keyPress == ESCAPE){
-          m_isPlaying = false;
-      } else if (keyPress == ARROW_LEFT){
-        movePlayer(-1, 0, 0);
-      } else if (keyPress == ARROW_RIGHT){
-        movePlayer(1, 0, 0);
-      } else if (keyPress == ARROW_UP){
-        movePlayer(0, -1, 0);
-      } else if (keyPress == ARROW_DOWN){
-        movePlayer(0, 1, 0);
-      } else if (keyPress == F1){
-        m_console->setFullscreen();
-      }
+    keyPress = m_input->getEvent(&e);
+    if (keyPress == ESCAPE){
+        m_isPlaying = false;
+    } else if (keyPress == ARROW_LEFT){
+      movePlayer(-1, 0, 0);
+    } else if (keyPress == ARROW_RIGHT){
+      movePlayer(1, 0, 0);
+    } else if (keyPress == ARROW_UP){
+      movePlayer(0, -1, 0);
+    } else if (keyPress == ARROW_DOWN){
+      movePlayer(0, 1, 0);
+    } else if (keyPress == F1){
+      m_console->setFullscreen();
+    }
 
-      dt = (currentTime - lastTime);
-      lastTime = currentTime;
+    dt = (currentTime - lastTime);
+    lastTime = currentTime;
 
-      m_messageLog->ageMessages(dt);
+    m_messageLog->ageMessages(dt);
   }
   m_console->closeSDL();
 }

@@ -326,23 +326,23 @@ int DungeonGenerator::floodFill(){
   int j;
 
   for (int i = 0; i < m_width * m_height; i++){
-      if (m_level[i] == '#'){
-          continue;
-      } else if (m_level[i] == '.'){
-          getNeighbours(neighbours, i);
-          while (neighbours->size() > 0){
+    if (m_level[i] == '#'){
+      continue;
+    } else if (m_level[i] == '.'){
+      getNeighbours(neighbours, i);
+      while (neighbours->size() > 0){
 
-              j = neighbours->back();
-              neighbours->pop_back();
+        j = neighbours->back();
+        neighbours->pop_back();
 
-              if (m_level[j] == '.'){
-                  m_level[j] = letter;
-                  getNeighbours(neighbours, j);
-              }
-          }
-      letterCode++;
-      letter = static_cast<int>(letterCode);
+        if (m_level[j] == '.'){
+          m_level[j] = letter;
+          getNeighbours(neighbours, j);
+        }
       }
+    letterCode++;
+    letter = static_cast<int>(letterCode);
+    }
   }
 
   int letterCount;
@@ -350,25 +350,25 @@ int DungeonGenerator::floodFill(){
   int highestCount;
 
   for (int i = startLetterCode; i < letterCode; i++){
-      letter = static_cast<int>(i);
-      letterCount = std::count(m_level, m_level + (m_width * m_height), letter);
-      if (i == startLetterCode){
-          mostFrequent = letter;
-      } else {
-          if (std::count(m_level, m_level + (m_width * m_height), mostFrequent) < letterCount){
-              mostFrequent = letter;
-          }
+    letter = static_cast<int>(i);
+    letterCount = std::count(m_level, m_level + (m_width * m_height), letter);
+    if (i == startLetterCode){
+      mostFrequent = letter;
+    } else {
+      if (std::count(m_level, m_level + (m_width * m_height), mostFrequent) < letterCount){
+        mostFrequent = letter;
       }
+    }
   }
 
   highestCount = std::count(m_level, m_level + (m_width * m_height), mostFrequent);
 
   for (int i = 0; i < m_width * m_height; i++){
-      if (m_level[i] == mostFrequent){
-          m_level[i] = '.';
-      } else {
-          m_level[i] = '#';
-      }
+    if (m_level[i] == mostFrequent){
+      m_level[i] = '.';
+    } else {
+      m_level[i] = '#';
+    }
   }
 
   delete neighbours;
@@ -391,25 +391,74 @@ void DungeonGenerator::removeLoneWalls(int j){
 
 void DungeonGenerator::fillBorder(){
   for (int i = 0; i < m_width * m_height; i++){
-      if (i % m_width  == 0 || i % m_width == m_width - 1 || i < m_width || i > m_width * m_height - m_width){
-        m_level[i] = '#';
-      }
+    if (i % m_width  == 0 || i % m_width == m_width - 1 || i < m_width || i > m_width * m_height - m_width){
+      m_level[i] = '#';
+    }
   }
 }
 
-void DungeonGenerator::thinSolidChunks()
+void DungeonGenerator::hollowSolidChunks()
 {
-  int wallCount;
+  std::vector<int> *neighbours = new std::vector<int>;
   char *new_level = new char[m_width * m_height];
+  int j = 0;
+  int walkableCount;
 
   for (int i = 0; i < m_width * m_height; i++){
-    wallCount = getNeigbourWallCount(i);
-    if (wallCount == 8){
-      new_level[i] = ' ';
-    } else {
+    walkableCount = 0;
+    getNeighbours(neighbours, i);
+    while (neighbours->size() > 0){
+
+      j = neighbours->back();
+      neighbours->pop_back();
+
+      if (m_level[j] == '.'){
+        walkableCount += 1;
+      }
+    }
+    if (walkableCount > 0){
       new_level[i] = m_level[i];
+    } else {
+      new_level[i] = ' ';
     }
   }
+
+  delete neighbours;
+
+  delete[] m_level;
+  m_level = new_level;
+}
+
+void DungeonGenerator::tidyBorder()
+{
+  std::vector<int> *neighbours = new std::vector<int>;
+  char *new_level = new char[m_width * m_height];
+  int j = 0;
+  int walkableCount;
+
+  for (int i = 0; i < m_width * m_height; i++){
+    walkableCount = 0;
+    if (i % m_width  == 0 || i % m_width == m_width - 1 || i < m_width || i > m_width * m_height - m_width){
+      getNeighbours(neighbours, i);
+      while (neighbours->size() > 0){
+
+        j = neighbours->back();
+        neighbours->pop_back();
+
+        if (m_level[j] == '.'){
+          walkableCount += 1;
+        }
+      }
+      if (walkableCount > 0){
+        new_level[i] = m_level[i];
+      } else {
+        new_level[i] = ' ';
+      }
+    }
+  }
+
+  delete neighbours;
+
   delete[] m_level;
   m_level = new_level;
 }
@@ -417,7 +466,7 @@ void DungeonGenerator::thinSolidChunks()
 void DungeonGenerator::createMap(int threshold, int steps, int underPop, int overPop){
   initialiseMap(threshold);
   for (int i = 0; i < steps; i++){
-      simulationStep(underPop, overPop);
+    simulationStep(underPop, overPop);
   }
 
   if (static_cast<float>(floodFill())/static_cast<float>(m_width*m_height) < 0.3){
@@ -426,7 +475,7 @@ void DungeonGenerator::createMap(int threshold, int steps, int underPop, int ove
   }
 
   for (int j = 0; j < 3; j++){
-      removeLoneWalls(j);
+    removeLoneWalls(j);
   }
 
   removeLoneWalls(3);
@@ -434,7 +483,9 @@ void DungeonGenerator::createMap(int threshold, int steps, int underPop, int ove
   removeLoneWalls(2);
 
   fillBorder();
-  thinSolidChunks();
+  hollowSolidChunks();
+  //tidyBorder();
+
 }
 
 float DungeonGenerator::getGradient(float x1, float y1, float x2, float y2)
@@ -524,7 +575,7 @@ void DungeonGenerator::castOctant(int x, int y, int radius, float bottomSlope, f
       }
 
       if (gradient >= bottomSlope && gradient <= topSlope){
-        if (m_level[(y+b)*m_width+x+a] == '#'){
+        if (m_level[(y+b)*m_width+x+a] != '.'){
           newBottomSlope = getGradient(static_cast<float>(x+l-0.5), static_cast<float>(y+k+0.5), static_cast<float>(x), static_cast<float>(y));
           castOctant(x, y, radius, newBottomSlope, topSlope, step, octant);
 
