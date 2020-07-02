@@ -4,7 +4,12 @@
 #include <time.h>
 #include <iostream>
 
+#include "SDL2/SDL.h"
+
 #include "DungeonGenerator.h"
+#include "Components.h"
+#include "GameObject.h"
+
 
 DungeonGenerator::DungeonGenerator(int width, int height)
 {
@@ -403,9 +408,11 @@ void DungeonGenerator::hollowSolidChunks()
   char *new_level = new char[m_width * m_height];
   int j = 0;
   int walkableCount;
+  int voidCount;
 
   for (int i = 0; i < m_width * m_height; i++){
     walkableCount = 0;
+    voidCount = 0;
     getNeighbours(neighbours, i);
     while (neighbours->size() > 0){
 
@@ -414,46 +421,15 @@ void DungeonGenerator::hollowSolidChunks()
 
       if (m_level[j] == '.'){
         walkableCount += 1;
+      } else if (m_level[i] == ' '){
+        voidCount += 1;
       }
     }
+
     if (walkableCount > 0){
       new_level[i] = m_level[i];
     } else {
       new_level[i] = ' ';
-    }
-  }
-
-  delete neighbours;
-
-  delete[] m_level;
-  m_level = new_level;
-}
-
-void DungeonGenerator::tidyBorder()
-{
-  std::vector<int> *neighbours = new std::vector<int>;
-  char *new_level = new char[m_width * m_height];
-  int j = 0;
-  int walkableCount;
-
-  for (int i = 0; i < m_width * m_height; i++){
-    walkableCount = 0;
-    if (i % m_width  == 0 || i % m_width == m_width - 1 || i < m_width || i > m_width * m_height - m_width){
-      getNeighbours(neighbours, i);
-      while (neighbours->size() > 0){
-
-        j = neighbours->back();
-        neighbours->pop_back();
-
-        if (m_level[j] == '.'){
-          walkableCount += 1;
-        }
-      }
-      if (walkableCount > 0){
-        new_level[i] = m_level[i];
-      } else {
-        new_level[i] = ' ';
-      }
     }
   }
 
@@ -604,4 +580,64 @@ void DungeonGenerator::doRecomputeFOV(int x, int y, int radius)
   }
 
   shadowCast(x, y, radius);
+}
+
+void DungeonGenerator::createPlayer(std::vector<GameObject*> *actors)
+{
+  int i;
+  int x;
+  int y;
+  bool playerPlaced = false;
+
+  SDL_Color colour = {0xef, 0xac, 0x28};
+  char c = '@';
+
+  Renderable *r = new Renderable(c, colour);
+
+  while(!playerPlaced){
+    i = std::rand()%(m_width * m_height);
+    if (m_level[i] != '.'){
+      continue;
+    }
+    x = i % m_width;
+    y = i / m_width;
+    playerPlaced = true;
+  }
+
+  Position *p = new Position(x, y);
+
+  GameObject *player = new GameObject();
+  player->position = p;
+  player->renderable = r;
+  actors->push_back(player);
+}
+
+void DungeonGenerator::createEntities(std::vector<GameObject*> *actors)
+{
+  int i;
+  int x;
+  int y;
+  bool entityPlaced = false;
+
+  SDL_Color colour = {0x9b, 0x1a, 0x0a};
+  char c = 'b';
+
+  Renderable *r = new Renderable(c, colour);
+
+  while(!entityPlaced){
+    i = std::rand()%(m_width * m_height);
+    if (m_level[i] != '.'){
+      continue;
+    }
+    x = i % m_width;
+    y = i / m_width;
+    entityPlaced = true;
+  }
+
+  Position *p = new Position(x, y);
+
+  GameObject *entity = new GameObject();
+  entity->position = p;
+  entity->renderable = r;
+  actors->push_back(entity);
 }

@@ -21,8 +21,6 @@ Game::Game()
   m_console = nullptr;
   m_dungeon = nullptr;
   m_input = nullptr;
-  m_playerPos = nullptr;
-  m_playerRender = nullptr;
 }
 
 Game::~Game()
@@ -39,12 +37,6 @@ Game::~Game()
 
   delete m_messageLog;
   m_messageLog = nullptr;
-
-  delete m_playerPos;
-  m_playerPos = nullptr;
-
-  delete m_playerRender;
-  m_playerRender = nullptr;
 
   for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
     delete m_actors[i];
@@ -131,68 +123,6 @@ void Game::drawActors()
   }
 }
 
-void Game::createPlayer()
-{
-  int i;
-  int x;
-  int y;
-  bool playerPlaced = false;
-
-  std::srand(time(0));
-
-  SDL_Color colour = {0xef, 0xac, 0x28};
-  char c = '@';
-
-  Renderable *r = new Renderable(c, colour);
-
-  while(!playerPlaced){
-    i = std::rand()%(m_dungeon->Getm_width() * m_dungeon->Getm_height());
-    if (m_dungeon->m_level[i] != '.'){
-      continue;
-    }
-    x = i % m_dungeon->Getm_width();
-    y = i / m_dungeon->Getm_width();
-    playerPlaced = true;
-  }
-
-  Position *p = new Position(x, y);
-
-  GameObject *player = new GameObject();
-  player->position = p;
-  player->renderable = r;
-  m_actors.push_back(player);
-}
-
-void Game::createEntities()
-{
-  int i;
-  int x;
-  int y;
-  bool entityPlaced = false;
-
-  SDL_Color colour = {0x9b, 0x1a, 0x0a};
-  char c = 'b';
-
-  Renderable *r = new Renderable(c, colour);
-
-  while(!entityPlaced){
-    i = std::rand()%(m_dungeon->Getm_width() * m_dungeon->Getm_height());
-    if (m_dungeon->m_level[i] != '.'){
-      continue;
-    }
-    x = i % m_dungeon->Getm_width();
-    y = i / m_dungeon->Getm_width();
-    entityPlaced = true;
-  }
-
-  Position *p = new Position(x, y);
-
-  GameObject *entity = new GameObject();
-  entity->position = p;
-  entity->renderable = r;
-  m_actors.push_back(entity);
-}
-
 bool Game::checkMove(int dx, int dy, int uid)
 {
   if (m_actors.at(uid)->position->x + dx>= 0 && m_actors.at(uid)->position->x + dx < m_width && m_actors.at(uid)->position->y + dy >= 0 && m_actors.at(uid)->position->y + dy < m_height){
@@ -223,16 +153,20 @@ void Game::movePlayer(int dx, int dy, int uid)
   }
 }
 
+void Game::showFPS(){
+
+}
+
 void Game::run()
 {
   SDL_Event e;
   KeyPressSurfaces keyPress;
   m_isPlaying = true;
+  fpsInterval = 1.0;
 
   m_dungeon->createMap(60, 6, 2, 5);
-  createPlayer();
-  createEntities();
-
+  m_dungeon->createPlayer(&m_actors);
+  m_dungeon->createEntities(&m_actors);
   m_dungeon->shadowCast(m_actors.at(0)->position->x, m_actors.at(0)->position->y, 10);
 
   Uint32 currentTime;

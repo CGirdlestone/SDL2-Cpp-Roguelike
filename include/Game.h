@@ -20,10 +20,11 @@ class Game
     void drawMap();
     void drawLog();
     void drawActors();
-    void createPlayer();
-    void createEntities();
+    //void createPlayer();
+    //void createEntities();
     void movePlayer(int dx, int dy, int uid);
     bool checkMove(int dx, int dy, int uid);
+    void showFPS();
 
   protected:
 
@@ -33,13 +34,12 @@ class Game
     InputHandler* m_input;
     MessageLog* m_messageLog;
     bool m_isPlaying;
-    Position* m_playerPos;
-    Renderable* m_playerRender;
     int m_width;
     int m_height;
     int m_tileSize;
     int m_fps;
     std::vector<GameObject*> m_actors;
+    Uint32 fpsInterval;
 };
 
 #endif // GAME_H
