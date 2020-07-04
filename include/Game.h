@@ -9,6 +9,14 @@
 #include "KeyPressSurfaces.h"
 #include "MessageLog.h"
 
+enum GameState
+{
+    PLAYER,
+    AI,
+};
+
+extern GameState State;
+
 class Game
 {
   public:
@@ -20,11 +28,9 @@ class Game
     void drawMap();
     void drawLog();
     void drawActors();
-    //void createPlayer();
-    //void createEntities();
     void movePlayer(int dx, int dy, int uid);
     bool checkMove(int dx, int dy, int uid);
-    void showFPS();
+    void processEntities();
 
   protected:
 
@@ -40,6 +46,9 @@ class Game
     int m_fps;
     std::vector<GameObject*> m_actors;
     Uint32 fpsInterval;
+    GameState m_state;
 };
+
+
 
 #endif // GAME_H

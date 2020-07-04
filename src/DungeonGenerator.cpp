@@ -446,7 +446,6 @@ void DungeonGenerator::createMap(int threshold, int steps, int underPop, int ove
   }
 
   if (static_cast<float>(floodFill())/static_cast<float>(m_width*m_height) < 0.3){
-    std::cout << static_cast<float>(floodFill())/static_cast<float>(m_width*m_height) << std::endl;
     createMap(threshold, steps, underPop, overPop);
   }
 
@@ -528,6 +527,7 @@ void DungeonGenerator::castOctant(int x, int y, int radius, float bottomSlope, f
 
   for(int i = 0; i < radius - step; i++){
     l = i + step;
+
     for (int j = 0; j < l + 1; j++){
       if (i==0 && j == 0){
         m_fovMap[y*m_width+x] = 1;
@@ -636,8 +636,11 @@ void DungeonGenerator::createEntities(std::vector<GameObject*> *actors)
 
   Position *p = new Position(x, y);
 
+  AI *a = new AI();
+
   GameObject *entity = new GameObject();
   entity->position = p;
   entity->renderable = r;
+  entity->ai = a;
   actors->push_back(entity);
 }

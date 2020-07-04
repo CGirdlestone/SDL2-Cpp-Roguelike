@@ -12,6 +12,7 @@
 #include "GameObject.h"
 #include "Message.h"
 #include "MessageLog.h"
+#include "Pathfind.h"
 #include "Game.h"
 
 
@@ -126,13 +127,15 @@ void Game::drawActors()
 bool Game::checkMove(int dx, int dy, int uid)
 {
   if (m_actors.at(uid)->position->x + dx>= 0 && m_actors.at(uid)->position->x + dx < m_width && m_actors.at(uid)->position->y + dy >= 0 && m_actors.at(uid)->position->y + dy < m_height){
-    if (m_dungeon->m_level[(m_actors.at(uid)->position->x + dx) + m_dungeon->Getm_width() * (m_actors.at(uid)->position->y + dy)] == '#'){
+    if (m_dungeon->m_level[(m_actors.at(uid)->position->x + dx) + m_dungeon->Getm_width() * (m_actors.at(uid)->position->y + dy)] != '.'){
       return false;
     } else{
       for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
         if (i == uid){ continue; }
 
         if (m_actors.at(uid)->position->x + dx == m_actors.at(i)->position->x && m_actors.at(uid)->position->y + dy == m_actors.at(i)->position->y){
+          SDL_Color colour = {0x3f, 0x3a, 0x0c};
+          m_messageLog->addMessage("You kicked the mob!", colour);
           return false;
         }
       }
@@ -149,13 +152,37 @@ void Game::movePlayer(int dx, int dy, int uid)
     m_actors.at(uid)->position->x += dx;
     m_actors.at(uid)->position->y += dy;
 
-    m_dungeon->recomputeFOV = true;
+    if (uid == 0){
+      m_dungeon->recomputeFOV = true;
+    }
   }
 }
 
-void Game::showFPS(){
+void Game::processEntities()
+{
+  int j;
+  int x, y;
 
+  for (int i = 1; i < static_cast<int>(m_actors.size()); i++){
+    if (m_actors.at(i)->ai != nullptr){
+
+      if (m_dungeon->m_fovMap[m_actors.at(i)->position->x + m_actors.at(i)->position->y * m_dungeon->Getm_width()] == 1){
+
+        aStar(m_dungeon->m_level, &m_actors.at(i)->ai->path, m_dungeon->Getm_width(), m_dungeon->Getm_height(), m_actors.at(i)->position->x, m_actors.at(i)->position->y, m_actors.at(0)->position->x, m_actors.at(0)->position->y);
+
+        j = m_actors.at(i)->ai->path.back();
+        m_actors.at(i)->ai->path.pop_back();
+
+        x = j % m_dungeon->Getm_width();
+        y = j / m_dungeon->Getm_width();
+
+        movePlayer(x - m_actors.at(i)->position->x, y - m_actors.at(i)->position->y, i);
+      }
+    }
+  }
+  m_state = PLAYER;
 }
+
 
 void Game::run()
 {
@@ -172,6 +199,8 @@ void Game::run()
   Uint32 currentTime;
   Uint32 lastTime = 0;
   Uint32 dt = 0;
+
+  m_state = PLAYER;
 
   while(m_isPlaying){
     currentTime = SDL_GetTicks();
@@ -191,14 +220,22 @@ void Game::run()
         m_isPlaying = false;
     } else if (keyPress == ARROW_LEFT){
       movePlayer(-1, 0, 0);
+      m_state = AI;
     } else if (keyPress == ARROW_RIGHT){
       movePlayer(1, 0, 0);
+      m_state = AI;
     } else if (keyPress == ARROW_UP){
       movePlayer(0, -1, 0);
+      m_state = AI;
     } else if (keyPress == ARROW_DOWN){
       movePlayer(0, 1, 0);
+      m_state = AI;
     } else if (keyPress == F1){
       m_console->setFullscreen();
+    }
+
+    if (m_state == AI){
+      processEntities();
     }
 
     dt = (currentTime - lastTime);

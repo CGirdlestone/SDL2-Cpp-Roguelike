@@ -45,6 +45,7 @@ struct Player
 
 struct AI
 {
+  std::vector<int> path;
   ~AI();
 };
 
