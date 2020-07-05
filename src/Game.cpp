@@ -57,7 +57,7 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_camera = new Camera(width, height, mapWidth, mapHeight);
   m_console = new Console(width, height, title, (char*)"./resources/Cheepicus_8x8x2.png", tileSize);
   m_input = new InputHandler();
-  m_messageLog = new MessageLog(width, 8);
+  m_messageLog = new MessageLog(width, 9);
   m_renderer = new Renderer(m_console);
   m_width = width;
   m_height = height;
@@ -76,6 +76,8 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
 
 bool Game::checkMove(int dx, int dy, int uid)
 {
+  std::string msg;
+
   if (m_actors.at(uid)->position->x + dx>= 0 && m_actors.at(uid)->position->x + dx < m_dungeon->Getm_width() && m_actors.at(uid)->position->y + dy >= 0 && m_actors.at(uid)->position->y + dy < m_dungeon->Getm_height()){
     if (m_dungeon->m_level[(m_actors.at(uid)->position->x + dx) + m_dungeon->Getm_width() * (m_actors.at(uid)->position->y + dy)] != '.'){
       return false;
@@ -85,7 +87,11 @@ bool Game::checkMove(int dx, int dy, int uid)
 
         if (m_actors.at(uid)->position->x + dx == m_actors.at(i)->position->x && m_actors.at(uid)->position->y + dy == m_actors.at(i)->position->y){
           SDL_Color colour = {0x3f, 0x3a, 0x0c};
-          m_messageLog->addMessage("You kicked the mob!", colour);
+          if (uid == 0){
+            msg = "You kicked the ";
+            msg.append("bat.");
+            m_messageLog->addMessage(msg, colour);
+          }
           return false;
         }
       }
@@ -104,7 +110,6 @@ void Game::movePlayer(int dx, int dy, int uid)
 
     if (uid == 0){
       m_dungeon->recomputeFOV = true;
-      m_messageLog->addMessage("You moved!");
     }
   }
 }
@@ -144,13 +149,66 @@ void Game::processEntities()
   m_state = PLAYER;
 }
 
+void Game::processInput(KeyPressSurfaces keyPress)
+{
+  if (keyPress == ESCAPE){
+      m_isPlaying = false;
+  } else if (keyPress == WEST){
+    movePlayer(-1, 0, 0);
+    m_state = AI;
+  } else if (keyPress == EAST){
+    movePlayer(1, 0, 0);
+    m_state = AI;
+  } else if (keyPress == NORTH){
+    movePlayer(0, -1, 0);
+    m_state = AI;
+  } else if (keyPress == SOUTH){
+    movePlayer(0, 1, 0);
+    m_state = AI;
+  } else if (keyPress == NORTHWEST){
+    movePlayer(-1, -1, 0);
+    m_state = AI;
+  } else if (keyPress == NORTHEAST){
+    movePlayer(1, -1, 0);
+    m_state = AI;
+  } else if (keyPress == SOUTHWEST){
+    movePlayer(-1, 1, 0);
+    m_state = AI;
+  } else if (keyPress == SOUTHEAST){
+    movePlayer(1, 1, 0);
+    m_state = AI;
+  } else if (keyPress == WAIT){
+    m_state = AI;
+  } else if (keyPress == F1){
+    m_console->setFullscreen();
+  }
+}
+
+void Game::onTick()
+{
+  // to do
+  if (m_dungeon->recomputeFOV){
+    m_dungeon->doRecomputeFOV(m_actors.at(0)->position->x, m_actors.at(0)->position->y, 10);
+  }
+
+  m_camera->updatePosition(m_actors.at(0)->position->x, m_actors.at(0)->position->y);
+}
+
+void Game::update(Uint32 dt)
+{
+  m_messageLog->ageMessages(dt);
+}
+
 
 void Game::run()
 {
   SDL_Event e;
   KeyPressSurfaces keyPress;
   m_isPlaying = true;
-  fpsInterval = 1.0;
+  Uint32 currentTime;
+  Uint32 lastTime = 0;
+  Uint32 dt = 0;
+  m_state = PLAYER;
 
   m_dungeon->createMap(60, 6, 2, 5);
   m_dungeon->createPlayer(&m_actors);
@@ -158,55 +216,26 @@ void Game::run()
   m_dungeon->shadowCast(m_actors.at(0)->position->x, m_actors.at(0)->position->y, 10);
   m_camera->updatePosition(m_actors.at(0)->position->x, m_actors.at(0)->position->y);
 
-  Uint32 currentTime;
-  Uint32 lastTime = 0;
-  Uint32 dt = 0;
-
-  m_state = PLAYER;
-
   while(m_isPlaying){
     currentTime = SDL_GetTicks();
 
-    if (m_dungeon->recomputeFOV){
-      m_dungeon->doRecomputeFOV(m_actors.at(0)->position->x, m_actors.at(0)->position->y, 10);
-    }
-
     m_console->flush();
-    m_renderer->drawMap(m_camera, m_dungeon, &m_actors);
-    m_renderer->drawActors(m_camera, m_dungeon, &m_actors);
-    m_renderer->drawLog(m_messageLog, m_height);
-    m_renderer->drawUI();
+    m_renderer->drawGameScreen(m_camera, m_dungeon, &m_actors, m_messageLog, m_height);
     m_console->update();
 
     keyPress = m_input->getEvent(&e);
-    if (keyPress == ESCAPE){
-        m_isPlaying = false;
-    } else if (keyPress == ARROW_LEFT){
-      movePlayer(-1, 0, 0);
-      m_state = AI;
-    } else if (keyPress == ARROW_RIGHT){
-      movePlayer(1, 0, 0);
-      m_state = AI;
-    } else if (keyPress == ARROW_UP){
-      movePlayer(0, -1, 0);
-      m_state = AI;
-    } else if (keyPress == ARROW_DOWN){
-      movePlayer(0, 1, 0);
-      m_state = AI;
-    } else if (keyPress == F1){
-      m_console->setFullscreen();
-    }
+    processInput(keyPress);
 
     if (m_state == AI){
       processEntities();
     }
 
-    m_camera->updatePosition(m_actors.at(0)->position->x, m_actors.at(0)->position->y);
-
     dt = (currentTime - lastTime);
     lastTime = currentTime;
 
-    m_messageLog->ageMessages(dt);
+    onTick();
+    update(dt);
   }
+
   m_console->closeSDL();
 }

@@ -19,6 +19,7 @@ public:
   void drawLog(MessageLog* messageLog, int height);
   void drawUI();
   void drawMenuOutline();
+  void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors,MessageLog* messageLog, int height);
 
 private:
   Console* m_console;

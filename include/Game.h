@@ -30,6 +30,9 @@ class Game
     void movePlayer(int dx, int dy, int uid);
     bool checkMove(int dx, int dy, int uid);
     void processEntities();
+    void processInput(KeyPressSurfaces keyPress);
+    void onTick();
+    void update(Uint32 dt);
 
   protected:
 

@@ -32,7 +32,8 @@ DungeonGenerator::~DungeonGenerator()
   m_exploredMap = nullptr;
 }
 
-void DungeonGenerator::initialiseMap(int threshold){
+void DungeonGenerator::initialiseMap(int threshold)
+{
   int chance;
 
   std::srand(time(0));
@@ -62,7 +63,8 @@ void DungeonGenerator::initialiseMap(int threshold){
   }
 }
 
-int DungeonGenerator::getNeigbourWallCount(int i){
+int DungeonGenerator::getNeigbourWallCount(int i)
+{
   int wallCount = 0;
 
   if (i == 0){
@@ -186,7 +188,8 @@ int DungeonGenerator::getNeigbourWallCount(int i){
   return wallCount;
 }
 
-void DungeonGenerator::simulationStep(int underPop, int overPop){
+void DungeonGenerator::simulationStep(int underPop, int overPop)
+{
   int wallCount;
   char *new_level = new char[m_width * m_height];
 
@@ -203,7 +206,8 @@ void DungeonGenerator::simulationStep(int underPop, int overPop){
   m_level = new_level;
 }
 
-void DungeonGenerator::getNeighbours(std::vector<int>* neighbours, int i){
+void DungeonGenerator::getNeighbours(std::vector<int>* neighbours, int i)
+{
   if (i == 0){
       // top left
       // ignore W, NW N
@@ -323,7 +327,8 @@ void DungeonGenerator::getNeighbours(std::vector<int>* neighbours, int i){
   }
 }
 
-int DungeonGenerator::floodFill(){
+int DungeonGenerator::floodFill()
+{
   std::vector<int> *neighbours = new std::vector<int>;
   int startLetterCode = 97;
   int letterCode = 97; // a
@@ -380,7 +385,8 @@ int DungeonGenerator::floodFill(){
   return highestCount;
 }
 
-void DungeonGenerator::removeLoneWalls(int j){
+void DungeonGenerator::removeLoneWalls(int j)
+{
   int wallCount;
 
   for (int i = 0; i < m_width * m_height; i++){
@@ -394,7 +400,8 @@ void DungeonGenerator::removeLoneWalls(int j){
   }
 }
 
-void DungeonGenerator::fillBorder(){
+void DungeonGenerator::fillBorder()
+{
   for (int i = 0; i < m_width * m_height; i++){
     if (i % m_width  == 0 || i % m_width == m_width - 1 || i < m_width || i > m_width * m_height - m_width){
       m_level[i] = '#';
@@ -439,7 +446,8 @@ void DungeonGenerator::hollowSolidChunks()
   m_level = new_level;
 }
 
-void DungeonGenerator::createMap(int threshold, int steps, int underPop, int overPop){
+void DungeonGenerator::createMap(int threshold, int steps, int underPop, int overPop)
+{
   initialiseMap(threshold);
   for (int i = 0; i < steps; ++i){
     simulationStep(underPop, overPop);
@@ -594,7 +602,7 @@ void DungeonGenerator::createPlayer(std::vector<GameObject*> *actors)
   SDL_Color colour = {0xef, 0xac, 0x28};
   char c = '@';
 
-  Renderable *r = new Renderable(c, colour);
+  GameObject *player = new GameObject();
 
   while(!playerPlaced){
     i = std::rand()%(m_width * m_height);
@@ -606,9 +614,10 @@ void DungeonGenerator::createPlayer(std::vector<GameObject*> *actors)
     playerPlaced = true;
   }
 
+  Renderable *r = new Renderable(c, colour);
+
   Position *p = new Position(x, y);
 
-  GameObject *player = new GameObject();
   player->position = p;
   player->renderable = r;
   actors->push_back(player);
@@ -624,7 +633,7 @@ void DungeonGenerator::createEntities(std::vector<GameObject*> *actors)
   SDL_Color colour = {0x9b, 0x1a, 0x0a};
   char c = 'b';
 
-  Renderable *r = new Renderable(c, colour);
+  GameObject *entity = new GameObject();
 
   while(!entityPlaced){
     i = std::rand()%(m_width * m_height);
@@ -636,11 +645,12 @@ void DungeonGenerator::createEntities(std::vector<GameObject*> *actors)
     entityPlaced = true;
   }
 
+  Renderable *r = new Renderable(c, colour);
+
   Position *p = new Position(x, y);
 
   AI *a = new AI();
 
-  GameObject *entity = new GameObject();
   entity->position = p;
   entity->renderable = r;
   entity->ai = a;

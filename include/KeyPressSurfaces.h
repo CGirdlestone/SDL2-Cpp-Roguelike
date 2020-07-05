@@ -9,7 +9,16 @@ enum KeyPressSurfaces
     ARROW_DOWN,
     ARROW_LEFT,
     ARROW_RIGHT,
+    NORTH,
+    NORTHEAST,
+    EAST,
+    SOUTHEAST,
+    SOUTH,
+    SOUTHWEST,
+    WEST,
+    NORTHWEST,
     ESCAPE,
+    WAIT,
     F1,
 };
 

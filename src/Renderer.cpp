@@ -1,5 +1,5 @@
 
-
+#include <iostream>
 #include "Renderer.h"
 
 Renderer::Renderer(Console* console)
@@ -48,8 +48,9 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::vector<Ga
 
     occupied = false;
     if (dungeon->m_fovMap[i] == 1){
-      for(int i = 0; i < static_cast<int>(actors->size()); i++){
-        if (actors->at(i)->position->x + actors->at(i)->position->y*dungeon->Getm_width() == i){
+
+      for(int j = 0; j < static_cast<int>(actors->size()); ++j){
+        if (actors->at(j)->position->x + actors->at(j)->position->y*dungeon->Getm_width() == i){
           occupied = true;
         }
       }
@@ -59,8 +60,8 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::vector<Ga
       }
     } else if (dungeon->m_fovMap[i] == 0){
       if (dungeon->m_exploredMap[i] == 1){
-        for(int i = 0; i < static_cast<int>(actors->size()); i++){
-          if (actors->at(i)->position->x + actors->at(i)->position->y*dungeon->Getm_width() == i){
+        for(int j = 0; j < static_cast<int>(actors->size()); ++j){
+          if (actors->at(j)->position->x + actors->at(j)->position->y*dungeon->Getm_width() == i){
             occupied = true;
           }
         }
@@ -69,7 +70,7 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::vector<Ga
       }
     }
     if (x == dungeon->Getm_width() - 1){
-      y++;
+      ++y;
     }
   }
 }
@@ -139,4 +140,12 @@ void Renderer::drawMenuOutline()
 void Renderer::drawUI()
 {
   drawMenuOutline();
+}
+
+void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors, MessageLog* messageLog, int height)
+{
+  drawMap(camera, dungeon, actors);
+  drawActors(camera, dungeon, actors);
+  drawLog(messageLog, height);
+  drawUI();
 }
