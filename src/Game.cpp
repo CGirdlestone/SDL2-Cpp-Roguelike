@@ -43,6 +43,9 @@ Game::~Game()
   delete m_camera;
   m_camera = nullptr;
 
+  delete m_renderer;
+  m_renderer = nullptr;
+
   for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
     delete m_actors[i];
   }
@@ -51,17 +54,16 @@ Game::~Game()
 bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize, char* title, int fps)
 {
   m_dungeon = new DungeonGenerator(mapWidth, mapHeight);
+  m_camera = new Camera(width, height, mapWidth, mapHeight);
   m_console = new Console(width, height, title, (char*)"./resources/Cheepicus_8x8x2.png", tileSize);
   m_input = new InputHandler();
-  m_messageLog = new MessageLog(width, 10);
-  m_camera = new Camera(width, height, mapWidth, mapHeight);
+  m_messageLog = new MessageLog(width, 8);
   m_renderer = new Renderer(m_console);
   m_width = width;
   m_height = height;
   m_mapWidth = mapWidth;
   m_mapHeight = mapHeight;
   m_tileSize = tileSize;
-  m_fps = fps;
   m_defaultColour = {0x18, 0x79, 0x87};
   m_inViewColour = {0xef, 0xd8, 0xa1};
 
@@ -102,6 +104,7 @@ void Game::movePlayer(int dx, int dy, int uid)
 
     if (uid == 0){
       m_dungeon->recomputeFOV = true;
+      m_messageLog->addMessage("You moved!");
     }
   }
 }
@@ -172,6 +175,7 @@ void Game::run()
     m_renderer->drawMap(m_camera, m_dungeon, &m_actors);
     m_renderer->drawActors(m_camera, m_dungeon, &m_actors);
     m_renderer->drawLog(m_messageLog, m_height);
+    m_renderer->drawUI();
     m_console->update();
 
     keyPress = m_input->getEvent(&e);

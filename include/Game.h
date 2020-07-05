@@ -46,7 +46,6 @@ class Game
     int m_mapWidth;
     int m_mapHeight;
     int m_tileSize;
-    int m_fps;
     std::vector<GameObject*> m_actors;
     Uint32 fpsInterval;
     GameState m_state;

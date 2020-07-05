@@ -17,6 +17,8 @@ public:
   void drawActors(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors);
   void drawMap(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors);
   void drawLog(MessageLog* messageLog, int height);
+  void drawUI();
+  void drawMenuOutline();
 
 private:
   Console* m_console;

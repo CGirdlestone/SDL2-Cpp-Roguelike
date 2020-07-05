@@ -21,6 +21,8 @@ Console::Console(int width, int height, char* title, char* path, int tileSize)
     m_renderer = nullptr;
     m_texture = nullptr;
     m_tileSize = tileSize;
+    m_xBuffer = 20;
+    m_yBuffer = 10;
     init(path);
 }
 
@@ -70,7 +72,7 @@ bool Console::init(char* path)
 
 bool Console::createWindow()
 {
-    m_root = SDL_CreateWindow(m_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (m_width+20)*m_tileSize, (m_height+10)*m_tileSize, SDL_WINDOW_SHOWN);
+    m_root = SDL_CreateWindow(m_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (m_width+m_xBuffer)*m_tileSize, (m_height+m_yBuffer)*m_tileSize, SDL_WINDOW_SHOWN);
     if (m_root == nullptr){
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
@@ -128,6 +130,25 @@ void Console::createTiles()
 
 void Console::render(char* c, int x, int y, SDL_Color colour){
     int i = static_cast<int>((*c));
+
+    SDL_Rect dstrect;
+    dstrect.x = x  * m_tileSize;
+    dstrect.y = y * m_tileSize;
+    dstrect.w = m_tileSize;
+    dstrect.h = m_tileSize;
+
+    SDL_Rect srcrect;
+    srcrect.w = m_tileSize;
+    srcrect.h = m_tileSize;
+
+    srcrect.x = m_glyphs.at(i).m_x;
+    srcrect.y = m_glyphs.at(i).m_y;
+
+    SDL_SetTextureColorMod(m_texture, colour.r, colour.g, colour.b);
+    SDL_RenderCopy(m_renderer, m_texture, &srcrect, &dstrect);
+}
+
+void Console::render(int i, int x, int y, SDL_Color colour){
 
     SDL_Rect dstrect;
     dstrect.x = x  * m_tileSize;

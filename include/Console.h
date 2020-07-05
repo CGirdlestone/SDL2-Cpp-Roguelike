@@ -18,6 +18,9 @@ class Console
         int Getm_height() { return m_height; }
         void Setm_height(int val) { m_height = val; }
 
+        int getXBuffer(){return m_xBuffer;}
+        int getYBuffer(){return m_yBuffer;}
+
         bool init(char* path);
         bool createWindow();
         bool createRenderer();
@@ -25,6 +28,7 @@ class Console
         bool loadMedia(char* path);
         void createTiles();
         void render(char* c, int x, int y, SDL_Color colour);
+        void render(int i, int x, int y, SDL_Color colour);
         void update();
         void closeSDL();
         void flush();
@@ -41,10 +45,10 @@ class Console
         int m_width;
         int m_height;
         char *m_title;
-        int m_textWidth;
-        int m_textHeight;
         int m_fullscreen;
         int m_tileSize;
+        int m_xBuffer;
+        int m_yBuffer;
         std::vector<Tile> m_glyphs;
 };
 

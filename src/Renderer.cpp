@@ -22,7 +22,7 @@ void Renderer::drawLog(MessageLog* messageLog, int height)
     for(int j = 0; j < static_cast<int>(messages.size()); j++){
       Message msg = messages.at(j);
       for(int i = 0; i < static_cast<int>(msg.m_msg.length()); i++){
-        m_console->render(&msg.m_msg[i], i, j + height, msg.m_colour);
+        m_console->render(&msg.m_msg[i], i + 1, j + height+1, msg.m_colour);
       }
     }
   }
@@ -87,4 +87,56 @@ void Renderer::drawActors(Camera* camera, DungeonGenerator* dungeon, std::vector
       }
     }
   }
+}
+
+void Renderer::drawMenuOutline()
+{
+  SDL_Color colour = {0xef, 0xb7, 0x75};
+  int xBuffer = m_console->getXBuffer();
+  int yBuffer = m_console->getYBuffer();
+  int height = m_console->Getm_height();
+  int width = m_console->Getm_width();
+  int verticalBar = 186;
+  int topLeft = 201;
+  int topRight = 187;
+  int bottomLeft = 200;
+  int bottomRight = 188;
+  int horizontalBar = 205;
+  int leftJoin = 185;
+  int topJoin = 202;
+
+  for (int i = 0; i < width + xBuffer; ++i){
+    for (int j = 0; j < height + yBuffer; ++j){
+      if (i == width && j == 0){
+        m_console->render(topLeft, i, j, colour);
+      } else if (i == width + xBuffer - 1 && j == 0){
+        m_console->render(topRight, i, j, colour);
+      } else if (i == width && j == height + yBuffer -1){
+        m_console->render(topJoin, i, j, colour);
+      } else if (i == width + xBuffer - 1 && j == height + yBuffer -1){
+        m_console->render(bottomRight, i, j, colour);
+      }else if (j == height && i == width){
+        m_console->render(leftJoin, i, j, colour);
+      } else if (i == width || i == width + xBuffer - 1){
+        m_console->render(verticalBar, i, j, colour);
+      } else if ((j == 0 || j == height + yBuffer - 1) && i > width){
+        m_console->render(horizontalBar, i, j, colour);
+      } else if (i == 0 && j == height){
+        m_console->render(topLeft, i, j, colour);
+      } else if (i == 0 && j == height + yBuffer - 1){
+        m_console->render(bottomLeft, i, j, colour);
+      } else if (i == 0 && j >= height){
+        m_console->render(verticalBar, i, j, colour);
+      } else if (j == height && i < width){
+        m_console->render(horizontalBar, i, j, colour);
+      } else if (j == height + yBuffer - 1 && i < width){
+        m_console->render(horizontalBar, i, j, colour);
+      }
+    }
+  }
+}
+
+void Renderer::drawUI()
+{
+  drawMenuOutline();
 }
