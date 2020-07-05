@@ -39,17 +39,21 @@ Game::~Game()
   delete m_messageLog;
   m_messageLog = nullptr;
 
+  delete m_camera;
+  m_camera = nullptr;
+
   for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
     delete m_actors[i];
   }
 }
 
-bool Game::init(int width, int height, int tileSize, char* title, int fps)
+bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize, char* title, int fps)
 {
-  m_dungeon = new DungeonGenerator(width, height);
+  m_dungeon = new DungeonGenerator(mapWidth, mapHeight);
   m_console = new Console(width, height, title, (char*)"./resources/Cheepicus_8x8x2.png", tileSize);
   m_input = new InputHandler();
   m_messageLog = new MessageLog(width, 10);
+  m_camera = new Camera(width, height, mapWidth, mapHeight);
   m_width = width;
   m_height = height;
   m_tileSize = tileSize;
@@ -80,11 +84,20 @@ void Game::drawMap()
 {
   int x;
   int y = 0;
+  int offsetI;
   SDL_Color colour = {0xef, 0xd8, 0xa1};
   bool occupied;
 
   for (int i = 0; i < m_dungeon->Getm_width() * m_dungeon->Getm_height(); i++){
     x = i % m_dungeon->Getm_width();
+
+    if (!(x >= m_camera->getX() && x < m_camera->getX() + m_camera->getWidth() && y >= m_camera->getY() && y < m_camera->getY() + m_camera->getHeight())){
+      if (x == m_dungeon->Getm_width() - 1){
+        y++;
+      }
+      continue;
+    }
+
     occupied = false;
     if (m_dungeon->m_fovMap[i] == 1){
       for(GameObject* actor : m_actors){
@@ -93,7 +106,8 @@ void Game::drawMap()
         }
       }
       if(!occupied){
-        m_console->render(&m_dungeon->m_level[i], x, y, colour);
+        offsetI = m_camera->calculateOffset(x, y);
+        m_console->render(&m_dungeon->m_level[i], offsetI % m_camera->getWidth(), offsetI / m_camera->getWidth(), colour);
       }
     } else if (m_dungeon->m_fovMap[i] == 0){
       if (m_dungeon->m_exploredMap[i] == 1){
@@ -102,7 +116,8 @@ void Game::drawMap()
             occupied = true;
           }
         }
-        m_console->render(&m_dungeon->m_level[i], x, y);
+        offsetI = m_camera->calculateOffset(x, y);
+        m_console->render(&m_dungeon->m_level[i], offsetI % m_camera->getWidth(), offsetI / m_camera->getWidth(), colour);
       }
     }
     if (x == m_dungeon->Getm_width() - 1){
@@ -114,11 +129,13 @@ void Game::drawMap()
 void Game::drawActors()
 {
   int mapArrayIndex;
+  int offsetI;
   if (!m_actors.empty()){
     for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
       mapArrayIndex = m_actors[i]->position->x + m_actors[i]->position->y*m_dungeon->Getm_width();
       if (m_dungeon->m_fovMap[mapArrayIndex] == 1){
-        m_console->render(&m_actors[i]->renderable->chr, m_actors[i]->position->x, m_actors[i]->position->y, m_actors[i]->renderable->colour);
+        offsetI = m_camera->calculateOffset(m_actors[i]->position->x, m_actors[i]->position->y);
+        m_console->render(&m_actors[i]->renderable->chr, offsetI % m_camera->getWidth(), offsetI / m_camera->getWidth(), m_actors[i]->renderable->colour);
       }
     }
   }
@@ -126,7 +143,7 @@ void Game::drawActors()
 
 bool Game::checkMove(int dx, int dy, int uid)
 {
-  if (m_actors.at(uid)->position->x + dx>= 0 && m_actors.at(uid)->position->x + dx < m_width && m_actors.at(uid)->position->y + dy >= 0 && m_actors.at(uid)->position->y + dy < m_height){
+  if (m_actors.at(uid)->position->x + dx>= 0 && m_actors.at(uid)->position->x + dx < m_dungeon->Getm_width() && m_actors.at(uid)->position->y + dy >= 0 && m_actors.at(uid)->position->y + dy < m_dungeon->Getm_height()){
     if (m_dungeon->m_level[(m_actors.at(uid)->position->x + dx) + m_dungeon->Getm_width() * (m_actors.at(uid)->position->y + dy)] != '.'){
       return false;
     } else{
@@ -167,7 +184,7 @@ void Game::processEntities()
     if (m_actors.at(i)->ai != nullptr){
 
       if (m_dungeon->m_fovMap[m_actors.at(i)->position->x + m_actors.at(i)->position->y * m_dungeon->Getm_width()] == 1){
-
+        m_actors.at(i)->ai->path.clear();
         aStar(m_dungeon->m_level, &m_actors.at(i)->ai->path, m_dungeon->Getm_width(), m_dungeon->Getm_height(), m_actors.at(i)->position->x, m_actors.at(i)->position->y, m_actors.at(0)->position->x, m_actors.at(0)->position->y);
 
         j = m_actors.at(i)->ai->path.back();
@@ -177,6 +194,16 @@ void Game::processEntities()
         y = j / m_dungeon->Getm_width();
 
         movePlayer(x - m_actors.at(i)->position->x, y - m_actors.at(i)->position->y, i);
+      } else {
+        if (m_actors.at(i)->ai->path.size() > 0){
+          j = m_actors.at(i)->ai->path.back();
+          m_actors.at(i)->ai->path.pop_back();
+
+          x = j % m_dungeon->Getm_width();
+          y = j / m_dungeon->Getm_width();
+
+          movePlayer(x - m_actors.at(i)->position->x, y - m_actors.at(i)->position->y, i);
+        }
       }
     }
   }
@@ -195,6 +222,7 @@ void Game::run()
   m_dungeon->createPlayer(&m_actors);
   m_dungeon->createEntities(&m_actors);
   m_dungeon->shadowCast(m_actors.at(0)->position->x, m_actors.at(0)->position->y, 10);
+  m_camera->updatePosition(m_actors.at(0)->position->x, m_actors.at(0)->position->y);
 
   Uint32 currentTime;
   Uint32 lastTime = 0;
@@ -237,6 +265,8 @@ void Game::run()
     if (m_state == AI){
       processEntities();
     }
+
+    m_camera->updatePosition(m_actors.at(0)->position->x, m_actors.at(0)->position->y);
 
     dt = (currentTime - lastTime);
     lastTime = currentTime;

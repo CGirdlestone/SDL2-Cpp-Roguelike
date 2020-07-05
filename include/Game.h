@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "KeyPressSurfaces.h"
 #include "MessageLog.h"
+#include "Camera.h"
 
 enum GameState
 {
@@ -23,7 +24,7 @@ class Game
     Game();
     virtual ~Game();
 
-    bool init(int width, int height, int tileSize, char* title, int fps);
+    bool init(int mapWidth, int mapHheight, int width, int height, int tileSize, char* title, int fps);
     void run();
     void drawMap();
     void drawLog();
@@ -39,6 +40,7 @@ class Game
     Console* m_console;
     InputHandler* m_input;
     MessageLog* m_messageLog;
+    Camera *m_camera;
     bool m_isPlaying;
     int m_width;
     int m_height;

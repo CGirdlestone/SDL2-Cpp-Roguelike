@@ -441,24 +441,26 @@ void DungeonGenerator::hollowSolidChunks()
 
 void DungeonGenerator::createMap(int threshold, int steps, int underPop, int overPop){
   initialiseMap(threshold);
-  for (int i = 0; i < steps; i++){
+  for (int i = 0; i < steps; ++i){
     simulationStep(underPop, overPop);
   }
 
   if (static_cast<float>(floodFill())/static_cast<float>(m_width*m_height) < 0.3){
     createMap(threshold, steps, underPop, overPop);
+  } else {
+    for (int j = 0; j < 3; ++j){
+      removeLoneWalls(j);
+    }
+
+    removeLoneWalls(3);
+    removeLoneWalls(0);
+    removeLoneWalls(2);
+
+    fillBorder();
+    hollowSolidChunks();
   }
 
-  for (int j = 0; j < 3; j++){
-    removeLoneWalls(j);
-  }
 
-  removeLoneWalls(3);
-  removeLoneWalls(0);
-  removeLoneWalls(2);
-
-  fillBorder();
-  hollowSolidChunks();
   //tidyBorder();
 
 }
