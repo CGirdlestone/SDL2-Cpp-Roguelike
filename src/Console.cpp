@@ -64,7 +64,6 @@ bool Console::init(char* path)
     createTiles();
 
     m_fullscreen = 0;
-    m_defaultColour = {0x18, 0x79, 0x87};
 
     return true;
 }
@@ -125,28 +124,6 @@ void Console::createTiles()
     for(int i = 0; i < textureSize; i++){
         m_glyphs.push_back(Tile(i%m_tileSize, i/m_tileSize, m_tileSize));
     }
-}
-
-void Console::render(char* c, int x, int y)
-{
-    int i = static_cast<int>((*c));
-
-    SDL_Rect dstrect;
-    dstrect.x = x  * m_tileSize;
-    dstrect.y = y * m_tileSize;
-    dstrect.w = m_tileSize;
-    dstrect.h = m_tileSize;
-
-    SDL_Rect srcrect;
-    srcrect.w = m_tileSize;
-    srcrect.h = m_tileSize;
-
-    srcrect.x = m_glyphs.at(i).m_x;
-    srcrect.y = m_glyphs.at(i).m_y;
-
-    SDL_SetTextureColorMod(m_texture, m_defaultColour.r, m_defaultColour.g, m_defaultColour.b);
-    SDL_RenderCopy(m_renderer, m_texture, &srcrect, &dstrect);
-
 }
 
 void Console::render(char* c, int x, int y, SDL_Color colour){

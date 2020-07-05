@@ -25,11 +25,11 @@ class Console
         bool loadMedia(char* path);
         void createTiles();
         void render(char* c, int x, int y, SDL_Color colour);
-        void render(char* c, int x, int y);
         void update();
         void closeSDL();
         void flush();
         void setFullscreen();
+        SDL_Renderer* getRenderer(){return m_renderer;};
 
     protected:
 
@@ -38,7 +38,6 @@ class Console
         SDL_Surface *m_rootSurface;
         SDL_Renderer *m_renderer;
         SDL_Texture *m_texture;
-        SDL_Color m_defaultColour;
         int m_width;
         int m_height;
         char *m_title;

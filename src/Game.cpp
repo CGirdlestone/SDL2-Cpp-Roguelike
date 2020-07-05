@@ -14,6 +14,7 @@
 #include "MessageLog.h"
 #include "Pathfind.h"
 #include "Game.h"
+#include "Renderer.h"
 
 
 Game::Game()
@@ -54,90 +55,20 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_input = new InputHandler();
   m_messageLog = new MessageLog(width, 10);
   m_camera = new Camera(width, height, mapWidth, mapHeight);
+  m_renderer = new Renderer(m_console);
   m_width = width;
   m_height = height;
+  m_mapWidth = mapWidth;
+  m_mapHeight = mapHeight;
   m_tileSize = tileSize;
   m_fps = fps;
+  m_defaultColour = {0x18, 0x79, 0x87};
+  m_inViewColour = {0xef, 0xd8, 0xa1};
 
   if (m_dungeon == nullptr || m_console == nullptr || m_input == nullptr){
       return false;
   } else {
       return true;
-  }
-}
-
-void Game::drawLog()
-{
-  std::vector<Message> messages = m_messageLog->getMessages();
-
-  if (messages.size() > 0){
-    for(int j = 0; j < static_cast<int>(messages.size()); j++){
-      Message msg = messages.at(j);
-      for(int i = 0; i < static_cast<int>(msg.m_msg.length()); i++){
-        m_console->render(&msg.m_msg[i], i, j + m_height, msg.m_colour);
-      }
-    }
-  }
-}
-
-void Game::drawMap()
-{
-  int x;
-  int y = 0;
-  int offsetI;
-  SDL_Color colour = {0xef, 0xd8, 0xa1};
-  bool occupied;
-
-  for (int i = 0; i < m_dungeon->Getm_width() * m_dungeon->Getm_height(); i++){
-    x = i % m_dungeon->Getm_width();
-
-    if (!(x >= m_camera->getX() && x < m_camera->getX() + m_camera->getWidth() && y >= m_camera->getY() && y < m_camera->getY() + m_camera->getHeight())){
-      if (x == m_dungeon->Getm_width() - 1){
-        y++;
-      }
-      continue;
-    }
-
-    occupied = false;
-    if (m_dungeon->m_fovMap[i] == 1){
-      for(GameObject* actor : m_actors){
-        if (actor->position->x + actor->position->y*m_dungeon->Getm_width() == i){
-          occupied = true;
-        }
-      }
-      if(!occupied){
-        offsetI = m_camera->calculateOffset(x, y);
-        m_console->render(&m_dungeon->m_level[i], offsetI % m_camera->getWidth(), offsetI / m_camera->getWidth(), colour);
-      }
-    } else if (m_dungeon->m_fovMap[i] == 0){
-      if (m_dungeon->m_exploredMap[i] == 1){
-        for(GameObject* actor : m_actors){
-          if (actor->position->x + actor->position->y*m_dungeon->Getm_width() == i){
-            occupied = true;
-          }
-        }
-        offsetI = m_camera->calculateOffset(x, y);
-        m_console->render(&m_dungeon->m_level[i], offsetI % m_camera->getWidth(), offsetI / m_camera->getWidth(), colour);
-      }
-    }
-    if (x == m_dungeon->Getm_width() - 1){
-      y++;
-    }
-  }
-}
-
-void Game::drawActors()
-{
-  int mapArrayIndex;
-  int offsetI;
-  if (!m_actors.empty()){
-    for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
-      mapArrayIndex = m_actors[i]->position->x + m_actors[i]->position->y*m_dungeon->Getm_width();
-      if (m_dungeon->m_fovMap[mapArrayIndex] == 1){
-        offsetI = m_camera->calculateOffset(m_actors[i]->position->x, m_actors[i]->position->y);
-        m_console->render(&m_actors[i]->renderable->chr, offsetI % m_camera->getWidth(), offsetI / m_camera->getWidth(), m_actors[i]->renderable->colour);
-      }
-    }
   }
 }
 
@@ -238,9 +169,9 @@ void Game::run()
     }
 
     m_console->flush();
-    drawMap();
-    drawActors();
-    drawLog();
+    m_renderer->drawMap(m_camera, m_dungeon, &m_actors);
+    m_renderer->drawActors(m_camera, m_dungeon, &m_actors);
+    m_renderer->drawLog(m_messageLog, m_height);
     m_console->update();
 
     keyPress = m_input->getEvent(&e);
