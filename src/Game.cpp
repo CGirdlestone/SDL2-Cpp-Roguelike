@@ -15,6 +15,10 @@
 #include "Pathfind.h"
 #include "Game.h"
 #include "Renderer.h"
+#include "EventTypes.h"
+#include "Events.h"
+#include "EventManager.h"
+#include "MoveSystem.h"
 
 
 Game::Game()
@@ -46,6 +50,12 @@ Game::~Game()
   delete m_renderer;
   m_renderer = nullptr;
 
+  delete m_eventManager;
+  m_eventManager = nullptr;
+
+  delete m_moveSystem;
+  m_moveSystem = nullptr;
+
   for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
     delete m_actors[i];
   }
@@ -57,6 +67,8 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_camera = new Camera(width, height, mapWidth, mapHeight);
   m_console = new Console(width, height, title, (char*)"./resources/Cheepicus_8x8x2.png", tileSize);
   m_input = new InputHandler();
+  m_eventManager = new EventManager();
+  m_moveSystem = new MoveSystem(m_eventManager, &m_actors, m_dungeon);
   m_messageLog = new MessageLog(width, 9);
   m_renderer = new Renderer(m_console);
   m_width = width;
@@ -154,7 +166,8 @@ void Game::processInput(KeyPressSurfaces keyPress)
   if (keyPress == ESCAPE){
       m_isPlaying = false;
   } else if (keyPress == WEST){
-    movePlayer(-1, 0, 0);
+    MoveEvent moveEvent = MoveEvent(-1, 0, 0);
+    m_eventManager->pushEvent(moveEvent);
     m_state = AI;
   } else if (keyPress == EAST){
     movePlayer(1, 0, 0);

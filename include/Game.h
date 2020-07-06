@@ -10,6 +10,8 @@
 #include "KeyPressSurfaces.h"
 #include "MessageLog.h"
 #include "Camera.h"
+#include "EventManager.h"
+#include "MoveSystem.h"
 
 enum GameState
 {
@@ -43,6 +45,8 @@ class Game
     MessageLog* m_messageLog;
     Camera *m_camera;
     Renderer* m_renderer;
+    EventManager* m_eventManager;
+    MoveSystem* m_moveSystem;
     bool m_isPlaying;
     int m_width;
     int m_height;
