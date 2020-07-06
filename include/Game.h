@@ -29,8 +29,6 @@ class Game
 
     bool init(int mapWidth, int mapHheight, int width, int height, int tileSize, char* title, int fps);
     void run();
-    void movePlayer(int dx, int dy, int uid);
-    bool checkMove(int dx, int dy, int uid);
     void processEntities();
     void processInput(KeyPressSurfaces keyPress);
     void onTick();

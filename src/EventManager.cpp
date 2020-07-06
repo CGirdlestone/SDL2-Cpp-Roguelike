@@ -23,7 +23,6 @@ void EventManager::registerSystem(EventTypes eventType, System* s)
   } else {
     m_subscribers.at(eventType).push_back(s);
   }
-
 }
 
 void EventManager::pushEvent(MoveEvent event)
