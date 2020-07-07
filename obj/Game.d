@@ -7,8 +7,9 @@ obj/Game.o: src/Game.cpp include/DungeonGenerator.h include/GameObject.h \
  include/System.h include/Pathfind.h include/Game.h \
  include/DungeonGenerator.h include/Console.h include/Renderer.h \
  include/MessageLog.h include/Camera.h include/InputHandler.h \
- include/MoveSystem.h include/Renderer.h include/EventTypes.h \
- include/Events.h include/EventManager.h include/MoveSystem.h
+ include/MoveSystem.h include/CombatSystem.h include/Renderer.h \
+ include/EventTypes.h include/Events.h include/EventManager.h \
+ include/MoveSystem.h include/CombatSystem.h
 
 include/DungeonGenerator.h:
 
@@ -62,6 +63,8 @@ include/InputHandler.h:
 
 include/MoveSystem.h:
 
+include/CombatSystem.h:
+
 include/Renderer.h:
 
 include/EventTypes.h:
@@ -71,3 +74,5 @@ include/Events.h:
 include/EventManager.h:
 
 include/MoveSystem.h:
+
+include/CombatSystem.h:

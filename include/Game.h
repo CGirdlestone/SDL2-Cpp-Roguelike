@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "EventManager.h"
 #include "MoveSystem.h"
+#include "CombatSystem.h"
 
 enum GameState
 {
@@ -45,6 +46,7 @@ class Game
     Renderer* m_renderer;
     EventManager* m_eventManager;
     MoveSystem* m_moveSystem;
+    CombatSystem* m_combatSystem;
     bool m_isPlaying;
     int m_width;
     int m_height;

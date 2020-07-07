@@ -20,7 +20,6 @@ public:
     std::vector<Message> getMessages();
     int getm_y_buffer(){return m_y_buffer;};
     void ageMessages(Uint32 ticks);
-    virtual void notify(MoveEvent event);
     virtual void notify(AttackEvent event);
     virtual void notify(OnHitEvent event);
     virtual void notify(OnMissEvent event);

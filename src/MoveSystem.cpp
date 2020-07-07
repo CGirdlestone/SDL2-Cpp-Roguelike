@@ -29,7 +29,8 @@ bool MoveSystem::checkMove(int dx, int dy, int uid)
         if (i == uid){ continue; }
 
         if (m_entities->at(uid)->position->x + dx == m_entities->at(i)->position->x && m_entities->at(uid)->position->y + dy == m_entities->at(i)->position->y){
-          // attack here
+          AttackEvent attackEvent = AttackEvent(uid, i);
+          m_eventManager->pushEvent(attackEvent);
           return false;
         }
       }

@@ -19,6 +19,7 @@
 #include "Events.h"
 #include "EventManager.h"
 #include "MoveSystem.h"
+#include "CombatSystem.h"
 
 
 Game::Game()
@@ -56,6 +57,9 @@ Game::~Game()
   delete m_moveSystem;
   m_moveSystem = nullptr;
 
+  delete m_combatSystem;
+  m_combatSystem = nullptr;
+
   for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
     delete m_actors[i];
   }
@@ -68,7 +72,8 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_console = new Console(width, height, title, (char*)"./resources/Cheepicus_8x8x2.png", tileSize);
   m_input = new InputHandler();
   m_eventManager = new EventManager();
-  m_messageLog = new MessageLog(width, 9, m_eventManager, &m_actors);
+  m_messageLog = new MessageLog(width, 8, m_eventManager, &m_actors);
+  m_combatSystem = new CombatSystem(m_eventManager, &m_actors);
   m_moveSystem = new MoveSystem(m_eventManager, &m_actors, m_dungeon);
   m_renderer = new Renderer(m_console);
   m_width = width;

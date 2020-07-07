@@ -16,7 +16,7 @@ MessageLog::MessageLog(int x_buffer, int y_buffer, EventManager* eventManager, s
     m_y_buffer = y_buffer;
     m_eventManager = eventManager;
     m_entities = entities;
-    m_eventManager->registerSystem(MOVE, this);
+    m_eventManager->registerSystem(ATTACK, this);
 }
 
 MessageLog::~MessageLog()
@@ -75,15 +75,19 @@ std::vector<Message> MessageLog::getMessages()
     return m_messageQueue;
 }
 
-void MessageLog::notify(MoveEvent event)
-{
-  // to do
-  addMessage(m_entities->at(event.m_uid)->m_name);
-}
+// void MessageLog::notify(MoveEvent event)
+// {
+//   // to do
+//   addMessage(m_entities->at(event.m_uid)->m_name);
+// }
 
 void MessageLog::notify(AttackEvent event)
 {
   // to do
+  std::string attacker_name = m_entities->at(event.m_attacker_uid)->m_name;
+  std::string defender_name = m_entities->at(event.m_defender_uid)->m_name;
+  std::string msg = attacker_name + " attacked " + defender_name;
+  addMessage(msg);
 }
 
 void MessageLog::notify(OnHitEvent event)
