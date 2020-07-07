@@ -27,8 +27,10 @@ bool MoveSystem::checkMove(int dx, int dy, int uid)
     } else{
       for (int i = 0; i < static_cast<int>(m_entities->size()); i++){
         if (i == uid){ continue; }
+        if (m_entities->at(i)->fighter == nullptr){ continue; }
+        if (!(m_entities->at(i)->fighter->isAlive)){ continue; }
 
-        if (m_entities->at(uid)->position->x + dx == m_entities->at(i)->position->x && m_entities->at(uid)->position->y + dy == m_entities->at(i)->position->y){
+        if (m_entities->at(uid)->position->x + dx == m_entities->at(i)->position->x && m_entities->at(uid)->position->y + dy == m_entities->at(i)->position->y && m_entities->at(i)->fighter->isAlive){
           AttackEvent attackEvent = AttackEvent(uid, i);
           m_eventManager->pushEvent(attackEvent);
           return false;

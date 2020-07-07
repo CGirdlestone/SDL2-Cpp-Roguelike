@@ -29,7 +29,7 @@ struct Fighter
   int power;
   int defence;
   bool isAlive;
-  Fighter(int maxHealth, int power, int defence, bool isAlive);
+  Fighter(int _maxHealth, int _power, int _defence);
   ~Fighter();
 };
 

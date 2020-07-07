@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <vector>
 
 #include "CombatSystem.h"
@@ -21,22 +22,68 @@ CombatSystem::~CombatSystem()
   m_entities = nullptr;
 }
 
+void CombatSystem::doAttack(AttackEvent event)
+{
+  int roll = std::rand()%20 + 1;
+
+  if (roll >= 10 + m_entities->at(event.m_defender_uid)->fighter->defence){
+    OnHitEvent onHit = OnHitEvent(event.m_attacker_uid, event.m_defender_uid);
+    m_eventManager->pushEvent(onHit);
+  } else {
+    OnMissEvent onMiss = OnMissEvent(event.m_attacker_uid, event.m_defender_uid);
+    m_eventManager->pushEvent(onMiss);
+  }
+}
+
+void CombatSystem::calculateDamage(OnHitEvent event)
+{
+  int dmg;
+
+  dmg = std::rand()%6 + 1 + m_entities->at(event.m_attacker_uid)->fighter->power;
+
+  DamageEvent damageEvent = DamageEvent(event.m_defender_uid, dmg);
+  m_eventManager->pushEvent(damageEvent);
+
+}
+
+void CombatSystem::applyDamage(DamageEvent event)
+{
+  if (m_entities->at(event.m_uid)->fighter != nullptr){
+    m_entities->at(event.m_uid)->fighter->health -= event.m_damage;
+
+    if (m_entities->at(event.m_uid)->fighter->health <= 0){
+      m_entities->at(event.m_uid)->fighter->isAlive = false;
+      DeadEvent deadEvent = DeadEvent(event.m_uid);
+      m_eventManager->pushEvent(deadEvent);
+}
+  }
+}
+
+void CombatSystem::onDead(DeadEvent event)
+{
+  SDL_Color c = {0x55, 0x0f, 0x0a};
+  m_entities->at(event.m_uid)->renderable->colour = c;
+}
+
 void CombatSystem::notify(AttackEvent event)
 {
-  // to do
+  doAttack(event);
 }
 
 void CombatSystem::notify(OnHitEvent event)
 {
   // to do
+  calculateDamage(event);
 }
 
 void CombatSystem::notify(DamageEvent event)
 {
   // to do
+  applyDamage(event);
 }
 
 void CombatSystem::notify(DeadEvent event)
 {
   // to do
+  onDead(event);
 }

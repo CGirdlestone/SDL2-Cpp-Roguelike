@@ -615,10 +615,16 @@ void DungeonGenerator::createPlayer(std::vector<GameObject*> *actors)
 
   Renderable *r = new Renderable(c, colour);
 
+  Fighter *f = new Fighter(20, 2, 3);
+
   Position *p = new Position(x, y);
+
+  Actor *actor = new Actor();
 
   player->position = p;
   player->renderable = r;
+  player->fighter = f;
+  player->actor = actor;
   actors->push_back(player);
 }
 
@@ -646,12 +652,18 @@ void DungeonGenerator::createEntities(std::vector<GameObject*> *actors)
 
   Renderable *r = new Renderable(c, colour);
 
+  Fighter *f = new Fighter(12, 2, 1);
+
   Position *p = new Position(x, y);
 
   AI *a = new AI();
 
+  Actor *actor = new Actor();
+
   entity->position = p;
   entity->renderable = r;
+  entity->fighter = f;
   entity->ai = a;
+  entity->actor = actor;
   actors->push_back(entity);
 }

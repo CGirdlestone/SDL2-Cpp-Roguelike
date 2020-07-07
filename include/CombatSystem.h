@@ -14,6 +14,11 @@ class CombatSystem : public System
 public:
   CombatSystem(EventManager* eventManager, std::vector<GameObject*> *entities);
   virtual ~CombatSystem();
+  void doAttack(AttackEvent event);
+  void calculateDamage(OnHitEvent event);
+  void applyDamage(DamageEvent event);
+  void onDead(DeadEvent event);
+
 
   virtual void notify(AttackEvent event);
   virtual void notify(OnHitEvent event);

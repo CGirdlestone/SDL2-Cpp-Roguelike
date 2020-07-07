@@ -18,42 +18,42 @@ m_name(name)
 
 GameObject::~GameObject()
 {
-  if(position){
+  if(position != nullptr){
     delete position;
     position = nullptr;
   }
 
-  if(renderable){
+  if(renderable != nullptr){
     delete renderable;
     renderable = nullptr;
   }
 
-  if(fighter){
+  if(fighter != nullptr){
     delete fighter;
     fighter = nullptr;
   }
 
-  if(actor){
+  if(actor != nullptr){
     delete actor;
     actor = nullptr;
   }
 
-  if(player){
+  if(player != nullptr){
     delete player;
     player = nullptr;
   }
 
-  if(ai){
+  if(ai != nullptr){
     delete ai;
     ai = nullptr;
   }
 
-  if(item){
+  if(item != nullptr){
     delete item;
     item = nullptr;
   }
 
-  if(container){
+  if(container != nullptr){
     delete container;
     container = nullptr;
   }

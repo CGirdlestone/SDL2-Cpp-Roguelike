@@ -18,6 +18,7 @@ enum GameState
 {
     PLAYER,
     AI,
+    GAMEOVER,
 };
 
 extern GameState State;

@@ -16,7 +16,10 @@ MessageLog::MessageLog(int x_buffer, int y_buffer, EventManager* eventManager, s
     m_y_buffer = y_buffer;
     m_eventManager = eventManager;
     m_entities = entities;
-    m_eventManager->registerSystem(ATTACK, this);
+    m_eventManager->registerSystem(ONHIT, this);
+    m_eventManager->registerSystem(ONMISS, this);
+    m_eventManager->registerSystem(DAMAGE, this);
+    m_eventManager->registerSystem(DEAD, this);
 }
 
 MessageLog::~MessageLog()
@@ -84,30 +87,41 @@ std::vector<Message> MessageLog::getMessages()
 void MessageLog::notify(AttackEvent event)
 {
   // to do
-  std::string attacker_name = m_entities->at(event.m_attacker_uid)->m_name;
-  std::string defender_name = m_entities->at(event.m_defender_uid)->m_name;
-  std::string msg = attacker_name + " attacked " + defender_name;
-  addMessage(msg);
 }
 
 void MessageLog::notify(OnHitEvent event)
 {
   // to do
+  std::string attacker_name = m_entities->at(event.m_attacker_uid)->m_name;
+  std::string defender_name = m_entities->at(event.m_defender_uid)->m_name;
+  std::string msg = attacker_name + " hits " + defender_name;
+  addMessage(msg);
 }
 
 
 void MessageLog::notify(OnMissEvent event)
 {
   // to do
+  std::string attacker_name = m_entities->at(event.m_attacker_uid)->m_name;
+  std::string defender_name = m_entities->at(event.m_defender_uid)->m_name;
+  std::string msg = attacker_name + " misses " + defender_name;
+  addMessage(msg);
 }
 
 
 void MessageLog::notify(DamageEvent event)
 {
   // to do
+  std::string defender_name = m_entities->at(event.m_uid)->m_name;
+  int dmg = event.m_damage;
+  std::string msg = defender_name + " suffers " + std::to_string(dmg) + " points of damage!";
+  addMessage(msg);
 }
 
 void MessageLog::notify(DeadEvent event)
 {
   // to do
+  std::string defender_name = m_entities->at(event.m_uid)->m_name;
+  std::string msg = defender_name + " has been slain!";
+  addMessage(msg);
 }

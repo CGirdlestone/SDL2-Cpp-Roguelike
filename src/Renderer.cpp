@@ -80,7 +80,7 @@ void Renderer::drawActors(Camera* camera, DungeonGenerator* dungeon, std::vector
   int mapArrayIndex;
   int offsetI;
   if (!actors->empty()){
-    for (int i = 0; i < static_cast<int>(actors->size()); i++){
+    for (int i = static_cast<int>(actors->size())-1; i >= 0 ; --i){
       mapArrayIndex = actors->at(i)->position->x + actors->at(i)->position->y*dungeon->Getm_width();
       if (dungeon->m_fovMap[mapArrayIndex] == 1){
         offsetI = camera->calculateOffset(actors->at(i)->position->x, actors->at(i)->position->y);

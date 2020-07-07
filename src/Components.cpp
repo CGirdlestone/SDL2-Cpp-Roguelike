@@ -26,7 +26,8 @@ Renderable::~Renderable()
 
 }
 
-Fighter::Fighter(int maxHealth, int power, int defence, bool isAlive)
+Fighter::Fighter(int _maxHealth, int _power, int _defence):
+maxHealth(_maxHealth), health(_maxHealth), power(_power), defence(_defence), isAlive(true)
 {
 
 }

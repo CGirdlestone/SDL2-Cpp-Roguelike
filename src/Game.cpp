@@ -97,23 +97,12 @@ void Game::processEntities()
   int x, y;
 
   for (int i = 1; i < static_cast<int>(m_actors.size()); ++i){
-    if (m_actors.at(i)->ai != nullptr){
+    if (m_actors.at(i)->ai != nullptr && m_actors.at(i)->fighter != nullptr){
+      if (m_actors.at(i)->fighter->isAlive){
+        if (m_dungeon->m_fovMap[m_actors.at(i)->position->x + m_actors.at(i)->position->y * m_dungeon->Getm_width()] == 1){
+          m_actors.at(i)->ai->path.clear();
+          aStar(m_dungeon->m_level, &m_actors.at(i)->ai->path, m_dungeon->Getm_width(), m_dungeon->Getm_height(), m_actors.at(i)->position->x, m_actors.at(i)->position->y, m_actors.at(0)->position->x, m_actors.at(0)->position->y);
 
-      if (m_dungeon->m_fovMap[m_actors.at(i)->position->x + m_actors.at(i)->position->y * m_dungeon->Getm_width()] == 1){
-        m_actors.at(i)->ai->path.clear();
-        aStar(m_dungeon->m_level, &m_actors.at(i)->ai->path, m_dungeon->Getm_width(), m_dungeon->Getm_height(), m_actors.at(i)->position->x, m_actors.at(i)->position->y, m_actors.at(0)->position->x, m_actors.at(0)->position->y);
-
-        j = m_actors.at(i)->ai->path.back();
-        m_actors.at(i)->ai->path.pop_back();
-
-        x = j % m_dungeon->Getm_width();
-        y = j / m_dungeon->Getm_width();
-
-        MoveEvent moveEvent = MoveEvent(x - m_actors.at(i)->position->x, y - m_actors.at(i)->position->y, i);
-        m_eventManager->pushEvent(moveEvent);
-
-      } else {
-        if (m_actors.at(i)->ai->path.size() > 0){
           j = m_actors.at(i)->ai->path.back();
           m_actors.at(i)->ai->path.pop_back();
 
@@ -122,6 +111,18 @@ void Game::processEntities()
 
           MoveEvent moveEvent = MoveEvent(x - m_actors.at(i)->position->x, y - m_actors.at(i)->position->y, i);
           m_eventManager->pushEvent(moveEvent);
+
+        } else {
+          if (m_actors.at(i)->ai->path.size() > 0){
+            j = m_actors.at(i)->ai->path.back();
+            m_actors.at(i)->ai->path.pop_back();
+
+            x = j % m_dungeon->Getm_width();
+            y = j / m_dungeon->Getm_width();
+
+            MoveEvent moveEvent = MoveEvent(x - m_actors.at(i)->position->x, y - m_actors.at(i)->position->y, i);
+            m_eventManager->pushEvent(moveEvent);
+          }
         }
       }
     }
@@ -180,6 +181,11 @@ void Game::onTick()
   }
 
   m_camera->updatePosition(m_actors.at(0)->position->x, m_actors.at(0)->position->y);
+
+  if (!(m_actors.at(0)->fighter->isAlive)){
+    m_state = GAMEOVER;
+    m_isPlaying = false;
+  }
 }
 
 void Game::update(Uint32 dt)
