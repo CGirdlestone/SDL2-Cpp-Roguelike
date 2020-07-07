@@ -1,8 +1,10 @@
 
 #include "GameObject.h"
+#include <string>
 #include <vector>
 
-GameObject::GameObject()
+GameObject::GameObject(std::string name):
+m_name(name)
 {
   position = nullptr;
   renderable = nullptr;

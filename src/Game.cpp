@@ -68,8 +68,8 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_console = new Console(width, height, title, (char*)"./resources/Cheepicus_8x8x2.png", tileSize);
   m_input = new InputHandler();
   m_eventManager = new EventManager();
+  m_messageLog = new MessageLog(width, 9, m_eventManager, &m_actors);
   m_moveSystem = new MoveSystem(m_eventManager, &m_actors, m_dungeon);
-  m_messageLog = new MessageLog(width, 9);
   m_renderer = new Renderer(m_console);
   m_width = width;
   m_height = height;
@@ -91,7 +91,7 @@ void Game::processEntities()
   int j;
   int x, y;
 
-  for (int i = 1; i < static_cast<int>(m_actors.size()); i++){
+  for (int i = 1; i < static_cast<int>(m_actors.size()); ++i){
     if (m_actors.at(i)->ai != nullptr){
 
       if (m_dungeon->m_fovMap[m_actors.at(i)->position->x + m_actors.at(i)->position->y * m_dungeon->Getm_width()] == 1){

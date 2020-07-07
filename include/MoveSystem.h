@@ -17,7 +17,7 @@ public:
   virtual ~MoveSystem();
   bool checkMove(int dx, int dy, int uid);
   void moveEntity(int dx, int dy, int uid);
-  virtual void notify(MoveEvent event) override {moveEntity(event.m_uid, event.m_dx, event.m_dy);};
+  virtual void notify(MoveEvent event) override {moveEntity(event.m_dx, event.m_dy, event.m_uid);};
 
 
 

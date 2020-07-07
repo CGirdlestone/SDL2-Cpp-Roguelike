@@ -2,6 +2,7 @@
 
 #include "EventTypes.h"
 #include "Events.h"
+#include "GameObject.h"
 
 Event::~Event()
 {
@@ -9,7 +10,7 @@ Event::~Event()
 }
 
 
-MoveEvent::MoveEvent(int uid, int dx, int dy):
+MoveEvent::MoveEvent(int dx, int dy, int uid):
 m_uid(uid), m_dx(dx), m_dy(dy)
 {
   m_type = MOVE;

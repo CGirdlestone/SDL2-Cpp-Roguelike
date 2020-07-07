@@ -12,7 +12,7 @@ struct Event
 
 struct MoveEvent : Event
 {
-  MoveEvent(int uid, int dx, int dy);
+  MoveEvent(int dx, int dy, int uid);
   virtual ~MoveEvent();
   int m_uid;
   int m_dx;

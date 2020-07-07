@@ -581,7 +581,6 @@ void DungeonGenerator::shadowCast(int x, int y, int radius)
   }
 }
 
-
 void DungeonGenerator::doRecomputeFOV(int x, int y, int radius)
 {
   recomputeFOV = false;
@@ -602,7 +601,7 @@ void DungeonGenerator::createPlayer(std::vector<GameObject*> *actors)
   SDL_Color colour = {0xef, 0xac, 0x28};
   char c = '@';
 
-  GameObject *player = new GameObject();
+  GameObject *player = new GameObject("player");
 
   while(!playerPlaced){
     i = std::rand()%(m_width * m_height);
@@ -633,7 +632,7 @@ void DungeonGenerator::createEntities(std::vector<GameObject*> *actors)
   SDL_Color colour = {0x9b, 0x1a, 0x0a};
   char c = 'b';
 
-  GameObject *entity = new GameObject();
+  GameObject *entity = new GameObject("bat");
 
   while(!entityPlaced){
     i = std::rand()%(m_width * m_height);
