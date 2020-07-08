@@ -75,3 +75,25 @@ DeadEvent::~DeadEvent()
 {
 
 }
+
+TakeEvent::TakeEvent(int uid, int x, int y):
+m_uid(uid), m_x(x), m_y(y)
+{
+  m_type = TAKE;
+}
+
+TakeEvent::~TakeEvent()
+{
+
+}
+
+OnPickUpEvent::OnPickUpEvent(int uid, std::string name):
+m_uid(uid), m_name(name)
+{
+  m_type = ONPICKUP;
+}
+
+OnPickUpEvent::~OnPickUpEvent()
+{
+
+}

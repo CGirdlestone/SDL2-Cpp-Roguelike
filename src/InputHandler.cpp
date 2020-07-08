@@ -63,6 +63,9 @@ enum KeyPressSurfaces InputHandler::getEvent(SDL_Event* e){
 
                 case SDLK_F1:
                 return F1;
+
+                case SDLK_g:
+                return GRAB;
             }
         }
     }

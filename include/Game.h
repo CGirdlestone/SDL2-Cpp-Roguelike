@@ -13,6 +13,7 @@
 #include "EventManager.h"
 #include "MoveSystem.h"
 #include "CombatSystem.h"
+#include "InventorySystem.h"
 
 enum GameState
 {
@@ -48,6 +49,7 @@ class Game
     EventManager* m_eventManager;
     MoveSystem* m_moveSystem;
     CombatSystem* m_combatSystem;
+    InventorySystem* m_inventorySystem;
     bool m_isPlaying;
     int m_width;
     int m_height;

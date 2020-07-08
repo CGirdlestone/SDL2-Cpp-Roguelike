@@ -21,6 +21,8 @@ public:
   void pushEvent(OnMissEvent event);
   void pushEvent(DamageEvent event);
   void pushEvent(DeadEvent event);
+  void pushEvent(TakeEvent event);
+  void pushEvent(OnPickUpEvent event);
 
 private:
   std::map<EventTypes, std::vector<System*>> m_subscribers;

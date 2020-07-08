@@ -50,6 +50,8 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::vector<Ga
     if (dungeon->m_fovMap[i] == 1){
 
       for(int j = 0; j < static_cast<int>(actors->size()); ++j){
+        if (actors->at(j)->position == nullptr){ continue; }
+
         if (actors->at(j)->position->x + actors->at(j)->position->y*dungeon->Getm_width() == i){
           occupied = true;
         }
@@ -61,6 +63,8 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::vector<Ga
     } else if (dungeon->m_fovMap[i] == 0){
       if (dungeon->m_exploredMap[i] == 1){
         for(int j = 0; j < static_cast<int>(actors->size()); ++j){
+          if (actors->at(j)->position == nullptr){ continue; }
+
           if (actors->at(j)->position->x + actors->at(j)->position->y*dungeon->Getm_width() == i){
             occupied = true;
           }
@@ -81,6 +85,8 @@ void Renderer::drawActors(Camera* camera, DungeonGenerator* dungeon, std::vector
   int offsetI;
   if (!actors->empty()){
     for (int i = static_cast<int>(actors->size())-1; i >= 0 ; --i){
+      if (actors->at(i)->position == nullptr){ continue; }
+
       mapArrayIndex = actors->at(i)->position->x + actors->at(i)->position->y*dungeon->Getm_width();
       if (dungeon->m_fovMap[mapArrayIndex] == 1){
         offsetI = camera->calculateOffset(actors->at(i)->position->x, actors->at(i)->position->y);
@@ -148,4 +154,10 @@ void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::ve
   drawActors(camera, dungeon, actors);
   drawLog(messageLog, height);
   drawUI();
+  if(actors->at(0)->inventory->inventory.size() > 0){
+    GameObject* item = actors->at(0)->inventory->inventory.at(0);
+    for (int i = 0; i < item->m_name.length(); ++i){
+      m_console->render(&item->m_name[i], m_console->Getm_width()+1+i, 1, m_defaultColour);
+    }
+  }
 }

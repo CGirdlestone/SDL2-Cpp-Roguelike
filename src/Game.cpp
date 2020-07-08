@@ -20,6 +20,7 @@
 #include "EventManager.h"
 #include "MoveSystem.h"
 #include "CombatSystem.h"
+#include "InventorySystem.h"
 
 
 Game::Game()
@@ -60,6 +61,9 @@ Game::~Game()
   delete m_combatSystem;
   m_combatSystem = nullptr;
 
+  delete m_inventorySystem;
+  m_inventorySystem = nullptr;
+
   for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
     delete m_actors[i];
   }
@@ -74,6 +78,7 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_eventManager = new EventManager();
   m_messageLog = new MessageLog(width, 8, m_eventManager, &m_actors);
   m_combatSystem = new CombatSystem(m_eventManager, &m_actors);
+  m_inventorySystem = new InventorySystem(m_eventManager, &m_actors);
   m_moveSystem = new MoveSystem(m_eventManager, &m_actors, m_dungeon);
   m_renderer = new Renderer(m_console);
   m_width = width;
@@ -167,6 +172,10 @@ void Game::processInput(KeyPressSurfaces keyPress)
     m_eventManager->pushEvent(moveEvent);
     m_state = AI;
   } else if (keyPress == WAIT){
+    m_state = AI;
+  }else if (keyPress == GRAB){
+    TakeEvent takeEvent = TakeEvent(0, m_actors.at(0)->position->x, m_actors.at(0)->position->y);
+    m_eventManager->pushEvent(takeEvent);
     m_state = AI;
   } else if (keyPress == F1){
     m_console->setFullscreen();

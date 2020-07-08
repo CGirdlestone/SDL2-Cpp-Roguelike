@@ -10,6 +10,8 @@ enum EventTypes
     ONMISS,
     DAMAGE,
     DEAD,
+    TAKE,
+    ONPICKUP,
 };
 
 extern EventTypes EventType;

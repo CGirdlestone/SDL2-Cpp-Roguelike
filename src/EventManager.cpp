@@ -40,6 +40,7 @@ void EventManager::pushEvent(AttackEvent event)
     m_subscribers.at(event.m_type).at(i)->notify(event);
   }
 }
+
 void EventManager::pushEvent(OnHitEvent event)
 {
   for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
@@ -47,6 +48,7 @@ void EventManager::pushEvent(OnHitEvent event)
     m_subscribers.at(event.m_type).at(i)->notify(event);
   }
 }
+
 void EventManager::pushEvent(OnMissEvent event)
 {
   for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
@@ -54,6 +56,7 @@ void EventManager::pushEvent(OnMissEvent event)
     m_subscribers.at(event.m_type).at(i)->notify(event);
   }
 }
+
 void EventManager::pushEvent(DamageEvent event)
 {
   for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
@@ -61,7 +64,24 @@ void EventManager::pushEvent(DamageEvent event)
     m_subscribers.at(event.m_type).at(i)->notify(event);
   }
 }
+
 void EventManager::pushEvent(DeadEvent event)
+{
+  for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
+  {
+    m_subscribers.at(event.m_type).at(i)->notify(event);
+  }
+}
+
+void EventManager::pushEvent(TakeEvent event)
+{
+  for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
+  {
+    m_subscribers.at(event.m_type).at(i)->notify(event);
+  }
+}
+
+void EventManager::pushEvent(OnPickUpEvent event)
 {
   for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
   {

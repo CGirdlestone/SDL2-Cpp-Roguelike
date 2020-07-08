@@ -20,6 +20,7 @@ enum KeyPressSurfaces
     ESCAPE,
     WAIT,
     F1,
+    GRAB,
 };
 
 extern KeyPressSurfaces Key;

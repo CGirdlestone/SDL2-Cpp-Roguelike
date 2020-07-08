@@ -2,6 +2,7 @@
 #ifndef EVENTS_H
 #define EVENTS_H
 
+#include <string>
 #include "EventTypes.h"
 
 struct Event
@@ -58,6 +59,22 @@ struct DeadEvent : Event
   int m_uid;
 };
 
+struct TakeEvent : Event
+{
+  TakeEvent(int uid, int x, int y);
+  virtual ~TakeEvent();
+  int m_uid;
+  int m_x;
+  int m_y;
+};
+
+struct OnPickUpEvent : Event
+{
+  OnPickUpEvent(int uid, std::string name);
+  virtual ~OnPickUpEvent();
+  int m_uid;
+  std::string m_name;
+};
 
 
 #endif

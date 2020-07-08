@@ -20,6 +20,7 @@ MessageLog::MessageLog(int x_buffer, int y_buffer, EventManager* eventManager, s
     m_eventManager->registerSystem(ONMISS, this);
     m_eventManager->registerSystem(DAMAGE, this);
     m_eventManager->registerSystem(DEAD, this);
+    m_eventManager->registerSystem(ONPICKUP, this);
 }
 
 MessageLog::~MessageLog()
@@ -92,9 +93,9 @@ void MessageLog::notify(AttackEvent event)
 void MessageLog::notify(OnHitEvent event)
 {
   // to do
-  std::string attacker_name = m_entities->at(event.m_attacker_uid)->m_name;
-  std::string defender_name = m_entities->at(event.m_defender_uid)->m_name;
-  std::string msg = attacker_name + " hits " + defender_name;
+  std::string attackerName = m_entities->at(event.m_attacker_uid)->m_name;
+  std::string defenderName = m_entities->at(event.m_defender_uid)->m_name;
+  std::string msg = attackerName + " hits " + defenderName;
   addMessage(msg);
 }
 
@@ -102,9 +103,9 @@ void MessageLog::notify(OnHitEvent event)
 void MessageLog::notify(OnMissEvent event)
 {
   // to do
-  std::string attacker_name = m_entities->at(event.m_attacker_uid)->m_name;
-  std::string defender_name = m_entities->at(event.m_defender_uid)->m_name;
-  std::string msg = attacker_name + " misses " + defender_name;
+  std::string attackerName = m_entities->at(event.m_attacker_uid)->m_name;
+  std::string defenderName = m_entities->at(event.m_defender_uid)->m_name;
+  std::string msg = attackerName + " misses " + defenderName;
   addMessage(msg);
 }
 
@@ -112,16 +113,25 @@ void MessageLog::notify(OnMissEvent event)
 void MessageLog::notify(DamageEvent event)
 {
   // to do
-  std::string defender_name = m_entities->at(event.m_uid)->m_name;
+  std::string defenderName = m_entities->at(event.m_uid)->m_name;
   int dmg = event.m_damage;
-  std::string msg = defender_name + " suffers " + std::to_string(dmg) + " points of damage!";
+  std::string msg = defenderName + " suffers " + std::to_string(dmg) + " points of damage!";
   addMessage(msg);
 }
 
 void MessageLog::notify(DeadEvent event)
 {
   // to do
-  std::string defender_name = m_entities->at(event.m_uid)->m_name;
-  std::string msg = defender_name + " has been slain!";
+  std::string defenderName = m_entities->at(event.m_uid)->m_name;
+  std::string msg = defenderName + " has been slain!";
+  addMessage(msg);
+}
+
+void MessageLog::notify(OnPickUpEvent event)
+{
+  // to do
+
+  std::string name = m_entities->at(event.m_uid)->m_name;
+  std::string msg = name + " has picked up " + event.m_name;
   addMessage(msg);
 }
