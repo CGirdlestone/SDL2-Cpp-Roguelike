@@ -55,7 +55,7 @@ void CombatSystem::applyDamage(DamageEvent event)
       m_entities->at(event.m_uid)->fighter->isAlive = false;
       DeadEvent deadEvent = DeadEvent(event.m_uid);
       m_eventManager->pushEvent(deadEvent);
-}
+    }
   }
 }
 
@@ -63,7 +63,10 @@ void CombatSystem::onDead(DeadEvent event)
 {
   SDL_Color c = {0x55, 0x0f, 0x0a};
   m_entities->at(event.m_uid)->renderable->colour = c;
+  m_entities->at(event.m_uid)->renderable->chr = '%';
 }
+
+// notify overrides below
 
 void CombatSystem::notify(AttackEvent event)
 {

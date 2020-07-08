@@ -19,7 +19,11 @@ public:
   Player *player;
   AI *ai;
   Item *item;
-  Container *container;
+  Inventory *inventory;
+  Weapon *weapon;
+  Armour *armour;
+  Wearable *wearable;
+  Body *body;
 protected:
 
 private:

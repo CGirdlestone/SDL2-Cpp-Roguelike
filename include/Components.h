@@ -3,6 +3,10 @@
 
 #include "SDL2/SDL.h"
 #include <vector>
+#include <string>
+#include <map>
+#include "DamageTypes.h"
+#include "Slots.h"
 
 class GameObject;
 
@@ -51,16 +55,47 @@ struct AI
 
 struct Item
 {
+  std::string description;
+  Item(std::string desc);
   ~Item();
 };
 
-struct Container
+struct Inventory
 {
+    int capacity;
     std::vector<GameObject*> inventory;
-    Container(int capacity);
-    ~Container();
-    bool addItem(GameObject *item);
-    bool removeItem(GameObject *item);
+    Inventory(int _capacity);
+    ~Inventory();
+};
+
+struct Weapon
+{
+  DamageTypes damageType;
+  EquipSlots slot;
+  int sidedDie;
+  Weapon(DamageTypes _damageType, EquipSlots _slot, int _sidedDie);
+  ~Weapon();
+};
+
+struct Armour
+{
+  DamageTypes resistance;
+  DamageTypes weakness;
+  EquipSlots slot;
+  Armour(DamageTypes _resistance, DamageTypes _weakness, EquipSlots _slot);
+  ~Armour();
+};
+
+struct Wearable
+{
+  ~Wearable();
+};
+
+struct Body
+{
+  std::map<EquipSlots, GameObject*> slots;
+  Body();
+  ~Body();
 };
 
 #endif

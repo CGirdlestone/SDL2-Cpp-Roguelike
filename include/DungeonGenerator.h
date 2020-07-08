@@ -34,6 +34,7 @@ class DungeonGenerator
     void doRecomputeFOV(int x, int y, int radius);
     void createPlayer(std::vector<GameObject*> *actors);
     void createEntities(std::vector<GameObject*> *actors);
+    void createItems(std::vector<GameObject*> *actors);
 
     char *m_level;
     int *m_fovMap;

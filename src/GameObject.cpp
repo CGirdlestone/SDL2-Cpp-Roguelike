@@ -13,7 +13,11 @@ m_name(name)
   player = nullptr;
   ai = nullptr;
   item = nullptr;
-  container = nullptr;
+  inventory = nullptr;
+  weapon = nullptr;
+  armour = nullptr;
+  wearable = nullptr;
+  body = nullptr;
 }
 
 GameObject::~GameObject()
@@ -53,8 +57,28 @@ GameObject::~GameObject()
     item = nullptr;
   }
 
-  if(container != nullptr){
-    delete container;
-    container = nullptr;
+  if(inventory != nullptr){
+    delete inventory;
+    inventory = nullptr;
+  }
+
+  if(weapon != nullptr){
+    delete weapon;
+    weapon = nullptr;
+  }
+
+  if(armour != nullptr){
+    delete armour;
+    armour = nullptr;
+  }
+
+  if(wearable != nullptr){
+    delete wearable;
+    wearable = nullptr;
+  }
+
+  if(body != nullptr){
+    delete body;
+    body = nullptr;
   }
 }

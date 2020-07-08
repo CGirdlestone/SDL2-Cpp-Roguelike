@@ -9,6 +9,8 @@
 #include "DungeonGenerator.h"
 #include "Components.h"
 #include "GameObject.h"
+#include "DamageTypes.h"
+#include "Slots.h"
 
 
 DungeonGenerator::DungeonGenerator(int width, int height)
@@ -567,8 +569,10 @@ void DungeonGenerator::castOctant(int x, int y, int radius, float bottomSlope, f
 
           topSlope = getGradient(static_cast<float>(x+l+0.5), static_cast<float>(y+k-0.5), static_cast<float>(x), static_cast<float>(y));
         }
-        m_fovMap[(y+b)*m_width+x+a] = 1;
-        m_exploredMap[(y+b)*m_width+x+a] = 1;
+        if (a*a + b*b <= radius*radius){
+          m_fovMap[(y+b)*m_width+x+a] = 1;
+          m_exploredMap[(y+b)*m_width+x+a] = 1;
+        }
       }
     }
   }
@@ -619,12 +623,18 @@ void DungeonGenerator::createPlayer(std::vector<GameObject*> *actors)
 
   Position *p = new Position(x, y);
 
+  Inventory *inventory = new Inventory(10);
+
+  Body *body = new Body();
+
   Actor *actor = new Actor();
 
   player->position = p;
   player->renderable = r;
   player->fighter = f;
   player->actor = actor;
+  player->inventory = inventory;
+  player->body = body;
   actors->push_back(player);
 }
 
@@ -665,5 +675,45 @@ void DungeonGenerator::createEntities(std::vector<GameObject*> *actors)
   entity->fighter = f;
   entity->ai = a;
   entity->actor = actor;
+  actors->push_back(entity);
+}
+
+void DungeonGenerator::createItems(std::vector<GameObject*> *actors)
+{
+  int i;
+  int x;
+  int y;
+  bool entityPlaced = false;
+
+  SDL_Color colour = {0x9b, 0x1a, 0x0a};
+  char c = '/';
+
+  GameObject *entity = new GameObject("sword");
+
+  while(!entityPlaced){
+    i = std::rand()%(m_width * m_height);
+    if (m_level[i] != '.'){
+      continue;
+    }
+    x = i % m_width;
+    y = i / m_width;
+    entityPlaced = true;
+  }
+
+  Renderable *r = new Renderable(c, colour);
+
+  Position *p = new Position(x, y);
+
+  Item *item = new Item("A simple longsword");
+
+  Weapon *weapon = new Weapon(SLASHING, RIGHTHAND, 8);
+
+  Wearable *wearable = new Wearable();
+
+  entity->position = p;
+  entity->renderable = r;
+  entity->item = item;
+  entity->weapon = weapon;
+  entity->wearable = wearable;
   actors->push_back(entity);
 }

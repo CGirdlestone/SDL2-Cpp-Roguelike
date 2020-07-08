@@ -207,6 +207,7 @@ void Game::run()
   m_dungeon->createMap(60, 6, 2, 5);
   m_dungeon->createPlayer(&m_actors);
   m_dungeon->createEntities(&m_actors);
+  m_dungeon->createItems(&m_actors);
   m_dungeon->shadowCast(m_actors.at(0)->position->x, m_actors.at(0)->position->y, 10);
   m_camera->updatePosition(m_actors.at(0)->position->x, m_actors.at(0)->position->y);
 

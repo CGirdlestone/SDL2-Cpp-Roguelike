@@ -47,6 +47,12 @@ Player::~Player()
 
 }
 
+Item::Item(std::string desc):
+description(desc)
+{
+
+}
+
 AI::~AI()
 {
 
@@ -57,23 +63,56 @@ Item::~Item()
 
 }
 
-Container::Container(int capacity)
-{
-  capacity = capacity;
-}
-
-Container::~Container()
+Inventory::Inventory(int _capacity):
+capacity(_capacity)
 {
 
 }
 
-bool Container::addItem(GameObject *item)
+Inventory::~Inventory()
 {
-  //inventory.push_back(item);
-  return true;
+
 }
 
-bool Container::removeItem(GameObject *item)
+Weapon::Weapon(DamageTypes _damageType, EquipSlots _slot, int _sidedDie):
+damageType(_damageType), slot(_slot), sidedDie(_sidedDie)
 {
-  return true;
+
+}
+
+Weapon::~Weapon()
+{
+
+}
+
+
+Armour::Armour(DamageTypes _resistance, DamageTypes _weakness, EquipSlots _slot):
+resistance(_resistance), weakness(_weakness), slot(_slot)
+{
+
+}
+
+Armour::~Armour()
+{
+
+}
+
+Wearable::~Wearable()
+{
+
+}
+
+Body::Body()
+{
+  slots.insert({HEAD, nullptr});
+  slots.insert({LEFTHAND, nullptr});
+  slots.insert({RIGHTHAND, nullptr});
+  slots.insert({BODY, nullptr});
+  slots.insert({NECK, nullptr});
+  slots.insert({BACK, nullptr});
+}
+
+Body::~Body()
+{
+
 }
