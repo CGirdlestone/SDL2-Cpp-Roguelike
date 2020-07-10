@@ -23,6 +23,9 @@ public:
   void pushEvent(DeadEvent event);
   void pushEvent(TakeEvent event);
   void pushEvent(OnPickUpEvent event);
+  void pushEvent(PushScene event);
+  void pushEvent(PopScene event);
+  void pushEvent(QuitEvent event);
 
 private:
   std::map<EventTypes, std::vector<System*>> m_subscribers;

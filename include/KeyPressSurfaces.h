@@ -21,6 +21,9 @@ enum KeyPressSurfaces
     WAIT,
     F1,
     GRAB,
+    MENUUP,
+    MENUDOWN,
+    PRESS,
 };
 
 extern KeyPressSurfaces Key;

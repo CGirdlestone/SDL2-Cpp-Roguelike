@@ -14,6 +14,9 @@
 #include "MoveSystem.h"
 #include "CombatSystem.h"
 #include "InventorySystem.h"
+#include "GameStateManager.h"
+#include "StartScene.h"
+#include "GameScene.h"
 
 enum GameState
 {
@@ -30,7 +33,7 @@ class Game
     Game();
     virtual ~Game();
 
-    bool init(int mapWidth, int mapHheight, int width, int height, int tileSize, char* title, int fps);
+    bool init(int mapWidth, int mapHheight, int width, int height, int tileSize, char* title);
     void run();
     void processEntities();
     void processInput(KeyPressSurfaces keyPress);
@@ -50,6 +53,7 @@ class Game
     MoveSystem* m_moveSystem;
     CombatSystem* m_combatSystem;
     InventorySystem* m_inventorySystem;
+    std::vector<Scene*> sceneStack;
     bool m_isPlaying;
     int m_width;
     int m_height;
@@ -57,10 +61,12 @@ class Game
     int m_mapHeight;
     int m_tileSize;
     std::vector<GameObject*> m_actors;
-    Uint32 fpsInterval;
     GameState m_state;
     SDL_Color m_defaultColour;
     SDL_Color m_inViewColour;
+    GameStateManager *m_sceneManager;
+    StartScene *m_startScene;
+    GameScene *m_gameScene;
 };
 
 

@@ -12,6 +12,9 @@ enum EventTypes
     DEAD,
     TAKE,
     ONPICKUP,
+    PUSHSCENE,
+    POPSCENE,
+    QUIT,
 };
 
 extern EventTypes EventType;

@@ -4,6 +4,7 @@
 
 #include <string>
 #include "EventTypes.h"
+#include "SceneTypes.h"
 
 struct Event
 {
@@ -74,6 +75,26 @@ struct OnPickUpEvent : Event
   virtual ~OnPickUpEvent();
   int m_uid;
   std::string m_name;
+};
+
+struct PushScene : Event
+{
+  PushScene(SceneTypes scene);
+  virtual ~PushScene();
+  SceneTypes m_scene;
+};
+
+struct PopScene : Event
+{
+  PopScene(int numPops);
+  virtual ~PopScene();
+  int m_numPops;
+};
+
+struct QuitEvent : Event
+{
+  QuitEvent();
+  virtual ~QuitEvent();
 };
 
 

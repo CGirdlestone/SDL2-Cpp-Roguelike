@@ -1,0 +1,71 @@
+
+#include <vector>
+
+#include "GameStateManager.h"
+#include "EventManager.h"
+#include "Events.h"
+#include "EventTypes.h"
+#include "StartScene.h"
+#include "GameScene.h"
+#include "SceneTypes.h"
+
+GameStateManager::GameStateManager(EventManager* eventManager, std::vector<GameObject*> *entities):
+m_eventManager(eventManager), m_entities(entities)
+{
+  m_eventManager->registerSystem(POPSCENE, this);
+  m_eventManager->registerSystem(PUSHSCENE, this);
+  m_eventManager->registerSystem(QUIT, this);
+  m_startScene = nullptr;
+  m_gameScene = nullptr;
+  playing = true;
+}
+
+GameStateManager::~GameStateManager()
+{
+  m_eventManager = nullptr;
+  m_entities = nullptr;
+};
+
+void GameStateManager::notify(PushScene event)
+{
+  //TO DO
+  if (event.m_scene == STARTMENU){
+    m_sceneStack.push_back(m_startScene);
+  } else if (event.m_scene == GAMESCENE){
+    m_sceneStack.push_back(m_gameScene);
+  }
+}
+
+void GameStateManager::notify(PopScene event)
+{
+  for (int i = 0; i < event.m_numPops; ++i){
+    m_sceneStack.pop_back();
+  }
+}
+
+void GameStateManager::notify(QuitEvent event)
+{
+  playing = false;
+}
+
+void GameStateManager::processInput(SDL_Event *e)
+{
+  KeyPressSurfaces keyPress;
+  keyPress = m_sceneStack.back()->getEvent(e);
+  m_sceneStack.back()->handleInput(keyPress);
+}
+
+void GameStateManager::update(Uint32 dt)
+{
+  m_sceneStack.back()->update(dt);
+}
+
+void GameStateManager::onTick()
+{
+  m_sceneStack.back()->onTick();
+}
+
+void GameStateManager::render()
+{
+  m_sceneStack.back()->render();
+}

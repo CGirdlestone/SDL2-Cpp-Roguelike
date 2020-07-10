@@ -4,6 +4,7 @@
 #include "Events.h"
 #include "System.h"
 
+
 EventManager::EventManager()
 {
   //
@@ -82,6 +83,30 @@ void EventManager::pushEvent(TakeEvent event)
 }
 
 void EventManager::pushEvent(OnPickUpEvent event)
+{
+  for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
+  {
+    m_subscribers.at(event.m_type).at(i)->notify(event);
+  }
+}
+
+void EventManager::pushEvent(PushScene event)
+{
+  for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
+  {
+    m_subscribers.at(event.m_type).at(i)->notify(event);
+  }
+}
+
+void EventManager::pushEvent(PopScene event)
+{
+  for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
+  {
+    m_subscribers.at(event.m_type).at(i)->notify(event);
+  }
+}
+
+void EventManager::pushEvent(QuitEvent event)
 {
   for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
   {

@@ -17,6 +17,9 @@ public:
   virtual void notify(DeadEvent event) {};
   virtual void notify(TakeEvent event) {};
   virtual void notify(OnPickUpEvent event) {};
+  virtual void notify(PushScene event) {};
+  virtual void notify(PopScene event) {};
+  virtual void notify(QuitEvent event) {};
 };
 
 #endif

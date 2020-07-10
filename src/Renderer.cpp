@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <string>
 #include "Renderer.h"
 
 Renderer::Renderer(Console* console)
@@ -148,11 +149,45 @@ void Renderer::drawUI()
   drawMenuOutline();
 }
 
-void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors, MessageLog* messageLog, int height)
+void Renderer::drawStartMenu(int i)
 {
+  int width = m_console->Getm_width() + m_console->getXBuffer();
+  int height = m_console->Getm_height() + m_console->getYBuffer();
+  std::string name = "ROGUELIKE";
+  std::string startText = "START GAME";
+  std::string exitText = "EXIT GAME";
+
+  m_console->flush();
+
+  for (int j = 0; j < static_cast<int>(name.length()); ++j){
+    m_console->render(&name[j], width/2 + j - 5, height/2-4, m_defaultColour);
+  }
+
+  for (int j = 0; j < static_cast<int>(startText.length()); ++j){
+    if (i == 0){
+      m_console->render(&startText[j], width/2 + j - 5, height/2, m_inViewColour);
+    } else {
+      m_console->render(&startText[j], width/2 + j - 5, height/2, m_defaultColour);
+    }
+  }
+
+  for (int j = 0; j < static_cast<int>(exitText.length()); ++j){
+    if (i == 1){
+      m_console->render(&exitText[j], width/2 + j - 5, height/2+4, m_inViewColour);
+    } else {
+      m_console->render(&exitText[j], width/2 + j - 5, height/2+4, m_defaultColour);
+    }
+  }
+
+  m_console->update();
+}
+
+void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors, MessageLog* messageLog)
+{
+  m_console->flush();
   drawMap(camera, dungeon, actors);
   drawActors(camera, dungeon, actors);
-  drawLog(messageLog, height);
+  drawLog(messageLog, camera->getHeight());
   drawUI();
   if(actors->at(0)->inventory->inventory.size() > 0){
     GameObject* item = actors->at(0)->inventory->inventory.at(0);
@@ -160,4 +195,5 @@ void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::ve
       m_console->render(&item->m_name[i], m_console->Getm_width()+1+i, 1, m_defaultColour);
     }
   }
+  m_console->update();
 }

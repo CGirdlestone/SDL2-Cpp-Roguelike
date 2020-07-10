@@ -21,6 +21,9 @@
 #include "MoveSystem.h"
 #include "CombatSystem.h"
 #include "InventorySystem.h"
+#include "Scene.h"
+#include "StartScene.h"
+#include "GameScene.h"
 
 
 Game::Game()
@@ -64,12 +67,21 @@ Game::~Game()
   delete m_inventorySystem;
   m_inventorySystem = nullptr;
 
+  delete m_startScene;
+  m_startScene = nullptr;
+
+  delete m_gameScene;
+  m_gameScene = nullptr;
+
+  delete m_sceneManager;
+  m_sceneManager = nullptr;
+
   for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
     delete m_actors[i];
   }
 }
 
-bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize, char* title, int fps)
+bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize, char* title)
 {
   m_dungeon = new DungeonGenerator(mapWidth, mapHeight);
   m_camera = new Camera(width, height, mapWidth, mapHeight);
@@ -81,6 +93,13 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_inventorySystem = new InventorySystem(m_eventManager, &m_actors);
   m_moveSystem = new MoveSystem(m_eventManager, &m_actors, m_dungeon);
   m_renderer = new Renderer(m_console);
+
+  m_sceneManager = new GameStateManager(m_eventManager, &m_actors);
+  m_startScene = new StartScene(m_eventManager, m_renderer);
+  m_gameScene = new GameScene(m_eventManager, m_renderer, &m_actors, m_camera, m_dungeon, m_messageLog);
+  m_sceneManager->m_startScene = m_startScene;
+  m_sceneManager->m_gameScene = m_gameScene;
+
   m_width = width;
   m_height = height;
   m_mapWidth = mapWidth;
@@ -173,7 +192,7 @@ void Game::processInput(KeyPressSurfaces keyPress)
     m_state = AI;
   } else if (keyPress == WAIT){
     m_state = AI;
-  }else if (keyPress == GRAB){
+  } else if (keyPress == GRAB){
     TakeEvent takeEvent = TakeEvent(0, m_actors.at(0)->position->x, m_actors.at(0)->position->y);
     m_eventManager->pushEvent(takeEvent);
     m_state = AI;
@@ -206,12 +225,12 @@ void Game::update(Uint32 dt)
 void Game::run()
 {
   SDL_Event e;
-  KeyPressSurfaces keyPress;
+  //KeyPressSurfaces keyPress;
   m_isPlaying = true;
   Uint32 currentTime;
   Uint32 lastTime = 0;
   Uint32 dt = 0;
-  m_state = PLAYER;
+  //m_state = PLAYER;
 
   m_dungeon->createMap(60, 6, 2, 5);
   m_dungeon->createPlayer(&m_actors);
@@ -220,25 +239,19 @@ void Game::run()
   m_dungeon->shadowCast(m_actors.at(0)->position->x, m_actors.at(0)->position->y, 10);
   m_camera->updatePosition(m_actors.at(0)->position->x, m_actors.at(0)->position->y);
 
-  while(m_isPlaying){
+  m_eventManager->pushEvent(PushScene(STARTMENU));
+
+  while(m_sceneManager->playing){
     currentTime = SDL_GetTicks();
 
-    m_console->flush();
-    m_renderer->drawGameScreen(m_camera, m_dungeon, &m_actors, m_messageLog, m_height);
-    m_console->update();
-
-    keyPress = m_input->getEvent(&e);
-    processInput(keyPress);
-
-    if (m_state == AI){
-      processEntities();
-    }
+    m_sceneManager->render();
+    m_sceneManager->processInput(&e);
 
     dt = (currentTime - lastTime);
     lastTime = currentTime;
 
-    onTick();
-    update(dt);
+    m_sceneManager->update(dt);
+    m_sceneManager->onTick();
   }
 
   m_console->closeSDL();

@@ -97,3 +97,35 @@ OnPickUpEvent::~OnPickUpEvent()
 {
 
 }
+
+PushScene::PushScene(SceneTypes scene):
+m_scene(scene)
+{
+  m_type = PUSHSCENE;
+}
+
+PushScene::~PushScene()
+{
+
+}
+
+PopScene::PopScene(int numPops):
+m_numPops(numPops)
+{
+  m_type = POPSCENE;
+}
+
+PopScene::~PopScene()
+{
+
+}
+
+QuitEvent::QuitEvent()
+{
+  m_type = QUIT;
+}
+
+QuitEvent::~QuitEvent()
+{
+
+}

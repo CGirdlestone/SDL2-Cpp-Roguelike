@@ -19,7 +19,8 @@ public:
   void drawLog(MessageLog* messageLog, int height);
   void drawUI();
   void drawMenuOutline();
-  void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors,MessageLog* messageLog, int height);
+  void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors, MessageLog* messageLog);
+  void drawStartMenu(int i);
 
 private:
   Console* m_console;
