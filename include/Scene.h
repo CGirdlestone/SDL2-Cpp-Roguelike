@@ -13,8 +13,6 @@ public:
   virtual void handleInput(KeyPressSurfaces keyPress) = 0;
   virtual void update(Uint32 dt) = 0;
   virtual void onTick() = 0;
-
-
 };
 
 #endif
