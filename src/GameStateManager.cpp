@@ -17,6 +17,7 @@ m_eventManager(eventManager), m_entities(entities)
   m_eventManager->registerSystem(QUIT, this);
   m_startScene = nullptr;
   m_gameScene = nullptr;
+	m_inventoryScene = nullptr;
   playing = true;
 }
 
@@ -24,6 +25,9 @@ GameStateManager::~GameStateManager()
 {
   m_eventManager = nullptr;
   m_entities = nullptr;
+	m_startScene = nullptr;
+	m_gameScene = nullptr;
+	m_inventoryScene = nullptr;
 };
 
 void GameStateManager::notify(PushScene event)
@@ -33,7 +37,9 @@ void GameStateManager::notify(PushScene event)
     m_sceneStack.push_back(m_startScene);
   } else if (event.m_scene == GAMESCENE){
     m_sceneStack.push_back(m_gameScene);
-  }
+  } else if (event.m_scene == INVENTORY){
+		m_sceneStack.push_back(m_inventoryScene);
+	}
 }
 
 void GameStateManager::notify(PopScene event)

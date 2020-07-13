@@ -20,6 +20,7 @@ public:
   virtual void notify(PushScene event) {};
   virtual void notify(PopScene event) {};
   virtual void notify(QuitEvent event) {};
+	virtual void notify(DropEvent event) {};
 };
 
 #endif

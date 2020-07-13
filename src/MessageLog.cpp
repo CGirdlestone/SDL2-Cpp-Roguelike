@@ -21,6 +21,7 @@ MessageLog::MessageLog(int x_buffer, int y_buffer, EventManager* eventManager, s
     m_eventManager->registerSystem(DAMAGE, this);
     m_eventManager->registerSystem(DEAD, this);
     m_eventManager->registerSystem(ONPICKUP, this);
+		m_eventManager->registerSystem(DROP, this);
 }
 
 MessageLog::~MessageLog()
@@ -134,4 +135,11 @@ void MessageLog::notify(OnPickUpEvent event)
   std::string name = m_entities->at(event.m_uid)->m_name;
   std::string msg = name + " has picked up " + event.m_name;
   addMessage(msg);
+}
+
+void MessageLog::notify(DropEvent event)
+{
+	std::string name = m_entities->at(event.m_item_uid)->m_name;
+	std::string msg = name + " dropped!";
+	addMessage(msg);
 }

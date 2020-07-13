@@ -24,6 +24,9 @@ enum KeyPressSurfaces
     MENUUP,
     MENUDOWN,
     PRESS,
+		BAG,
+		WEAR,
+		DROPITEM,
 };
 
 extern KeyPressSurfaces Key;

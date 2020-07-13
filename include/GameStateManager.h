@@ -9,6 +9,7 @@
 #include "Scene.h"
 #include "GameScene.h"
 #include "StartScene.h"
+#include "InventoryScene.h"
 #include "SceneTypes.h"
 
 class EventManager;
@@ -30,6 +31,7 @@ public:
   bool playing;
   StartScene *m_startScene;
   GameScene *m_gameScene;
+	InventoryScene *m_inventoryScene;
 
 private:
   EventManager* m_eventManager;

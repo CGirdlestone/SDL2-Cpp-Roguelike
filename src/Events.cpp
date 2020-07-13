@@ -129,3 +129,37 @@ QuitEvent::~QuitEvent()
 {
 
 }
+
+DropEvent::DropEvent(int actor_uid, int item_uid, int x, int y):
+m_actor_uid(actor_uid), m_item_uid(item_uid), m_x(x), m_y(y)
+{
+	m_type = DROP;
+}
+
+DropEvent::~DropEvent()
+{
+
+}
+
+EquipEvent::EquipEvent(int uid):
+m_uid(uid)
+{
+	m_type = EQUIP;
+}
+
+EquipEvent::~EquipEvent()
+{
+
+}
+
+UnequipEvent::UnequipEvent(int uid):
+m_uid(uid)
+{
+	m_type = UNEQUIP;
+}
+
+UnequipEvent::~UnequipEvent()
+{
+
+}
+

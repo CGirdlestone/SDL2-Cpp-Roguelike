@@ -182,6 +182,37 @@ void Renderer::drawStartMenu(int i)
   m_console->update();
 }
 
+void Renderer::drawInventory(std::vector<GameObject*> *actors, int i)
+{
+	m_console->flush();
+
+	std::string inventoryHeader = "Inventory";
+	int width = m_console->Getm_width() / 2;
+	std::string selectedItem;
+
+	for (int k = 0; k < static_cast<int>(inventoryHeader.length()); ++k){
+		m_console->render(&inventoryHeader[k], width -static_cast<int>(inventoryHeader.length()) + k, 3, m_inViewColour);
+	}
+
+	if (actors->at(0)->inventory->inventory.size() > 0){
+		for (int k = 0; k < static_cast<int>(actors->at(0)->inventory->inventory.size());++k){
+			GameObject* item = actors->at(0)->inventory->inventory.at(k);
+			if (k == i){
+				selectedItem = ">" + item->m_name + "<";
+				for (int j = 0; j < static_cast<int>(selectedItem.length()); ++j){
+					m_console->render(&selectedItem[j], 1 + j, 2*k + 5, m_inViewColour);
+				}
+			} else {
+				for (int j = 0; j < static_cast<int>(item->m_name.length()); ++j){
+					m_console->render(&item->m_name[j], 2 + j, 2*k + 5, m_defaultColour);
+				}
+			}
+		}
+	}
+
+	m_console->update();
+} 
+
 void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors, MessageLog* messageLog)
 {
   m_console->flush();
@@ -189,11 +220,5 @@ void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::ve
   drawActors(camera, dungeon, actors);
   drawLog(messageLog, camera->getHeight());
   drawUI();
-  if(actors->at(0)->inventory->inventory.size() > 0){
-    GameObject* item = actors->at(0)->inventory->inventory.at(0);
-    for (int i = 0; i < item->m_name.length(); ++i){
-      m_console->render(&item->m_name[i], m_console->Getm_width()+1+i, 1, m_defaultColour);
-    }
-  }
   m_console->update();
 }

@@ -23,7 +23,7 @@
 #include "Scene.h"
 #include "StartScene.h"
 #include "GameScene.h"
-
+#include "InventoryScene.h"
 
 Game::Game()
 {
@@ -39,6 +39,7 @@ Game::Game()
   m_inventorySystem = nullptr;
   m_startScene = nullptr;
   m_gameScene = nullptr;
+	m_inventoryScene = nullptr;
   m_sceneManager = nullptr;
 
 }
@@ -79,6 +80,9 @@ Game::~Game()
   delete m_gameScene;
   m_gameScene = nullptr;
 
+	delete m_inventoryScene;
+	m_inventoryScene = nullptr;
+
   delete m_sceneManager;
   m_sceneManager = nullptr;
 
@@ -103,8 +107,10 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_sceneManager = new GameStateManager(m_eventManager, &m_actors);
   m_startScene = new StartScene(m_eventManager, m_renderer);
   m_gameScene = new GameScene(m_eventManager, m_renderer, &m_actors, m_camera, m_dungeon, m_messageLog);
+	m_inventoryScene = new InventoryScene(m_eventManager, m_renderer, &m_actors);
   m_sceneManager->m_startScene = m_startScene;
   m_sceneManager->m_gameScene = m_gameScene;
+	m_sceneManager->m_inventoryScene = m_inventoryScene;
 
   m_width = width;
   m_height = height;

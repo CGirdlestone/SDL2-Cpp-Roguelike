@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-GameObject::GameObject(std::string name):
-m_name(name)
+GameObject::GameObject(std::string name, int uid):
+m_name(name), m_uid(uid)
 {
   position = nullptr;
   renderable = nullptr;

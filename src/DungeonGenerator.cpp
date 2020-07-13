@@ -605,7 +605,7 @@ void DungeonGenerator::createPlayer(std::vector<GameObject*> *actors)
   SDL_Color colour = {0xef, 0xac, 0x28};
   char c = '@';
 
-  GameObject *player = new GameObject("player");
+  GameObject *player = new GameObject("player", 0);
 
   while(!playerPlaced){
     i = std::rand()%(m_width * m_height);
@@ -648,7 +648,7 @@ void DungeonGenerator::createEntities(std::vector<GameObject*> *actors)
   SDL_Color colour = {0x9b, 0x1a, 0x0a};
   char c = 'b';
 
-  GameObject *entity = new GameObject("bat");
+  GameObject *entity = new GameObject("bat", 1);
 
   while(!entityPlaced){
     i = std::rand()%(m_width * m_height);
@@ -688,7 +688,7 @@ void DungeonGenerator::createItems(std::vector<GameObject*> *actors)
   SDL_Color colour = {0x9b, 0x1a, 0x0a};
   char c = '/';
 
-  GameObject *entity = new GameObject("sword");
+  GameObject *entity = new GameObject("sword", 2);
 
   while(!entityPlaced){
     i = std::rand()%(m_width * m_height);

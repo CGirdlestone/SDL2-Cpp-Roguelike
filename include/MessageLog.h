@@ -26,6 +26,7 @@ public:
     virtual void notify(DamageEvent event);
     virtual void notify(DeadEvent event);
     virtual void notify(OnPickUpEvent event);
+		virtual void notify(DropEvent event);
 protected:
 
 private:

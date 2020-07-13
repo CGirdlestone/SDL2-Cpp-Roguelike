@@ -8,10 +8,11 @@
 class GameObject
 {
 public:
-  GameObject(std::string name);
+  GameObject(std::string name, int uid);
   ~GameObject();
 
   std::string m_name;
+	int m_uid;
   Position *position;
   Renderable *renderable;
   Fighter *fighter;

@@ -116,6 +116,9 @@ enum KeyPressSurfaces GameScene::getEvent(SDL_Event *e)
 
               case SDLK_g:
               return GRAB;
+
+							case SDLK_i:
+							return BAG;
           }
       }
   }
@@ -164,7 +167,9 @@ void GameScene::handleInput(KeyPressSurfaces keyPress)
     TakeEvent takeEvent = TakeEvent(0, m_entities->at(0)->position->x, m_entities->at(0)->position->y);
     m_eventManager->pushEvent(takeEvent);
     m_playerTurn = false;
-  }
+  } else if (keyPress == BAG){
+		m_eventManager->pushEvent(PushScene(INVENTORY));
+	}
 
   if (!m_playerTurn){
     processEntities();

@@ -26,6 +26,7 @@ public:
   void pushEvent(PushScene event);
   void pushEvent(PopScene event);
   void pushEvent(QuitEvent event);
+	void pushEvent(DropEvent event);
 
 private:
   std::map<EventTypes, std::vector<System*>> m_subscribers;

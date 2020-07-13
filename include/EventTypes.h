@@ -15,6 +15,9 @@ enum EventTypes
     PUSHSCENE,
     POPSCENE,
     QUIT,
+		DROP,
+		EQUIP,
+		UNEQUIP,
 };
 
 extern EventTypes EventType;

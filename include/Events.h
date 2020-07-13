@@ -5,6 +5,7 @@
 #include <string>
 #include "EventTypes.h"
 #include "SceneTypes.h"
+#include "GameObject.h"
 
 struct Event
 {
@@ -67,6 +68,30 @@ struct TakeEvent : Event
   int m_uid;
   int m_x;
   int m_y;
+};
+
+struct DropEvent : Event
+{
+	DropEvent(int actor_uid, int item_uid, int x, int y);
+	virtual ~DropEvent();
+	int m_actor_uid;
+	int m_item_uid;
+	int m_x;
+	int m_y;
+};
+
+struct EquipEvent : Event
+{
+	EquipEvent(int uid);
+	virtual ~EquipEvent();
+	int m_uid;
+};
+
+struct UnequipEvent : Event
+{
+	UnequipEvent(int uid);
+	virtual ~UnequipEvent();
+	int m_uid;
 };
 
 struct OnPickUpEvent : Event

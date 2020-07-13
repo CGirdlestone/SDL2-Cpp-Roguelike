@@ -16,6 +16,7 @@
 #include "GameStateManager.h"
 #include "StartScene.h"
 #include "GameScene.h"
+#include "InventoryScene.h"
 
 enum GameState
 {
@@ -57,6 +58,7 @@ class Game
     GameStateManager *m_sceneManager;
     StartScene *m_startScene;
     GameScene *m_gameScene;
+		InventoryScene *m_inventoryScene;
 };
 
 

@@ -10,7 +10,7 @@ OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 CPPFLAGS := -Iinclude -MMD -MP
 CFLAGS   := -Wall
-LDFLAGS  := -Llib -lSDL2 -lSDL2_ttf -lSDL2_image
+LDFLAGS  := -Llib -lSDL2 -lSDL2_image
 LDLIBS   := -lm
 
 .PHONY: all clean
