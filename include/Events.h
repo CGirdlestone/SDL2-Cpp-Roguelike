@@ -82,16 +82,18 @@ struct DropEvent : Event
 
 struct EquipEvent : Event
 {
-	EquipEvent(int uid);
+	EquipEvent(int actor_uid, int item_uid);
 	virtual ~EquipEvent();
-	int m_uid;
+	int m_actor_uid;
+	int m_item_uid;
 };
 
 struct UnequipEvent : Event
 {
-	UnequipEvent(int uid);
+	UnequipEvent(int actor_uid, int item_uid);
 	virtual ~UnequipEvent();
-	int m_uid;
+	int m_actor_uid;
+	int m_item_uid;
 };
 
 struct OnPickUpEvent : Event

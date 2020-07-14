@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "Renderer.h"
+#include "Slots.h"
 
 Renderer::Renderer(Console* console)
 {
@@ -219,9 +220,19 @@ void Renderer::drawCharacterScene(std::vector<GameObject*> *actors, int i)
 
 	std::string character = "Character Screen";
 
+	std::string righthand = "Right Hand: ";
+	
 	for (int j = 0; j < static_cast<int>(character.length()); ++j){
 		m_console->render(&character[j], j + 3, 2, m_inViewColour);
 	}	
+	
+	if (actors->at(0)->body->slots.at(RIGHTHAND) != nullptr){
+		righthand += actors->at(0)->body->slots.at(RIGHTHAND)->m_name;
+	}  
+	
+	for (int j = 0; j < static_cast<int>(righthand.length()); ++j){
+		m_console->render(&righthand[j], j + 3, 4, m_inViewColour);
+	}
 
 	m_console->update();
 }

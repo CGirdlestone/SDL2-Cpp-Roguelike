@@ -71,9 +71,8 @@ struct Inventory
 struct Weapon
 {
   DamageTypes damageType;
-  EquipSlots slot;
   int sidedDie;
-  Weapon(DamageTypes _damageType, EquipSlots _slot, int _sidedDie);
+  Weapon(DamageTypes _damageType, int _sidedDie);
   ~Weapon();
 };
 
@@ -81,14 +80,15 @@ struct Armour
 {
   DamageTypes resistance;
   DamageTypes weakness;
-  EquipSlots slot;
-  Armour(DamageTypes _resistance, DamageTypes _weakness, EquipSlots _slot);
+  Armour(DamageTypes _resistance, DamageTypes _weakness);
   ~Armour();
 };
 
 struct Wearable
 {
-  ~Wearable();
+  Wearable(EquipSlots _slot);
+	~Wearable();
+	EquipSlots slot;
 };
 
 struct Body

@@ -706,9 +706,9 @@ void DungeonGenerator::createItems(std::vector<GameObject*> *actors)
 
   Item *item = new Item("A simple longsword");
 
-  Weapon *weapon = new Weapon(SLASHING, RIGHTHAND, 8);
+  Weapon *weapon = new Weapon(SLASHING, 8);
 
-  Wearable *wearable = new Wearable();
+  Wearable *wearable = new Wearable(RIGHTHAND);
 
   entity->position = p;
   entity->renderable = r;

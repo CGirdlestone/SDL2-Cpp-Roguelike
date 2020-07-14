@@ -141,8 +141,8 @@ DropEvent::~DropEvent()
 
 }
 
-EquipEvent::EquipEvent(int uid):
-m_uid(uid)
+EquipEvent::EquipEvent(int actor_uid, int item_uid):
+m_actor_uid(actor_uid), m_item_uid(item_uid)
 {
 	m_type = EQUIP;
 }
@@ -152,8 +152,8 @@ EquipEvent::~EquipEvent()
 
 }
 
-UnequipEvent::UnequipEvent(int uid):
-m_uid(uid)
+UnequipEvent::UnequipEvent(int actor_uid, int item_uid):
+m_actor_uid(actor_uid), m_item_uid(item_uid)
 {
 	m_type = UNEQUIP;
 }

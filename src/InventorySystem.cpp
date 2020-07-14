@@ -13,6 +13,7 @@ m_eventManager(eventManager), m_entities(entities)
 {
   m_eventManager->registerSystem(TAKE, this);
 	m_eventManager->registerSystem(DROP, this);
+	m_eventManager->registerSystem(EQUIP, this);
 }
 
 InventorySystem::~InventorySystem()
@@ -52,6 +53,24 @@ void InventorySystem::dropItem(DropEvent event)
 	}
 }
 
+void InventorySystem::equipItem(EquipEvent event)
+{
+	if (m_entities->at(event.m_item_uid)->wearable != nullptr){
+		if (m_entities->at(event.m_actor_uid)->body->slots.at(m_entities->at(event.m_item_uid)->wearable->slot) != nullptr){
+			m_entities->at(event.m_actor_uid)->inventory->inventory.push_back(m_entities->at(event.m_actor_uid)->body->slots.at(m_entities->at(event.m_item_uid)->wearable->slot));
+		}
+	
+		m_entities->at(event.m_actor_uid)->body->slots[m_entities->at(event.m_item_uid)->wearable->slot] = m_entities->at(event.m_item_uid);
+
+		for (int i = 0; i < static_cast<int>(m_entities->at(event.m_actor_uid)->inventory->inventory.size()); ++i){
+			if (m_entities->at(event.m_actor_uid)->inventory->inventory.at(i)->m_uid == event.m_item_uid){
+				m_entities->at(event.m_actor_uid)->inventory->inventory.erase(m_entities->at(event.m_actor_uid)->inventory->inventory.begin() + i);
+				break;
+			}
+		}
+	}
+}
+
 void InventorySystem::notify(TakeEvent event)
 {
   pickUpItem(event);
@@ -61,3 +80,9 @@ void InventorySystem::notify(DropEvent event)
 {
 	dropItem(event);
 }
+
+void InventorySystem::notify(EquipEvent event)
+{
+	equipItem(event);
+}
+

@@ -122,3 +122,10 @@ void EventManager::pushEvent(DropEvent event)
 	}
 }
 
+void EventManager::pushEvent(EquipEvent event)
+{
+	for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
+	{
+		m_subscribers.at(event.m_type).at(i)->notify(event);
+	}
+}

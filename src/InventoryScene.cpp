@@ -72,7 +72,8 @@ void InventoryScene::handleInput(KeyPressSurfaces keyPress)
 	} else if (keyPress == SOUTH){
 		m_index = m_index + 1 >= inventorySize ? 0 : m_index + 1;
 	} else if (keyPress == WEAR){
-		// TO DO
+		EquipEvent equipEvent = EquipEvent(0, m_entities->at(0)->inventory->inventory.at(m_index)->m_uid);
+		m_eventManager->pushEvent(equipEvent);
 	} else if (keyPress == DROPITEM){
 		// TO DO
 		DropEvent dropEvent = DropEvent(0, m_entities->at(0)->inventory->inventory.at(m_index)->m_uid, x, y);

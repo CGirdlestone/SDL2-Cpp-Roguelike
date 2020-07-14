@@ -16,9 +16,11 @@ public:
   virtual ~InventorySystem();
   void pickUpItem(TakeEvent event);
 	void dropItem(DropEvent event);
+	void equipItem(EquipEvent event);
 
 	virtual void notify(DropEvent event);
   virtual void notify(TakeEvent event);
+	virtual void notify(EquipEvent event);
 private:
   EventManager* m_eventManager;
   std::vector<GameObject*> *m_entities;

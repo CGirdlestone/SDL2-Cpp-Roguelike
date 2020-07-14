@@ -74,8 +74,8 @@ Inventory::~Inventory()
 
 }
 
-Weapon::Weapon(DamageTypes _damageType, EquipSlots _slot, int _sidedDie):
-damageType(_damageType), slot(_slot), sidedDie(_sidedDie)
+Weapon::Weapon(DamageTypes _damageType, int _sidedDie):
+damageType(_damageType), sidedDie(_sidedDie)
 {
 
 }
@@ -86,13 +86,19 @@ Weapon::~Weapon()
 }
 
 
-Armour::Armour(DamageTypes _resistance, DamageTypes _weakness, EquipSlots _slot):
-resistance(_resistance), weakness(_weakness), slot(_slot)
+Armour::Armour(DamageTypes _resistance, DamageTypes _weakness):
+resistance(_resistance), weakness(_weakness)
 {
 
 }
 
 Armour::~Armour()
+{
+
+}
+
+Wearable::Wearable(EquipSlots _slot):
+slot(_slot)
 {
 
 }
