@@ -7,6 +7,7 @@ enum SceneTypes
     STARTMENU,
     GAMESCENE,
     INVENTORY,
+		CHARACTER,
 };
 
 extern SceneTypes SceneType;

@@ -10,6 +10,7 @@
 #include "GameScene.h"
 #include "StartScene.h"
 #include "InventoryScene.h"
+#include "CharacterScene.h"
 #include "SceneTypes.h"
 
 class EventManager;
@@ -32,6 +33,7 @@ public:
   StartScene *m_startScene;
   GameScene *m_gameScene;
 	InventoryScene *m_inventoryScene;
+	CharacterScene *m_characterScene;
 
 private:
   EventManager* m_eventManager;

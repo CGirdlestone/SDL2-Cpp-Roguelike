@@ -27,6 +27,7 @@ enum KeyPressSurfaces
 		BAG,
 		WEAR,
 		DROPITEM,
+		SHOWCHARSCREEN,
 };
 
 extern KeyPressSurfaces Key;

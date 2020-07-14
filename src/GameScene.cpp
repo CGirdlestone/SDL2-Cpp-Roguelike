@@ -119,6 +119,9 @@ enum KeyPressSurfaces GameScene::getEvent(SDL_Event *e)
 
 							case SDLK_i:
 							return BAG;
+
+							case SDLK_c:
+							return SHOWCHARSCREEN;
           }
       }
   }
@@ -169,6 +172,8 @@ void GameScene::handleInput(KeyPressSurfaces keyPress)
     m_playerTurn = false;
   } else if (keyPress == BAG){
 		m_eventManager->pushEvent(PushScene(INVENTORY));
+	} else if (keyPress == SHOWCHARSCREEN){
+		m_eventManager->pushEvent(PushScene(CHARACTER));
 	}
 
   if (!m_playerTurn){

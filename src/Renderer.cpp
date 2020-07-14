@@ -213,6 +213,19 @@ void Renderer::drawInventory(std::vector<GameObject*> *actors, int i)
 	m_console->update();
 } 
 
+void Renderer::drawCharacterScene(std::vector<GameObject*> *actors, int i)
+{
+	m_console->flush();
+
+	std::string character = "Character Screen";
+
+	for (int j = 0; j < static_cast<int>(character.length()); ++j){
+		m_console->render(&character[j], j + 3, 2, m_inViewColour);
+	}	
+
+	m_console->update();
+}
+
 void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors, MessageLog* messageLog)
 {
   m_console->flush();

@@ -22,6 +22,7 @@ public:
   void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors, MessageLog* messageLog);
   void drawStartMenu(int i);
 	void drawInventory(std::vector<GameObject*> *actors, int i);
+	void drawCharacterScene(std::vector<GameObject*> *actors, int i);
 
 private:
   Console* m_console;

@@ -7,6 +7,8 @@
 #include "EventTypes.h"
 #include "StartScene.h"
 #include "GameScene.h"
+#include "InventoryScene.h"
+#include "CharacterScene.h"
 #include "SceneTypes.h"
 
 GameStateManager::GameStateManager(EventManager* eventManager, std::vector<GameObject*> *entities):
@@ -18,6 +20,7 @@ m_eventManager(eventManager), m_entities(entities)
   m_startScene = nullptr;
   m_gameScene = nullptr;
 	m_inventoryScene = nullptr;
+	m_characterScene = nullptr;
   playing = true;
 }
 
@@ -28,6 +31,7 @@ GameStateManager::~GameStateManager()
 	m_startScene = nullptr;
 	m_gameScene = nullptr;
 	m_inventoryScene = nullptr;
+	m_characterScene = nullptr;
 };
 
 void GameStateManager::notify(PushScene event)
@@ -39,6 +43,8 @@ void GameStateManager::notify(PushScene event)
     m_sceneStack.push_back(m_gameScene);
   } else if (event.m_scene == INVENTORY){
 		m_sceneStack.push_back(m_inventoryScene);
+	} else if (event.m_scene == CHARACTER){
+		m_sceneStack.push_back(m_characterScene);
 	}
 }
 
