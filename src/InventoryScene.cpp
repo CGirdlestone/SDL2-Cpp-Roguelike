@@ -1,5 +1,5 @@
 
-
+#include <map>
 #include "StartScene.h"
 #include "SDL2/SDL.h"
 #include "Renderer.h"
@@ -12,7 +12,7 @@
 #include "InventoryScene.h"
 
 
-InventoryScene::InventoryScene(EventManager *eventManager, Renderer *renderer, std::vector<GameObject*> *entities):
+InventoryScene::InventoryScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities):
 m_eventManager(eventManager), m_renderer(renderer), m_entities(entities)
 {
 	m_index = 0;

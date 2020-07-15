@@ -1,7 +1,7 @@
 #ifndef INVENTORYSCENE_H
 #define INVENTORYSCENE_H
 
-#include <vector>
+#include <map>
 #include "SDL2/SDL.h"
 #include "Renderer.h"
 #include "KeyPressSurfaces.h"
@@ -15,7 +15,7 @@
 class InventoryScene : public Scene
 {
 public:
-  InventoryScene(EventManager *eventManager, Renderer *renderer, std::vector<GameObject*> *entities);
+  InventoryScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities);
   virtual ~InventoryScene();
   enum KeyPressSurfaces getEvent(SDL_Event* e);
   void render();
@@ -27,7 +27,7 @@ public:
 private:
   EventManager *m_eventManager;
   Renderer *m_renderer;
-  std::vector<GameObject*> *m_entities;
+  std::map<int, GameObject*> *m_entities;
 	int m_index;
 };
 

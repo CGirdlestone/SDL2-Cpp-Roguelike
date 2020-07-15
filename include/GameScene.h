@@ -1,7 +1,7 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
 
-#include <vector>
+#include <map>
 #include "SDL2/SDL.h"
 #include "Renderer.h"
 #include "KeyPressSurfaces.h"
@@ -15,7 +15,7 @@
 class GameScene : public Scene
 {
 public:
-  GameScene(EventManager *eventManager, Renderer *renderer, std::vector<GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog);
+  GameScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog);
   virtual ~GameScene();
   enum KeyPressSurfaces getEvent(SDL_Event* e);
   void render();
@@ -27,7 +27,7 @@ public:
 private:
   EventManager *m_eventManager;
   Renderer *m_renderer;
-  std::vector<GameObject*> *m_entities;
+  std::map<int, GameObject*> *m_entities;
   Camera* m_camera;
   DungeonGenerator *m_dungeon;
   MessageLog *m_messageLog;

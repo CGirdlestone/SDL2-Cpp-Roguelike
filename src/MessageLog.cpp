@@ -1,5 +1,6 @@
 
 #include <vector>
+#include <map>
 #include <string>
 #include "SDL2/SDL.h"
 
@@ -10,7 +11,7 @@
 
 
 
-MessageLog::MessageLog(int x_buffer, int y_buffer, EventManager* eventManager, std::vector<GameObject*> *entities)
+MessageLog::MessageLog(int x_buffer, int y_buffer, EventManager* eventManager, std::map<int, GameObject*> *entities)
 {
     m_x_buffer = x_buffer;
     m_y_buffer = y_buffer;

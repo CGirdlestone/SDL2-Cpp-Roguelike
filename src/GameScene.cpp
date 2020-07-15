@@ -1,5 +1,5 @@
 
-
+#include <map>
 #include "StartScene.h"
 #include "SDL2/SDL.h"
 #include "Renderer.h"
@@ -12,7 +12,7 @@
 #include "GameScene.h"
 
 
-GameScene::GameScene(EventManager *eventManager, Renderer *renderer, std::vector<GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog):
+GameScene::GameScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog):
 m_eventManager(eventManager), m_renderer(renderer), m_entities(entities), m_camera(camera), m_dungeon(dungeon), m_messageLog(messageLog)
 {
   m_playerTurn = true;

@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <map>
 #include "DungeonGenerator.h"
 #include "Console.h"
 #include "Renderer.h"
@@ -55,7 +56,7 @@ class Game
     int m_mapWidth;
     int m_mapHeight;
     int m_tileSize;
-    std::vector<GameObject*> m_actors;
+    std::map<int, GameObject*> m_actors;
     GameStateManager *m_sceneManager;
     StartScene *m_startScene;
     GameScene *m_gameScene;

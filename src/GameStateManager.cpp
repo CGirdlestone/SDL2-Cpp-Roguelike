@@ -1,5 +1,6 @@
 
 #include <vector>
+#include <map>
 
 #include "GameStateManager.h"
 #include "EventManager.h"
@@ -11,7 +12,7 @@
 #include "CharacterScene.h"
 #include "SceneTypes.h"
 
-GameStateManager::GameStateManager(EventManager* eventManager, std::vector<GameObject*> *entities):
+GameStateManager::GameStateManager(EventManager* eventManager, std::map<int, GameObject*> *entities):
 m_eventManager(eventManager), m_entities(entities)
 {
   m_eventManager->registerSystem(POPSCENE, this);

@@ -1,13 +1,13 @@
 #include <iostream>
 #include <cstdlib>
-#include <vector>
+#include <map>
 
 #include "CombatSystem.h"
 #include "EventManager.h"
 #include "Events.h"
 #include "EventTypes.h"
 
-CombatSystem::CombatSystem(EventManager* eventManager, std::vector<GameObject*> *entities):
+CombatSystem::CombatSystem(EventManager* eventManager, std::map<int, GameObject*> *entities):
 m_eventManager(eventManager), m_entities(entities)
 {
   m_eventManager->registerSystem(ATTACK, this);

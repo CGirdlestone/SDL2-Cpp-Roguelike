@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <vector>
+#include <map>
 #include <algorithm>
 #include <time.h>
 #include <iostream>
@@ -595,7 +596,7 @@ void DungeonGenerator::doRecomputeFOV(int x, int y, int radius)
   shadowCast(x, y, radius);
 }
 
-void DungeonGenerator::createPlayer(std::vector<GameObject*> *actors)
+void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
 {
   int i;
   int x;
@@ -635,10 +636,10 @@ void DungeonGenerator::createPlayer(std::vector<GameObject*> *actors)
   player->actor = actor;
   player->inventory = inventory;
   player->body = body;
-  actors->push_back(player);
+  actors->insert({player->m_uid, player});
 }
 
-void DungeonGenerator::createEntities(std::vector<GameObject*> *actors)
+void DungeonGenerator::createEntities(std::map<int, GameObject*> *actors)
 {
   int i;
   int x;
@@ -675,10 +676,10 @@ void DungeonGenerator::createEntities(std::vector<GameObject*> *actors)
   entity->fighter = f;
   entity->ai = a;
   entity->actor = actor;
-  actors->push_back(entity);
+  actors->insert({entity->m_uid, entity});
 }
 
-void DungeonGenerator::createItems(std::vector<GameObject*> *actors)
+void DungeonGenerator::createItems(std::map<int, GameObject*> *actors)
 {
   int i;
   int x;
@@ -715,5 +716,5 @@ void DungeonGenerator::createItems(std::vector<GameObject*> *actors)
   entity->item = item;
   entity->weapon = weapon;
   entity->wearable = wearable;
-  actors->push_back(entity);
+  actors->insert({entity->m_uid, entity});
 }

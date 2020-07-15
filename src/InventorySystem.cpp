@@ -1,6 +1,6 @@
 
 
-#include <vector>
+#include <map>
 
 #include "InventorySystem.h"
 #include "EventManager.h"
@@ -8,7 +8,7 @@
 #include "EventTypes.h"
 #include "Components.h"
 
-InventorySystem::InventorySystem(EventManager* eventManager, std::vector<GameObject*> *entities):
+InventorySystem::InventorySystem(EventManager* eventManager, std::map<int, GameObject*> *entities):
 m_eventManager(eventManager), m_entities(entities)
 {
   m_eventManager->registerSystem(TAKE, this);

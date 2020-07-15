@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include <vector>
+#include <map>
 #include <string>
 #include "Console.h"
 #include "GameObject.h"
@@ -15,17 +16,17 @@ class Renderer
 public:
   Renderer(Console* console);
   ~Renderer();
-  void drawActors(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors);
-  void drawMap(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors);
+  void drawActors(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors);
+  void drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors);
   void drawLog(MessageLog* messageLog, int height);
   void drawUI();
   void drawMenuOutline();
-  void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors, MessageLog* messageLog);
+  void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog);
   void drawStartMenu(int i);
-	void drawInventory(std::vector<GameObject*> *actors, int i);
+	void drawInventory(std::map<int, GameObject*> *actors, int i);
 	void drawEquippedItem(std::string slot, std::string item, int y, int index);
 	void drawEquippedItem(std::string slot, int y, int index);
-	void drawCharacterScene(std::vector<GameObject*> *actors, int index);
+	void drawCharacterScene(std::map<int, GameObject*> *actors, int index);
 
 private:
   Console* m_console;

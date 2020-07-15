@@ -2,6 +2,7 @@
 #define GAMESTATEMANAGER_H
 
 #include <vector>
+#include <map>
 #include "SDL2/SDL.h"
 #include "System.h"
 #include "Events.h"
@@ -18,7 +19,7 @@ class EventManager;
 class GameStateManager : public System
 {
 public:
-  GameStateManager(EventManager* eventManager, std::vector<GameObject*> *entities);
+  GameStateManager(EventManager* eventManager, std::map<int, GameObject*> *entities);
   virtual ~GameStateManager();
   void notify(PushScene event);
   void notify(PopScene event);
@@ -37,7 +38,7 @@ public:
 
 private:
   EventManager* m_eventManager;
-  std::vector<GameObject*> *m_entities;
+  std::map<int, GameObject*> *m_entities;
   std::vector<Scene*> m_sceneStack;
 };
 #endif

@@ -6,14 +6,14 @@
 #include "GameObject.h"
 #include "DungeonGenerator.h"
 
-#include <vector>
+#include <map>
 
 class EventManager;
 
 class MoveSystem : public System
 {
 public:
-  MoveSystem(EventManager* eventManager, std::vector<GameObject*> *entities, DungeonGenerator* dungeon);
+  MoveSystem(EventManager* eventManager, std::map<int, GameObject*> *entities, DungeonGenerator* dungeon);
   virtual ~MoveSystem();
   bool checkMove(int dx, int dy, int uid);
   void moveEntity(int dx, int dy, int uid);
@@ -23,7 +23,7 @@ public:
 
 private:
   EventManager* m_eventManager;
-  std::vector<GameObject*> *m_entities;
+  std::map<int, GameObject*> *m_entities;
   DungeonGenerator* m_dungeon;
 };
 

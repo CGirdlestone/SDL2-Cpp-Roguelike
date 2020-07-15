@@ -2,6 +2,7 @@
 #define MESSAGELOG_H
 
 #include <vector>
+#include <map>
 #include <string>
 #include "SDL2/SDL.h"
 
@@ -13,7 +14,7 @@
 class MessageLog : System
 {
 public:
-    MessageLog(int x_buffer, int y_buffer, EventManager* eventManager, std::vector<GameObject*> *entities);
+    MessageLog(int x_buffer, int y_buffer, EventManager* eventManager, std::map<int, GameObject*> *entities);
     virtual ~MessageLog();
     void addMessage(std::string msg, SDL_Color colour);
     void addMessage(std::string msg);
@@ -34,7 +35,7 @@ private:
     int m_x_buffer;
     int m_y_buffer;
     EventManager* m_eventManager;
-    std::vector<GameObject*> *m_entities;
+    std::map<int, GameObject*> *m_entities;
 };
 
 #endif

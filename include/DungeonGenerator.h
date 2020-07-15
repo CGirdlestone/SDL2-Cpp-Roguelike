@@ -2,6 +2,7 @@
 #define DUNGEONGENERATOR_H
 
 #include <vector>
+#include <map>
 #include "GameObject.h"
 
 
@@ -32,9 +33,9 @@ class DungeonGenerator
     void shadowCast(int x, int y, int radius);
     bool checkInMap(int x, int y);
     void doRecomputeFOV(int x, int y, int radius);
-    void createPlayer(std::vector<GameObject*> *actors);
-    void createEntities(std::vector<GameObject*> *actors);
-    void createItems(std::vector<GameObject*> *actors);
+    void createPlayer(std::map<int, GameObject*> *actors);
+    void createEntities(std::map<int, GameObject*> *actors);
+    void createItems(std::map<int, GameObject*> *actors);
 
     char *m_level;
     int *m_fovMap;

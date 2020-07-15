@@ -1,12 +1,13 @@
 
 #include <iostream>
+#include <map>
 #include "MoveSystem.h"
 #include "Events.h"
 #include "EventTypes.h"
 #include "EventManager.h"
 
 
-MoveSystem::MoveSystem(EventManager* eventManager, std::vector<GameObject*> *entities, DungeonGenerator* dungeon):
+MoveSystem::MoveSystem(EventManager* eventManager, std::map<int, GameObject*> *entities, DungeonGenerator* dungeon):
 m_eventManager(eventManager), m_entities(entities), m_dungeon(dungeon)
 {
   m_eventManager->registerSystem(MOVE, this);

@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <string>
+#include <map>
 #include "Renderer.h"
 #include "Slots.h"
 
@@ -30,7 +31,7 @@ void Renderer::drawLog(MessageLog* messageLog, int height)
   }
 }
 
-void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors)
+void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors)
 {
   int x;
   int y = 0;
@@ -81,7 +82,7 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::vector<Ga
   }
 }
 
-void Renderer::drawActors(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors)
+void Renderer::drawActors(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors)
 {
   int mapArrayIndex;
   int offsetI;
@@ -183,7 +184,7 @@ void Renderer::drawStartMenu(int i)
   m_console->update();
 }
 
-void Renderer::drawInventory(std::vector<GameObject*> *actors, int i)
+void Renderer::drawInventory(std::map<int, GameObject*> *actors, int i)
 {
 	m_console->flush();
 
@@ -248,7 +249,7 @@ void Renderer::drawEquippedItem(std::string slot, int y, int index)
 	}
 } 
 
-void Renderer::drawCharacterScene(std::vector<GameObject*> *actors, int index)
+void Renderer::drawCharacterScene(std::map<int, GameObject*> *actors, int index)
 {
 	m_console->flush();
 
@@ -280,7 +281,7 @@ void Renderer::drawCharacterScene(std::vector<GameObject*> *actors, int index)
 	m_console->update();
 }
 
-void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors, MessageLog* messageLog)
+void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog)
 {
   m_console->flush();
   drawMap(camera, dungeon, actors);
