@@ -152,8 +152,8 @@ EquipEvent::~EquipEvent()
 
 }
 
-UnequipEvent::UnequipEvent(int actor_uid, int item_uid):
-m_actor_uid(actor_uid), m_item_uid(item_uid)
+UnequipEvent::UnequipEvent(int actor_uid, int item_uid, int slotNum):
+m_actor_uid(actor_uid), m_item_uid(item_uid), m_slotNum(slotNum)
 {
 	m_type = UNEQUIP;
 }

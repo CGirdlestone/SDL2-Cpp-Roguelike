@@ -22,6 +22,7 @@ public:
   virtual void notify(QuitEvent event) {};
 	virtual void notify(DropEvent event) {};
 	virtual void notify(EquipEvent event) {};
+	virtual void notify(UnequipEvent event) {};
 };
 
 #endif

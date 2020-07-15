@@ -45,7 +45,7 @@ enum KeyPressSurfaces InventoryScene::getEvent(SDL_Event *e)
               case SDLK_i:
               return ESCAPE;
 
-							case SDLK_w:
+							case SDLK_e:
 							return WEAR;
 
 							case SDLK_d:
@@ -53,7 +53,10 @@ enum KeyPressSurfaces InventoryScene::getEvent(SDL_Event *e)
 
 							case SDLK_ESCAPE:
 							return ESCAPE;
-          }
+		  
+							case SDLK_c:
+							return SHOWCHARSCREEN;
+        }
       }
   }
   return NONE;
@@ -78,6 +81,9 @@ void InventoryScene::handleInput(KeyPressSurfaces keyPress)
 		// TO DO
 		DropEvent dropEvent = DropEvent(0, m_entities->at(0)->inventory->inventory.at(m_index)->m_uid, x, y);
 		m_eventManager->pushEvent(DropEvent(dropEvent));
+	} else if (keyPress == SHOWCHARSCREEN){
+		m_eventManager->pushEvent(PopScene(1));
+		m_eventManager->pushEvent(PushScene(CHARACTER));
 	}
 }
 

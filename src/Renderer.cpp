@@ -199,7 +199,7 @@ void Renderer::drawInventory(std::vector<GameObject*> *actors, int i)
 		for (int k = 0; k < static_cast<int>(actors->at(0)->inventory->inventory.size());++k){
 			GameObject* item = actors->at(0)->inventory->inventory.at(k);
 			if (k == i){
-				selectedItem = ">" + item->m_name + "<";
+				selectedItem = ">" + item->m_name;
 				for (int j = 0; j < static_cast<int>(selectedItem.length()); ++j){
 					m_console->render(&selectedItem[j], 1 + j, 2*k + 5, m_inViewColour);
 				}
@@ -212,28 +212,71 @@ void Renderer::drawInventory(std::vector<GameObject*> *actors, int i)
 	}
 
 	m_console->update();
+}
+
+void Renderer::drawEquippedItem(std::string slot, std::string item, int y, int index)
+{
+	std::string equipmentSlot = slot + item;
+
+	if (index == y){
+		equipmentSlot = ">" + equipmentSlot;
+	}	
+
+	for (int j = 0; j < static_cast<int>(equipmentSlot.length()); ++j){
+		if (index == y){
+			m_console->render(&equipmentSlot[j], j + 2, 3 + 2 * y, m_inViewColour);
+		} else {
+			m_console->render(&equipmentSlot[j], j + 3, 3 + 2 * y, m_defaultColour);
+		}	
+	}
+}
+
+void Renderer::drawEquippedItem(std::string slot, int y, int index)
+{
+	std::string equipmentSlot = slot + "empty";
+	
+	if (index == y){
+		equipmentSlot = ">" + equipmentSlot;
+	}
+	
+	for (int j = 0; j < static_cast<int>(equipmentSlot.length()); ++j){
+		if (index == y){
+			m_console->render(&equipmentSlot[j], j + 2, 3 + 2 * y, m_inViewColour);
+		} else {
+			m_console->render(&equipmentSlot[j], j + 3, 3 + 2 * y, m_defaultColour);
+		}
+	}
 } 
 
-void Renderer::drawCharacterScene(std::vector<GameObject*> *actors, int i)
+void Renderer::drawCharacterScene(std::vector<GameObject*> *actors, int index)
 {
 	m_console->flush();
 
 	std::string character = "Character Screen";
+	std::string slot;
 
-	std::string righthand = "Right Hand: ";
-	
 	for (int j = 0; j < static_cast<int>(character.length()); ++j){
-		m_console->render(&character[j], j + 3, 2, m_inViewColour);
+		m_console->render(&character[j], j + 3, 1, m_inViewColour);
 	}	
-	
-	if (actors->at(0)->body->slots.at(RIGHTHAND) != nullptr){
-		righthand += actors->at(0)->body->slots.at(RIGHTHAND)->m_name;
-	}  
-	
-	for (int j = 0; j < static_cast<int>(righthand.length()); ++j){
-		m_console->render(&righthand[j], j + 3, 4, m_inViewColour);
-	}
 
+	for (std::map<EquipSlots, GameObject*>::iterator iter = actors->at(0)->body->slots.begin(); iter != actors->at(0)->body->slots.end(); ++iter){
+
+		switch(iter->first){
+			case HEAD: slot = "Head: "; break;
+			case LEFTHAND: slot = "Left Hand: "; break;
+			case RIGHTHAND: slot = "Right Hand: "; break;
+			case BODY: slot = "Body: "; break;
+			case NECK: slot = "Amulet: "; break;
+			case BACK: slot = "Cloak: "; break;
+		}
+
+		if (iter->second != nullptr){
+			drawEquippedItem(slot, iter->second->m_name, static_cast<int>(iter->first), index);
+		} else {
+			drawEquippedItem(slot, static_cast<int>(iter->first), index);
+		}
+	} 
+	
 	m_console->update();
 }
 

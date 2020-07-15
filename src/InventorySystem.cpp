@@ -14,6 +14,7 @@ m_eventManager(eventManager), m_entities(entities)
   m_eventManager->registerSystem(TAKE, this);
 	m_eventManager->registerSystem(DROP, this);
 	m_eventManager->registerSystem(EQUIP, this);
+	m_eventManager->registerSystem(UNEQUIP, this);
 }
 
 InventorySystem::~InventorySystem()
@@ -71,6 +72,15 @@ void InventorySystem::equipItem(EquipEvent event)
 	}
 }
 
+void InventorySystem::unequipItem(UnequipEvent event)
+{
+	GameObject* item = m_entities->at(event.m_actor_uid)->body->slots[static_cast<EquipSlots>(event.m_slotNum)];
+
+	m_entities->at(event.m_actor_uid)->body->slots[static_cast<EquipSlots>(event.m_slotNum)] = nullptr;
+
+	m_entities->at(event.m_actor_uid)->inventory->inventory.push_back(item);
+}
+
 void InventorySystem::notify(TakeEvent event)
 {
   pickUpItem(event);
@@ -84,5 +94,10 @@ void InventorySystem::notify(DropEvent event)
 void InventorySystem::notify(EquipEvent event)
 {
 	equipItem(event);
+}
+
+void InventorySystem::notify(UnequipEvent event)
+{
+	unequipItem(event);
 }
 

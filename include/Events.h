@@ -90,10 +90,11 @@ struct EquipEvent : Event
 
 struct UnequipEvent : Event
 {
-	UnequipEvent(int actor_uid, int item_uid);
+	UnequipEvent(int actor_uid, int item_uid, int slotNum);
 	virtual ~UnequipEvent();
 	int m_actor_uid;
 	int m_item_uid;
+	int m_slotNum;
 };
 
 struct OnPickUpEvent : Event

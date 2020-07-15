@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include <vector>
+#include <string>
 #include "Console.h"
 #include "GameObject.h"
 #include "Message.h"
@@ -22,7 +23,9 @@ public:
   void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::vector<GameObject*> *actors, MessageLog* messageLog);
   void drawStartMenu(int i);
 	void drawInventory(std::vector<GameObject*> *actors, int i);
-	void drawCharacterScene(std::vector<GameObject*> *actors, int i);
+	void drawEquippedItem(std::string slot, std::string item, int y, int index);
+	void drawEquippedItem(std::string slot, int y, int index);
+	void drawCharacterScene(std::vector<GameObject*> *actors, int index);
 
 private:
   Console* m_console;

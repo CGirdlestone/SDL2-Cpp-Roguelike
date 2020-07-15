@@ -10,7 +10,7 @@
 #include "EventTypes.h"
 #include "SceneTypes.h"
 #include "CharacterScene.h"
-
+#include "Slots.h"
 
 CharacterScene::CharacterScene(EventManager *eventManager, Renderer *renderer, std::vector<GameObject*> *entities):
 m_eventManager(eventManager), m_renderer(renderer), m_entities(entities)
@@ -47,6 +47,12 @@ enum KeyPressSurfaces CharacterScene::getEvent(SDL_Event *e)
 
 							case SDLK_ESCAPE:
 							return ESCAPE;
+
+							case SDLK_e:
+							return DOFF;
+							
+							case SDLK_i:
+							return BAG;
           }
       }
   }
@@ -56,15 +62,22 @@ enum KeyPressSurfaces CharacterScene::getEvent(SDL_Event *e)
 void CharacterScene::handleInput(KeyPressSurfaces keyPress)
 {
 	int inventorySize = m_entities->at(0)->inventory->inventory.size();
-	int x = m_entities->at(0)->position->x;
-	int y = m_entities->at(0)->position->y;
+	GameObject* item = m_entities->at(0)->body->slots[static_cast<EquipSlots>(m_index)];
 
   if (keyPress == ESCAPE){
     m_eventManager->pushEvent(PopScene(1));
   }else if (keyPress == NORTH){
-		m_index = m_index - 1 < 0 ? inventorySize - 1 : m_index - 1;
+		m_index = m_index - 1 < 0 ? 6 - 1 : m_index - 1;
 	} else if (keyPress == SOUTH){
-		m_index = m_index + 1 >= inventorySize ? 0 : m_index + 1;
+		m_index = m_index + 1 >= 6 ? 0 : m_index + 1;
+	} else if (keyPress == DOFF){
+		//TODO
+		if (item != nullptr){
+			m_eventManager->pushEvent(UnequipEvent(0, item->m_uid, m_index));
+		}
+	} else if (keyPress == BAG){
+		m_eventManager->pushEvent(PopScene(1));
+		m_eventManager->pushEvent(PushScene(INVENTORY));
 	}
 }
 

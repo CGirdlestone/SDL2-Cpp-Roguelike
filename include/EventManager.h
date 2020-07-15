@@ -28,6 +28,7 @@ public:
   void pushEvent(QuitEvent event);
 	void pushEvent(DropEvent event);
 	void pushEvent(EquipEvent event);
+	void pushEvent(UnequipEvent event);
 
 private:
   std::map<EventTypes, std::vector<System*>> m_subscribers;

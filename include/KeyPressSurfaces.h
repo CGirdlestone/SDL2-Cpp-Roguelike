@@ -26,6 +26,7 @@ enum KeyPressSurfaces
     PRESS,
 		BAG,
 		WEAR,
+		DOFF,
 		DROPITEM,
 		SHOWCHARSCREEN,
 };
