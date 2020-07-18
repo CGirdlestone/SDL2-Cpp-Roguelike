@@ -33,6 +33,7 @@ class DungeonGenerator
     void shadowCast(int x, int y, int radius);
     bool checkInMap(int x, int y);
     void doRecomputeFOV(int x, int y, int radius);
+		int getFreePosition();
     void createPlayer(std::map<int, GameObject*> *actors);
     void createEntities(std::map<int, GameObject*> *actors);
     void createItems(std::map<int, GameObject*> *actors);

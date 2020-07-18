@@ -605,74 +605,50 @@ void DungeonGenerator::doRecomputeFOV(int x, int y, int radius)
   shadowCast(x, y, radius);
 }
 
+int DungeonGenerator::getFreePosition()
+{
+	int i;
+	bool playerPlaced = false;
+	
+	while(!playerPlaced){
+		i = std::rand()%(m_width * m_height);
+		if (m_level[i] != '.'){
+			continue;
+		}
+		playerPlaced = true;
+	}
+	return i;
+}
+
 void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
 {
-  int i;
-  int x;
-  int y;
-  bool playerPlaced = false;
-
   GameObject *player = new GameObject();
-
-  while(!playerPlaced){
-    i = std::rand()%(m_width * m_height);
-    if (m_level[i] != '.'){
-      continue;
-    }
-    x = i % m_width;
-    y = i / m_width;
-    playerPlaced = true;
-  }
 	
-	m_factory->makeEntity("PLAYER", player, x, y);
+	int i = getFreePosition();
+
+	m_factory->makeEntity("PLAYER", player, i%m_width, i/m_width);
 
   actors->insert({player->m_uid, player});
 }
 
 void DungeonGenerator::createEntities(std::map<int, GameObject*> *actors)
 {
-  int i;
-  int x;
-  int y;
-  bool entityPlaced = false;
-
   GameObject *entity = new GameObject();
 
-  while(!entityPlaced){
-    i = std::rand()%(m_width * m_height);
-    if (m_level[i] != '.'){
-      continue;
-    }
-    x = i % m_width;
-    y = i / m_width;
-    entityPlaced = true;
-  }
+	int i = getFreePosition();
 
-  m_factory->makeEntity("BAT", entity, x, y);
+  m_factory->makeEntity("BAT", entity, i%m_width, i/m_width);
 
 	actors->insert({entity->m_uid, entity});
 }
 
 void DungeonGenerator::createItems(std::map<int, GameObject*> *actors)
 {
-  int i;
-  int x;
-  int y;
-  bool entityPlaced = false;
-
   GameObject *entity = new GameObject();
 
-  while(!entityPlaced){
-    i = std::rand()%(m_width * m_height);
-    if (m_level[i] != '.'){
-      continue;
-    }
-    x = i % m_width;
-    y = i / m_width;
-    entityPlaced = true;
-  }
-	
-	m_factory->makeEntity("HEALTH POTION", entity, x, y);
+	int i = getFreePosition();
+
+	m_factory->makeEntity("HEALTH POTION", entity, i%m_width, i/m_width);
 
   actors->insert({entity->m_uid, entity});
 }

@@ -93,9 +93,11 @@ void EntityFactory::makeRenderableComponent(std::string line, GameObject* entity
 	std::stringstream ss(line);
 
 	char chr;
-	Uint8 red, green, blue;
-
+	int red, green, blue;
+	std::cout << line << std::endl;
 	ss >> chr >> std::hex >> red >> std::hex >> green >> std::hex >> blue;
+	
+	std::cout << red << green << blue << std::endl;
 
 	SDL_Color colour = {red, green, blue};
 
