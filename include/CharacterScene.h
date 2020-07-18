@@ -23,6 +23,7 @@ public:
   void processEntities();
   void update(Uint32 dt);
   void onTick();
+	void resetIndex(){m_index = 0;};
 
 private:
   EventManager *m_eventManager;

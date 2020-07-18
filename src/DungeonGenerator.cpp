@@ -12,7 +12,7 @@
 #include "GameObject.h"
 #include "DamageTypes.h"
 #include "Slots.h"
-
+#include "EntityFactory.h"
 
 DungeonGenerator::DungeonGenerator(int width, int height)
 {
@@ -20,6 +20,11 @@ DungeonGenerator::DungeonGenerator(int width, int height)
   m_width = width;
   m_height = height;
   recomputeFOV = false;
+	m_uid = 0;
+	m_factory = new EntityFactory();
+	m_factory->loadData("./resources/player.txt");
+	m_factory->loadData("./resources/items.txt");
+	m_factory->loadData("./resources/mobs.txt");
 }
 
 DungeonGenerator::~DungeonGenerator()
@@ -33,6 +38,9 @@ DungeonGenerator::~DungeonGenerator()
 
   delete[] m_exploredMap;
   m_exploredMap = nullptr;
+
+	delete m_factory;
+	m_factory = nullptr;
 }
 
 void DungeonGenerator::initialiseMap(int threshold)
@@ -538,6 +546,7 @@ void DungeonGenerator::castOctant(int x, int y, int radius, float bottomSlope, f
   int a, b; // transformed offsets for octants 2 - 8
   float gradient, newBottomSlope;
 
+
   for(int i = 0; i < radius - step; i++){
     l = i + step;
 
@@ -603,10 +612,7 @@ void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
   int y;
   bool playerPlaced = false;
 
-  SDL_Color colour = {0xef, 0xac, 0x28};
-  char c = '@';
-
-  GameObject *player = new GameObject("player", 0);
+  GameObject *player = new GameObject();
 
   while(!playerPlaced){
     i = std::rand()%(m_width * m_height);
@@ -617,25 +623,9 @@ void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
     y = i / m_width;
     playerPlaced = true;
   }
+	
+	m_factory->makeEntity("PLAYER", player, x, y);
 
-  Renderable *r = new Renderable(c, colour);
-
-  Fighter *f = new Fighter(20, 2, 3);
-
-  Position *p = new Position(x, y);
-
-  Inventory *inventory = new Inventory(10);
-
-  Body *body = new Body();
-
-  Actor *actor = new Actor();
-
-  player->position = p;
-  player->renderable = r;
-  player->fighter = f;
-  player->actor = actor;
-  player->inventory = inventory;
-  player->body = body;
   actors->insert({player->m_uid, player});
 }
 
@@ -646,10 +636,7 @@ void DungeonGenerator::createEntities(std::map<int, GameObject*> *actors)
   int y;
   bool entityPlaced = false;
 
-  SDL_Color colour = {0x9b, 0x1a, 0x0a};
-  char c = 'b';
-
-  GameObject *entity = new GameObject("bat", 1);
+  GameObject *entity = new GameObject();
 
   while(!entityPlaced){
     i = std::rand()%(m_width * m_height);
@@ -661,22 +648,9 @@ void DungeonGenerator::createEntities(std::map<int, GameObject*> *actors)
     entityPlaced = true;
   }
 
-  Renderable *r = new Renderable(c, colour);
+  m_factory->makeEntity("BAT", entity, x, y);
 
-  Fighter *f = new Fighter(12, 2, 1);
-
-  Position *p = new Position(x, y);
-
-  AI *a = new AI();
-
-  Actor *actor = new Actor();
-
-  entity->position = p;
-  entity->renderable = r;
-  entity->fighter = f;
-  entity->ai = a;
-  entity->actor = actor;
-  actors->insert({entity->m_uid, entity});
+	actors->insert({entity->m_uid, entity});
 }
 
 void DungeonGenerator::createItems(std::map<int, GameObject*> *actors)
@@ -686,10 +660,7 @@ void DungeonGenerator::createItems(std::map<int, GameObject*> *actors)
   int y;
   bool entityPlaced = false;
 
-  SDL_Color colour = {0x9b, 0x1a, 0x0a};
-  char c = '/';
-
-  GameObject *entity = new GameObject("sword", 2);
+  GameObject *entity = new GameObject();
 
   while(!entityPlaced){
     i = std::rand()%(m_width * m_height);
@@ -700,21 +671,8 @@ void DungeonGenerator::createItems(std::map<int, GameObject*> *actors)
     y = i / m_width;
     entityPlaced = true;
   }
+	
+	m_factory->makeEntity("SWORD", entity, x, y);
 
-  Renderable *r = new Renderable(c, colour);
-
-  Position *p = new Position(x, y);
-
-  Item *item = new Item("A simple longsword");
-
-  Weapon *weapon = new Weapon(SLASHING, 8);
-
-  Wearable *wearable = new Wearable(RIGHTHAND);
-
-  entity->position = p;
-  entity->renderable = r;
-  entity->item = item;
-  entity->weapon = weapon;
-  entity->wearable = wearable;
   actors->insert({entity->m_uid, entity});
 }

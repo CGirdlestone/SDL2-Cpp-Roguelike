@@ -48,7 +48,7 @@ void StartScene::handleInput(KeyPressSurfaces keyPress)
   } else if (keyPress == MENUUP){
     m_i = m_i - 1 < 0 ? 1 : m_i - 1;
   } else if (keyPress == MENUDOWN){
-    m_i = m_i + 1 < 1 ? 0 : m_i + 1;
+    m_i = m_i + 1 > 1 ? 0 : m_i + 1;
   } else if (keyPress == PRESS and m_i == 0){
     //
     PushScene transition = PushScene(GAMESCENE);

@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 #include "GameObject.h"
-
+#include "EntityFactory.h"
 
 class DungeonGenerator
 {
@@ -47,6 +47,9 @@ class DungeonGenerator
   private:
     int m_width;
     int m_height;
+		int m_uid;
+		
+		EntityFactory* m_factory;
 };
 
 #endif // DUNGEONGENERATOR_H
