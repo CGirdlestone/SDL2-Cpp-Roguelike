@@ -119,13 +119,7 @@ void EntityFactory::makeFighterComponent(std::string line, GameObject* entity)
 
 void EntityFactory::makeItemComponent(std::string line, GameObject* entity)
 {
-	std::stringstream ss(line);
-
-	std::string description;
-
-	ss >> description;
-
-	Item* item = new Item(description);
+	Item* item = new Item(line);
 
 	entity->item = item;
 }

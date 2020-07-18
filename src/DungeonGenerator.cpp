@@ -672,7 +672,7 @@ void DungeonGenerator::createItems(std::map<int, GameObject*> *actors)
     entityPlaced = true;
   }
 	
-	m_factory->makeEntity("SWORD", entity, x, y);
+	m_factory->makeEntity("HEALTH POTION", entity, x, y);
 
   actors->insert({entity->m_uid, entity});
 }
