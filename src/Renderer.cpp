@@ -151,6 +151,28 @@ void Renderer::drawUI()
   drawMenuOutline();
 }
 
+void Renderer::drawPlayerInfo(GameObject* player)
+{
+	int width = m_console->Getm_width();
+	int buffer = m_console->getXBuffer()-2;
+	char healthBarChar = '=';
+	SDL_Color colour = {0x9b, 0x1a, 0x0a};
+	int healthBarWidth = (player->fighter->health * buffer) / player->fighter->maxHealth;
+	std::string health = "Health: " + std::to_string(player->fighter->health) + " / " + std::to_string(player->fighter->maxHealth);
+
+	for (int i = 0; i < health.length(); ++i){
+		m_console->render(&health[i], width + 1 + i, 2, m_inViewColour);
+	}
+	
+	for (int i = 0; i < buffer; ++i){
+		if (i <= healthBarWidth && healthBarWidth != 0){
+			m_console->render(&healthBarChar, width + 1 + i, 4, colour);
+		} else {
+			m_console->render(&healthBarChar, width + 1 + i, 4, m_defaultColour);
+		}
+	}
+}
+
 void Renderer::drawStartMenu(int i)
 {
   int width = m_console->Getm_width() + m_console->getXBuffer();
@@ -193,7 +215,7 @@ void Renderer::drawInventory(std::map<int, GameObject*> *actors, int i)
 	std::string selectedItem;
 
 	for (int k = 0; k < static_cast<int>(inventoryHeader.length()); ++k){
-		m_console->render(&inventoryHeader[k], width -static_cast<int>(inventoryHeader.length()) + k, 3, m_inViewColour);
+		m_console->render(&inventoryHeader[k], 2 + k, 1, m_inViewColour);
 	}
 
 	if (actors->at(0)->inventory->inventory.size() > 0){
@@ -202,11 +224,11 @@ void Renderer::drawInventory(std::map<int, GameObject*> *actors, int i)
 			if (k == i){
 				selectedItem = ">" + item->m_name;
 				for (int j = 0; j < static_cast<int>(selectedItem.length()); ++j){
-					m_console->render(&selectedItem[j], 1 + j, 2*k + 5, m_inViewColour);
+					m_console->render(&selectedItem[j], 1 + j, 2*k + 3, m_inViewColour);
 				}
 			} else {
 				for (int j = 0; j < static_cast<int>(item->m_name.length()); ++j){
-					m_console->render(&item->m_name[j], 2 + j, 2*k + 5, m_defaultColour);
+					m_console->render(&item->m_name[j], 2 + j, 2*k + 3, m_defaultColour);
 				}
 			}
 		}
@@ -288,5 +310,6 @@ void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::ma
   drawActors(camera, dungeon, actors);
   drawLog(messageLog, camera->getHeight());
   drawUI();
+	drawPlayerInfo(actors->at(0));
   m_console->update();
 }

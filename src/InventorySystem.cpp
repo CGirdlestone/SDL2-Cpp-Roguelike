@@ -93,6 +93,14 @@ void InventorySystem::useItem(UseItemEvent event)
 			if (m_entities->at(event.m_user_uid)->fighter->health < m_entities->at(event.m_user_uid)->fighter->maxHealth){
 				--item->useable->numUses;
 				m_eventManager->pushEvent(DamageEvent(event.m_user_uid, -1 * (std::rand()%item->healing->roll + 1)));
+				if (item->useable->numUses <= 0){
+					for (int i = 0; i < static_cast<int>(m_entities->at(event.m_user_uid)->inventory->inventory.size()); ++i){
+						if (m_entities->at(event.m_user_uid)->inventory->inventory.at(i)->m_uid == event.m_item_uid){
+							m_entities->at(event.m_user_uid)->inventory->inventory.erase(m_entities->at(event.m_user_uid)->inventory->inventory.begin() + i);
+						}
+					}
+				}
+				m_eventManager->pushEvent(PopScene(1));
 			} 
 		} else if (item->useable->funcToDo == DIRECTDAMAGE){
 			if (event.m_target_uid == -1){
@@ -113,14 +121,6 @@ void InventorySystem::useItem(UseItemEvent event)
 
 			}
 		}
-		if (item->useable->numUses <= 0){
-			for (int i = 0; i < static_cast<int>(m_entities->at(event.m_user_uid)->inventory->inventory.size()); ++i){
-				if (m_entities->at(event.m_user_uid)->inventory->inventory.at(i)->m_uid == event.m_item_uid){
-					m_entities->at(event.m_user_uid)->inventory->inventory.erase(m_entities->at(event.m_user_uid)->inventory->inventory.begin() + i);
-				}
-			}
-			delete m_entities->at(event.m_item_uid);
-		}	
 	}
 }
 
