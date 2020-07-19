@@ -163,3 +163,14 @@ UnequipEvent::~UnequipEvent()
 
 }
 
+UseItemEvent::UseItemEvent(int user_uid, int item_uid, int target_uid):
+m_user_uid(user_uid), m_item_uid(item_uid), m_target_uid(target_uid)
+{
+	m_type = USEITEM;
+}
+
+UseItemEvent::~UseItemEvent()
+{
+
+}
+

@@ -4,9 +4,13 @@
 
 enum DamageTypes
 {
-    SLASHING,
-    PIERCING,
-    BLUDGEONING,
+  SLASHING,
+  PIERCING,
+  BLUDGEONING,
+	FIRE,
+	ICE,
+	FORCE,
+	POISON,
 };
 
 extern DamageTypes DamageType;

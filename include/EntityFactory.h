@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "DamageTypes.h"
 #include "Slots.h"
+#include "UseableFunctionEnum.h"
 
 class EntityFactory
 {
@@ -26,9 +27,16 @@ public:
 	void makeBodyComponent(GameObject* entity);
 	void makeWearableComponent(std::string line, GameObject* entity);
 	void makePlayerComponent(GameObject* entity);
+	void makeUseableComponent(std::string line, GameObject* entity);
+	void makeHealingComponent(std::string line, GameObject* entity);
+	void makeDamageComponent(std::string line, GameObject* entity);
+	void makeAreaDamageComponent(std::string line, GameObject* entity);
+	void makeStatusComponent(std::string line, GameObject* entity);
+	void makeConsumableComponent(GameObject* entity);
 
 	DamageTypes getDamageTypeEnum(std::string stringEnum);
 	EquipSlots getEquipSlotEnum(std::string stringEnum);
+	UseableFunctionEnums getFunctionEnum(std::string stringEnum);
 	
 	void loadData(std::string filename);
 

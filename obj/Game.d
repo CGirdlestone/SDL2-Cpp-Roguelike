@@ -1,5 +1,6 @@
 obj/Game.o: src/Game.cpp include/DungeonGenerator.h include/GameObject.h \
  include/Components.h include/DamageTypes.h include/Slots.h \
+ include/UseableFunctionEnum.h include/StatusTypes.h \
  include/EntityFactory.h include/Console.h include/Tile.h \
  include/KeyPressSurfaces.h include/Components.h include/GameObject.h \
  include/Message.h include/MessageLog.h include/Message.h \
@@ -19,6 +20,8 @@ include/GameObject.h:
 include/Components.h:
 include/DamageTypes.h:
 include/Slots.h:
+include/UseableFunctionEnum.h:
+include/StatusTypes.h:
 include/EntityFactory.h:
 include/Console.h:
 include/Tile.h:

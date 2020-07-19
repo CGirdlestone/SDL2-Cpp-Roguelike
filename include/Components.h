@@ -5,8 +5,11 @@
 #include <vector>
 #include <string>
 #include <map>
+
 #include "DamageTypes.h"
 #include "Slots.h"
+#include "UseableFunctionEnum.h"
+#include "StatusTypes.h"
 
 class GameObject;
 
@@ -97,5 +100,57 @@ struct Body
   Body();
   ~Body();
 };
+
+struct Useable
+{
+	Useable(UseableFunctionEnums func, int _numUses);
+	~Useable();	
+	UseableFunctionEnums funcToDo;
+	int numUses;
+};
+
+struct Healing
+{
+	Healing(int _roll);
+	~Healing();
+	int roll;
+};
+
+struct Damage
+{
+	Damage(int _radius, std::string _roll, DamageTypes _type, int _chance);
+	~Damage();
+	int radius;
+	std::string roll;
+	DamageTypes type;
+	int chance;
+};
+
+struct AreaDamage
+{
+	AreaDamage(int _radius, std::string _roll, int _splashRadius, DamageTypes _type, int _chance);
+	~AreaDamage();
+	int radius;
+	std::string roll;
+	int splashRadius;
+	DamageTypes type;
+	int chance;
+};
+
+struct Status
+{
+	Status(int _radius, StatusTypes _status, int _splashRadius);
+	~Status();
+	int radius;
+	StatusTypes statusType;
+	int splashRadius;
+};
+
+struct Consumable
+{
+	Consumable();
+	~Consumable();
+};
+
 
 #endif

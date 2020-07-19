@@ -81,12 +81,6 @@ std::vector<Message> MessageLog::getMessages()
     return m_messageQueue;
 }
 
-// void MessageLog::notify(MoveEvent event)
-// {
-//   // to do
-//   addMessage(m_entities->at(event.m_uid)->m_name);
-// }
-
 void MessageLog::notify(AttackEvent event)
 {
   // to do
@@ -94,7 +88,6 @@ void MessageLog::notify(AttackEvent event)
 
 void MessageLog::notify(OnHitEvent event)
 {
-  // to do
   std::string attackerName = m_entities->at(event.m_attacker_uid)->m_name;
   std::string defenderName = m_entities->at(event.m_defender_uid)->m_name;
   std::string msg = attackerName + " hits " + defenderName;
@@ -104,7 +97,6 @@ void MessageLog::notify(OnHitEvent event)
 
 void MessageLog::notify(OnMissEvent event)
 {
-  // to do
   std::string attackerName = m_entities->at(event.m_attacker_uid)->m_name;
   std::string defenderName = m_entities->at(event.m_defender_uid)->m_name;
   std::string msg = attackerName + " misses " + defenderName;
@@ -114,16 +106,21 @@ void MessageLog::notify(OnMissEvent event)
 
 void MessageLog::notify(DamageEvent event)
 {
-  // to do
-  std::string defenderName = m_entities->at(event.m_uid)->m_name;
-  int dmg = event.m_damage;
-  std::string msg = defenderName + " suffers " + std::to_string(dmg) + " points of damage!";
-  addMessage(msg);
+	std::string msg;  
+	std::string defenderName = m_entities->at(event.m_uid)->m_name;
+  
+	int dmg = event.m_damage;
+	
+ 	if (dmg >= 0){
+		msg = defenderName + " suffers " + std::to_string(dmg) + " points of damage!";
+  } else {
+		msg = defenderName + " heals for " + std::to_string(-1 * dmg) + " health points!";
+	}
+	addMessage(msg);
 }
 
 void MessageLog::notify(DeadEvent event)
 {
-  // to do
   std::string defenderName = m_entities->at(event.m_uid)->m_name;
   std::string msg = defenderName + " has been slain!";
   addMessage(msg);
@@ -131,8 +128,6 @@ void MessageLog::notify(DeadEvent event)
 
 void MessageLog::notify(OnPickUpEvent event)
 {
-  // to do
-
   std::string name = m_entities->at(event.m_uid)->m_name;
   std::string msg = name + " has picked up " + event.m_name;
   addMessage(msg);

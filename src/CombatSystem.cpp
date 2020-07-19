@@ -55,7 +55,9 @@ void CombatSystem::applyDamage(DamageEvent event)
       m_entities->at(event.m_uid)->fighter->isAlive = false;
       DeadEvent deadEvent = DeadEvent(event.m_uid);
       m_eventManager->pushEvent(deadEvent);
-    }
+    } else if (m_entities->at(event.m_uid)->fighter->health > m_entities->at(event.m_uid)->fighter->maxHealth){
+			m_entities->at(event.m_uid)->fighter->health = m_entities->at(event.m_uid)->fighter->maxHealth;
+		}
   }
 }
 

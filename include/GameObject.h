@@ -26,6 +26,13 @@ public:
   Armour *armour;
   Wearable *wearable;
   Body *body;
+	Useable *useable;
+	Healing *healing;
+	Damage *damage;
+	AreaDamage *areaDamage;
+	Status *status;
+	Consumable *consumable;
+
 protected:
 
 private:

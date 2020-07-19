@@ -1,5 +1,6 @@
 
 #include <map>
+#include <iostream>
 #include "StartScene.h"
 #include "SDL2/SDL.h"
 #include "Renderer.h"
@@ -26,38 +27,44 @@ InventoryScene::~InventoryScene()
 enum KeyPressSurfaces InventoryScene::getEvent(SDL_Event *e)
 {
   while(SDL_PollEvent(e)){
-      if (e->type == SDL_QUIT){
-          return ESCAPE;
-      } else if (e->type == SDL_KEYDOWN){
-          switch(e->key.keysym.sym){
-              case SDLK_UP:
-              return NORTH;
+  	if (e->type == SDL_QUIT){
+    	return ESCAPE;
+    } else if (e->type == SDL_KEYDOWN){
+      switch(e->key.keysym.sym){
+        case SDLK_UP:
+        return NORTH;
 
-              case SDLK_DOWN:
-              return SOUTH;
+        case SDLK_DOWN:
+        return SOUTH;
 
-              case SDLK_KP_2:
-              return SOUTH;
+        case SDLK_KP_2:
+        return SOUTH;
 
-							case SDLK_KP_8:
-							return NORTH;
+				case SDLK_KP_8:
+				return NORTH;
 
-              case SDLK_i:
-              return ESCAPE;
+        case SDLK_i:
+        return ESCAPE;
 
-							case SDLK_e:
-							return WEAR;
+				case SDLK_e:
+				return WEAR;
 
-							case SDLK_d:
-							return DROPITEM;
+				case SDLK_d:
+				return DROPITEM;
 
-							case SDLK_ESCAPE:
-							return ESCAPE;
+				case SDLK_ESCAPE:
+				return ESCAPE;
 		  
-							case SDLK_c:
-							return SHOWCHARSCREEN;
-        }
+				case SDLK_c:
+				return SHOWCHARSCREEN;
+
+				case SDLK_q:
+				return USE;
+
+				case SDLK_RETURN:
+				return USE;
       }
+  	}
   }
   return NONE;
 }
@@ -84,9 +91,11 @@ void InventoryScene::handleInput(KeyPressSurfaces keyPress)
 	} else if (keyPress == SHOWCHARSCREEN){
 		m_eventManager->pushEvent(PopScene(1));
 		m_eventManager->pushEvent(PushScene(CHARACTER));
+	} else if (keyPress == USE){
+		//
+		m_eventManager->pushEvent(UseItemEvent(0, m_entities->at(0)->inventory->inventory.at(m_index)->m_uid));
 	}
 }
-
 
 void InventoryScene::render()
 {

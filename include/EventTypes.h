@@ -18,6 +18,7 @@ enum EventTypes
 		DROP,
 		EQUIP,
 		UNEQUIP,
+		USEITEM,
 };
 
 extern EventTypes EventType;

@@ -8,6 +8,8 @@
 #include "Slots.h"
 #include "DamageTypes.h"
 #include "SDL2/SDL.h"
+#include "UseableFunctionEnum.h"
+#include "StatusTypes.h"
 
 EntityFactory::EntityFactory()
 {
@@ -88,17 +90,27 @@ EquipSlots EntityFactory::getEquipSlotEnum(std::string stringEnum)
 	}
 }
 
+UseableFunctionEnums EntityFactory::getFunctionEnum(std::string stringEnum)
+{
+	if (stringEnum == "HEALING"){
+		return HEALING;
+	} else if (stringEnum == "DAMAGE"){
+		return DIRECTDAMAGE;
+	} else if (stringEnum == "AREA DAMAGE"){
+		return AOE;
+	} else if (stringEnum == "STATUS"){
+		return STATUS;
+	}
+}
+
 void EntityFactory::makeRenderableComponent(std::string line, GameObject* entity)
 {
 	std::stringstream ss(line);
 
 	char chr;
 	int red, green, blue;
-	std::cout << line << std::endl;
 	ss >> chr >> std::hex >> red >> std::hex >> green >> std::hex >> blue;
 	
-	std::cout << red << green << blue << std::endl;
-
 	SDL_Color colour = {red, green, blue};
 
 	Renderable* r = new Renderable(chr, colour); 
@@ -222,6 +234,55 @@ void EntityFactory::makePlayerComponent(GameObject* entity)
 	entity->player = p;
 }
 
+void EntityFactory::makeUseableComponent(std::string line, GameObject* entity)
+{	
+	std::stringstream ss(line);
+	std::string functionString;	
+	int numUses;
+	
+	ss >> functionString >> numUses;
+
+	UseableFunctionEnums functionEnum = getFunctionEnum(functionString);
+	
+	Useable* u = new Useable(functionEnum, numUses);
+
+	entity->useable = u;
+}
+
+void EntityFactory::makeHealingComponent(std::string line, GameObject* entity)
+{
+	std::stringstream ss(line);
+	int roll;
+
+	ss >> roll;
+
+	Healing* h = new Healing(roll);
+
+	entity->healing = h;
+}
+
+void EntityFactory::makeDamageComponent(std::string line, GameObject* entity)
+{
+
+}
+
+void EntityFactory::makeAreaDamageComponent(std::string line, GameObject* entity)
+{
+
+}
+
+void EntityFactory::makeStatusComponent(std::string line, GameObject* entity)
+{
+
+}
+
+void EntityFactory::makeConsumableComponent(GameObject* entity)
+{
+	Consumable* c = new Consumable();
+
+	entity->consumable = c;
+}
+
 void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x, int y)
 {
 	std::vector<std::string> components;
@@ -268,6 +329,18 @@ void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x
 			makeBodyComponent(entity);
 		} else if (component == "INVENTORY"){
 			makeInventoryComponent(s, entity);
+		} else if (component == "USEABLE"){
+			makeUseableComponent(stats, entity);
+		} else if (component == "HEALING"){
+			makeHealingComponent(stats, entity);
+		} else if (component == "DAMAGE"){
+			makeDamageComponent(stats, entity);
+		} else if (component == "AREADAMAGE"){
+			makeAreaDamageComponent(stats, entity);
+		} else if (component == "STATUS"){
+			makeStatusComponent(stats, entity);
+		} else if (component == "CONSUMABLE"){
+			makeConsumableComponent(entity);
 		}
 	}
 

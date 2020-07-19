@@ -18,11 +18,14 @@ public:
 	void dropItem(DropEvent event);
 	void equipItem(EquipEvent event);
 	void unequipItem(UnequipEvent event);
+	void useItem(UseItemEvent event);
 
 	virtual void notify(DropEvent event);
   virtual void notify(TakeEvent event);
 	virtual void notify(EquipEvent event);
 	virtual void notify(UnequipEvent event);
+	virtual void notify(UseItemEvent event);
+
 private:
   EventManager* m_eventManager;
   std::map<int, GameObject*> *m_entities;

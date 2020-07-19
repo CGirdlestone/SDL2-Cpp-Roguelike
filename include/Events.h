@@ -125,5 +125,13 @@ struct QuitEvent : Event
   virtual ~QuitEvent();
 };
 
+struct UseItemEvent : Event
+{
+	UseItemEvent(int user_uid, int item_uid, int target_uid = -1);
+	~UseItemEvent();
+	int m_user_uid;
+	int m_item_uid;
+	int m_target_uid;
+};
 
 #endif

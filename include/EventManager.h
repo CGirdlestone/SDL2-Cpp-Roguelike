@@ -29,6 +29,7 @@ public:
 	void pushEvent(DropEvent event);
 	void pushEvent(EquipEvent event);
 	void pushEvent(UnequipEvent event);
+	void pushEvent(UseItemEvent event);
 
 private:
   std::map<EventTypes, std::vector<System*>> m_subscribers;

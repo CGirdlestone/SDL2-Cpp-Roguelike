@@ -17,6 +17,12 @@ GameObject::GameObject()
   armour = nullptr;
   wearable = nullptr;
   body = nullptr;
+	useable = nullptr;
+	healing = nullptr;
+	damage = nullptr;
+	areaDamage = nullptr;
+	status = nullptr;
+	consumable = nullptr;
 }
 
 GameObject::~GameObject()
@@ -80,4 +86,34 @@ GameObject::~GameObject()
     delete body;
     body = nullptr;
   }
+	
+	if(useable != nullptr){
+		delete useable;
+		useable = nullptr;
+	}
+
+	if(healing != nullptr){
+		delete healing;
+		healing = nullptr;
+	}
+
+	if(damage != nullptr){
+		delete damage;
+		damage = nullptr;
+	}
+
+	if(areaDamage != nullptr){
+		delete areaDamage;
+		areaDamage = nullptr;
+	}
+
+	if(status != nullptr){
+		delete status;
+		status = nullptr;
+	}
+
+	if(consumable != nullptr){
+		delete consumable;
+		consumable = nullptr;
+	}
 }

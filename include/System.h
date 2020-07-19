@@ -23,6 +23,7 @@ public:
 	virtual void notify(DropEvent event) {};
 	virtual void notify(EquipEvent event) {};
 	virtual void notify(UnequipEvent event) {};
+	virtual void notify(UseItemEvent event) {};
 };
 
 #endif

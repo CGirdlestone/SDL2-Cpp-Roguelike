@@ -122,3 +122,68 @@ Body::~Body()
 {
 
 }
+
+Useable::Useable(UseableFunctionEnums func, int _numUses):
+funcToDo(func), numUses(_numUses)
+{
+
+}
+
+Useable::~Useable()
+{
+
+}
+
+Healing::Healing(int _roll):
+roll(_roll)
+{
+
+}
+
+Healing::~Healing()
+{
+
+}
+
+Damage::Damage(int _radius, std::string _roll, DamageTypes _type, int _chance):
+radius(_radius), roll(_roll), type(_type), chance(_chance)
+{
+
+}
+
+Damage::~Damage()
+{
+
+}
+
+AreaDamage::AreaDamage(int _radius, std::string _roll, int _splashRadius, DamageTypes _type, int _chance):
+radius(_radius), roll(_roll), splashRadius(_splashRadius), type(_type), chance(_chance)
+{
+
+}
+
+AreaDamage::~AreaDamage()
+{
+
+}
+
+Status::Status(int _radius, StatusTypes _status, int _splashRadius):
+radius(_radius), statusType(_status), splashRadius(_splashRadius)
+{
+
+}
+
+Status::~Status()
+{
+
+}
+
+Consumable::Consumable()
+{
+
+}
+
+Consumable::~Consumable()
+{
+
+}

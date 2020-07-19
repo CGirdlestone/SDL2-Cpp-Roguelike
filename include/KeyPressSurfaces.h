@@ -29,6 +29,7 @@ enum KeyPressSurfaces
 		DOFF,
 		DROPITEM,
 		SHOWCHARSCREEN,
+		USE,
 };
 
 extern KeyPressSurfaces Key;
