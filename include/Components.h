@@ -118,20 +118,20 @@ struct Healing
 
 struct Damage
 {
-	Damage(int _radius, std::string _roll, DamageTypes _type, int _chance);
+	Damage(int _radius, int _roll, DamageTypes _type, int _chance);
 	~Damage();
 	int radius;
-	std::string roll;
+	int roll;
 	DamageTypes type;
 	int chance;
 };
 
 struct AreaDamage
 {
-	AreaDamage(int _radius, std::string _roll, int _splashRadius, DamageTypes _type, int _chance);
+	AreaDamage(int _radius, int _roll, int _splashRadius, DamageTypes _type, int _chance);
 	~AreaDamage();
 	int radius;
-	std::string roll;
+	int roll;
 	int splashRadius;
 	DamageTypes type;
 	int chance;

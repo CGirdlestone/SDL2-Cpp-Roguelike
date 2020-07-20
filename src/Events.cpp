@@ -174,3 +174,13 @@ UseItemEvent::~UseItemEvent()
 
 }
 
+PassUserInfoEvent::PassUserInfoEvent(int user_uid, int item_uid):
+m_user_uid(user_uid), m_item_uid(item_uid)
+{
+	m_type = PASSUSERINFO;
+}
+
+PassUserInfoEvent::~PassUserInfoEvent()
+{
+
+}

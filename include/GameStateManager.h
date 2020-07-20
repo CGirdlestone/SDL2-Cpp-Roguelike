@@ -12,7 +12,9 @@
 #include "StartScene.h"
 #include "InventoryScene.h"
 #include "CharacterScene.h"
+#include "TargetingScene.h"
 #include "SceneTypes.h"
+
 
 class EventManager;
 
@@ -24,6 +26,7 @@ public:
   void notify(PushScene event);
   void notify(PopScene event);
   void notify(QuitEvent event);
+  void notify(PassUserInfoEvent event);
   void pushScene(SceneTypes scene);
   void popScene(int i);
   void render();
@@ -35,6 +38,7 @@ public:
   GameScene *m_gameScene;
 	InventoryScene *m_inventoryScene;
 	CharacterScene *m_characterScene;
+	TargetingScene *m_targetingScene;
 
 private:
   EventManager* m_eventManager;

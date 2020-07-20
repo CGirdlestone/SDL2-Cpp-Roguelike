@@ -134,4 +134,12 @@ struct UseItemEvent : Event
 	int m_target_uid;
 };
 
+struct PassUserInfoEvent : Event
+{
+	PassUserInfoEvent(int user_uid, int item_uid);
+	~PassUserInfoEvent();
+	int m_user_uid;
+	int m_item_uid;
+};
+
 #endif

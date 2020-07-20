@@ -19,6 +19,7 @@ enum EventTypes
 		EQUIP,
 		UNEQUIP,
 		USEITEM,
+		PASSUSERINFO,
 };
 
 extern EventTypes EventType;

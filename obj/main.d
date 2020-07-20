@@ -8,7 +8,7 @@ obj/main.o: src/main.cpp include/Game.h include/DungeonGenerator.h \
  include/KeyPressSurfaces.h include/MoveSystem.h include/CombatSystem.h \
  include/InventorySystem.h include/GameStateManager.h include/Scene.h \
  include/GameScene.h include/StartScene.h include/InventoryScene.h \
- include/CharacterScene.h
+ include/CharacterScene.h include/TargetingScene.h
 include/Game.h:
 include/DungeonGenerator.h:
 include/GameObject.h:
@@ -39,3 +39,4 @@ include/GameScene.h:
 include/StartScene.h:
 include/InventoryScene.h:
 include/CharacterScene.h:
+include/TargetingScene.h:

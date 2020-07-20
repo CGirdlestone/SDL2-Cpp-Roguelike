@@ -11,6 +11,7 @@ enum DamageTypes
 	ICE,
 	FORCE,
 	POISON,
+	LIGHTNING
 };
 
 extern DamageTypes DamageType;

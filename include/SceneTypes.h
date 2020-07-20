@@ -8,6 +8,7 @@ enum SceneTypes
     GAMESCENE,
     INVENTORY,
 		CHARACTER,
+		TARGETING,
 };
 
 extern SceneTypes SceneType;

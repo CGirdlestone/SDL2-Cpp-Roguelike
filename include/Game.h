@@ -19,15 +19,7 @@
 #include "GameScene.h"
 #include "InventoryScene.h"
 #include "CharacterScene.h"
-
-enum GameState
-{
-    PLAYER,
-    AI,
-    GAMEOVER,
-};
-
-extern GameState State;
+#include "TargetingScene.h"
 
 class Game
 {
@@ -62,6 +54,7 @@ class Game
     GameScene *m_gameScene;
 		InventoryScene *m_inventoryScene;
 		CharacterScene *m_characterScene;
+		TargetingScene *m_targetingScene;
 };
 
 

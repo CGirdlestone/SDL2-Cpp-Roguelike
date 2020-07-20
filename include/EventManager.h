@@ -30,6 +30,7 @@ public:
 	void pushEvent(EquipEvent event);
 	void pushEvent(UnequipEvent event);
 	void pushEvent(UseItemEvent event);
+	void pushEvent(PassUserInfoEvent event);
 
 private:
   std::map<EventTypes, std::vector<System*>> m_subscribers;

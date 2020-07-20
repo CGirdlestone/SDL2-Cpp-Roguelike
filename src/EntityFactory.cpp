@@ -70,6 +70,16 @@ DamageTypes EntityFactory::getDamageTypeEnum(std::string stringEnum)
 		return PIERCING;
 	} else if (stringEnum == "BLUDGEONING"){
 		return BLUDGEONING;
+	} else if (stringEnum == "FIRE"){
+		return FIRE;
+	} else if (stringEnum == "ICE"){
+		return ICE;
+	} else if (stringEnum == "FORCE"){
+		return FORCE;
+	} else if (stringEnum == "LIGHTNING"){
+		return LIGHTNING;
+	} else if (stringEnum == "POISON"){
+		return POISON;
 	}
 }
 
@@ -94,7 +104,7 @@ UseableFunctionEnums EntityFactory::getFunctionEnum(std::string stringEnum)
 {
 	if (stringEnum == "HEALING"){
 		return HEALING;
-	} else if (stringEnum == "DAMAGE"){
+	} else if (stringEnum == "DIRECTDAMAGE"){
 		return DIRECTDAMAGE;
 	} else if (stringEnum == "AREA DAMAGE"){
 		return AOE;
@@ -263,7 +273,18 @@ void EntityFactory::makeHealingComponent(std::string line, GameObject* entity)
 
 void EntityFactory::makeDamageComponent(std::string line, GameObject* entity)
 {
+	std::stringstream ss(line);
+	int roll, radius, chance;
+	std::string damageTypeString;
+	DamageTypes damageType;
+	
+	ss >> radius >> roll >> damageTypeString >> chance;
 
+	damageType = getDamageTypeEnum(damageTypeString);
+	
+	Damage *d = new Damage(radius, roll, damageType, chance);
+	
+	entity->damage = d;	
 }
 
 void EntityFactory::makeAreaDamageComponent(std::string line, GameObject* entity)
@@ -333,7 +354,7 @@ void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x
 			makeUseableComponent(stats, entity);
 		} else if (component == "HEALING"){
 			makeHealingComponent(stats, entity);
-		} else if (component == "DAMAGE"){
+		} else if (component == "DIRECTDAMAGE"){
 			makeDamageComponent(stats, entity);
 		} else if (component == "AREADAMAGE"){
 			makeAreaDamageComponent(stats, entity);

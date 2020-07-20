@@ -303,6 +303,24 @@ void Renderer::drawCharacterScene(std::map<int, GameObject*> *actors, int index)
 	m_console->update();
 }
 
+void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog, int x, int y, int radius)
+{
+	int offsetI;	
+  m_console->flush();
+  drawMap(camera, dungeon, actors);
+  drawActors(camera, dungeon, actors);
+  drawLog(messageLog, camera->getHeight());
+  drawUI();
+	drawPlayerInfo(actors->at(0));
+  offsetI = camera->calculateOffset(x, y);
+	if (checkInRange(x, y, actors->at(0)->position->x, actors->at(0)->position->y, radius)){
+ 		m_console->render('x', offsetI % camera->getWidth(), offsetI / camera->getWidth(), m_inViewColour);
+  } else {
+ 		m_console->render('o', offsetI % camera->getWidth(), offsetI / camera->getWidth(), m_defaultColour);
+	}
+	m_console->update();
+}
+
 void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog)
 {
   m_console->flush();

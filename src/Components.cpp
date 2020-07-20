@@ -145,7 +145,7 @@ Healing::~Healing()
 
 }
 
-Damage::Damage(int _radius, std::string _roll, DamageTypes _type, int _chance):
+Damage::Damage(int _radius, int _roll, DamageTypes _type, int _chance):
 radius(_radius), roll(_roll), type(_type), chance(_chance)
 {
 
@@ -156,7 +156,7 @@ Damage::~Damage()
 
 }
 
-AreaDamage::AreaDamage(int _radius, std::string _roll, int _splashRadius, DamageTypes _type, int _chance):
+AreaDamage::AreaDamage(int _radius, int _roll, int _splashRadius, DamageTypes _type, int _chance):
 radius(_radius), roll(_roll), splashRadius(_splashRadius), type(_type), chance(_chance)
 {
 

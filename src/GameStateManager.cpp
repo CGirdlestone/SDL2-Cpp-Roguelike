@@ -18,10 +18,14 @@ m_eventManager(eventManager), m_entities(entities)
   m_eventManager->registerSystem(POPSCENE, this);
   m_eventManager->registerSystem(PUSHSCENE, this);
   m_eventManager->registerSystem(QUIT, this);
+	m_eventManager->registerSystem(PASSUSERINFO, this);
+
   m_startScene = nullptr;
   m_gameScene = nullptr;
 	m_inventoryScene = nullptr;
 	m_characterScene = nullptr;
+	m_targetingScene = nullptr;
+
   playing = true;
 }
 
@@ -33,6 +37,7 @@ GameStateManager::~GameStateManager()
 	m_gameScene = nullptr;
 	m_inventoryScene = nullptr;
 	m_characterScene = nullptr;
+	m_targetingScene = nullptr;
 };
 
 void GameStateManager::notify(PushScene event)
@@ -48,6 +53,9 @@ void GameStateManager::notify(PushScene event)
 	} else if (event.m_scene == CHARACTER){
 		m_sceneStack.push_back(m_characterScene);
 		m_characterScene->resetIndex();
+	} else if (event.m_scene == TARGETING){
+		m_sceneStack.push_back(m_targetingScene);
+		m_targetingScene->resetIndex();
 	}
 }
 
@@ -61,6 +69,12 @@ void GameStateManager::notify(PopScene event)
 void GameStateManager::notify(QuitEvent event)
 {
   playing = false;
+}
+
+void GameStateManager::notify(PassUserInfoEvent event)
+{
+	m_targetingScene->m_user_uid = event.m_user_uid;
+	m_targetingScene->m_item_uid = event.m_item_uid;
 }
 
 void GameStateManager::processInput(SDL_Event *e)

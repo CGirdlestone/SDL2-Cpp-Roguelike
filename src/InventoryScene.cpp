@@ -12,7 +12,6 @@
 #include "SceneTypes.h"
 #include "InventoryScene.h"
 
-
 InventoryScene::InventoryScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities):
 m_eventManager(eventManager), m_renderer(renderer), m_entities(entities)
 {

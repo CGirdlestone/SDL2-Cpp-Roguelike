@@ -11,10 +11,11 @@ obj/Game.o: src/Game.cpp include/DungeonGenerator.h include/GameObject.h \
  include/MoveSystem.h include/CombatSystem.h include/InventorySystem.h \
  include/GameStateManager.h include/Scene.h include/GameScene.h \
  include/StartScene.h include/InventoryScene.h include/CharacterScene.h \
- include/Renderer.h include/EventTypes.h include/Events.h \
- include/EventManager.h include/MoveSystem.h include/CombatSystem.h \
- include/InventorySystem.h include/Scene.h include/StartScene.h \
- include/GameScene.h include/InventoryScene.h include/CharacterScene.h
+ include/TargetingScene.h include/Renderer.h include/EventTypes.h \
+ include/Events.h include/EventManager.h include/MoveSystem.h \
+ include/CombatSystem.h include/InventorySystem.h include/Scene.h \
+ include/StartScene.h include/GameScene.h include/InventoryScene.h \
+ include/CharacterScene.h include/TargetingScene.h
 include/DungeonGenerator.h:
 include/GameObject.h:
 include/Components.h:
@@ -53,6 +54,7 @@ include/GameScene.h:
 include/StartScene.h:
 include/InventoryScene.h:
 include/CharacterScene.h:
+include/TargetingScene.h:
 include/Renderer.h:
 include/EventTypes.h:
 include/Events.h:
@@ -65,3 +67,4 @@ include/StartScene.h:
 include/GameScene.h:
 include/InventoryScene.h:
 include/CharacterScene.h:
+include/TargetingScene.h:
