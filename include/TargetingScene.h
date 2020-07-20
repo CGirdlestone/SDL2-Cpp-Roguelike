@@ -24,6 +24,8 @@ public:
   void update(Uint32 dt);
   void onTick();
 	void resetIndex(){m_x = m_entities->at(0)->position->x; m_y = m_entities->at(0)->position->y;};
+	bool checkInRange(int x, int y, int i, int j, int radius){return (x-i)*(x-i) + (y-j)*(y-j) <= radius*radius;};
+	int getTargetUID();
 
 	int m_user_uid, m_item_uid;
 private:

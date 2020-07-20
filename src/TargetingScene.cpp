@@ -77,6 +77,7 @@ enum KeyPressSurfaces TargetingScene::getEvent(SDL_Event *e)
 
 void TargetingScene::handleInput(KeyPressSurfaces keyPress)
 {
+	int targetUID;
 
   if (keyPress == ESCAPE){
     m_eventManager->pushEvent(PopScene(1));
@@ -89,9 +90,33 @@ void TargetingScene::handleInput(KeyPressSurfaces keyPress)
 	} else if (keyPress == EAST){
 		m_x += 1;
 	} else if (keyPress == USE){
-		//
-		m_eventManager->pushEvent(PopScene(1));
+		targetUID = getTargetUID();
+		if (targetUID != -1){
+			m_eventManager->pushEvent(UseItemEvent(m_user_uid, m_item_uid, targetUID));
+			m_eventManager->pushEvent(PopScene(1));
+		}
 	}
+}
+
+int TargetingScene::getTargetUID()
+{
+	int radius;
+	if (m_entities->at(m_item_uid)->useable->funcToDo == DIRECTDAMAGE){
+		radius = m_entities->at(m_item_uid)->damage->radius;
+	} else if (m_entities->at(m_item_uid)->useable->funcToDo == AOE){
+		radius = m_entities->at(m_item_uid)->areaDamage->radius;
+	} else if (m_entities->at(m_item_uid)->useable->funcToDo == STATUS){
+		radius = m_entities->at(m_item_uid)->status->radius;
+	}
+	
+	for (int i = 0; i < static_cast<int>(m_entities->size()); ++i){
+		if (m_entities->at(i)->position->x == m_x && m_entities->at(i)->position->y == m_y && i != m_user_uid){
+			if (checkInRange(m_x, m_y, m_entities->at(m_user_uid)->position->x, m_entities->at(m_user_uid)->position->y, radius)){
+				return i;
+			}
+		}
+	}
+	return -1;
 }
 
 void TargetingScene::render()

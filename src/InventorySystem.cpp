@@ -112,7 +112,7 @@ void InventorySystem::useItem(UseItemEvent event)
 				m_eventManager->pushEvent(PushScene(TARGETING));
 			} else {
 				// this branch indicates that a target has been selected and executes the relevant function.
-					
+				m_eventManager->pushEvent(DamageEvent(event.m_target_uid, m_entities->at(event.m_item_uid)->damage->roll));
 			}
 		} else if (item->useable->funcToDo == AOE){
 			if (event.m_target_uid == -1){
