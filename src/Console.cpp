@@ -118,6 +118,20 @@ bool Console::loadMedia(char* path)
   }
 }
 
+void Console::fillBackgroundTile(int x, int y, SDL_Color colour)
+{
+	SDL_Rect rect;
+	rect.x = x * m_tileSize;
+	rect.y = y * m_tileSize;
+	rect.w = m_tileSize;
+	rect.h = m_tileSize;
+
+	SDL_SetRenderDrawColor(m_renderer, colour.r, colour.g, colour.b, 128);
+	SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
+	SDL_RenderFillRect(m_renderer, &rect);
+	SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0x00);
+}
+
 void Console::createTiles()
 {
     int textureSize = m_tileSize * m_tileSize;

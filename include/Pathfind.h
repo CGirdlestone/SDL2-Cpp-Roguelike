@@ -22,5 +22,6 @@ int calculate_h(int x1, int y1, int xf, int yf);
 void getNeighbours(std::vector<int> *neighbours, int width, int height, int x, int y);
 bool compareNodes(Node* n, Node* m);
 void aStar(char* world, std::vector<int> *path, int width, int height, int x1, int y1, int xf, int yf);
-
+void getBresenhamLine(std::vector<int> *path, int width, int x1, int y1, int xf, int yf);
+float getGradient(int x1, int y1, int xf, int yf);
 #endif

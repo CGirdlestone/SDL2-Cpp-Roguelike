@@ -28,6 +28,7 @@ public:
 	int getTargetUID();
 
 	int m_user_uid, m_item_uid;
+	std::vector<int> bresenhamLine;
 private:
   EventManager *m_eventManager;
   Renderer *m_renderer;

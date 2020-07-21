@@ -142,4 +142,11 @@ struct PassUserInfoEvent : Event
 	int m_item_uid;
 };
 
+struct MessageEvent : Event
+{
+	MessageEvent(std::string msg);
+	~MessageEvent();
+	std::string m_msg;
+};
+
 #endif

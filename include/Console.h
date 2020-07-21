@@ -33,6 +33,7 @@ class Console
         void flush();
         void setFullscreen();
         SDL_Renderer* getRenderer(){return m_renderer;};
+				void fillBackgroundTile(int x, int y, SDL_Color colour);
 
     protected:
 

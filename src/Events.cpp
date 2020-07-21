@@ -184,3 +184,14 @@ PassUserInfoEvent::~PassUserInfoEvent()
 {
 
 }
+
+MessageEvent::MessageEvent(std::string msg):
+m_msg(msg)
+{
+	m_type = MESSAGE;
+}
+
+MessageEvent::~MessageEvent()
+{
+
+}

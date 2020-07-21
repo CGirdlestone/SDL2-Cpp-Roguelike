@@ -648,7 +648,7 @@ void DungeonGenerator::createItems(std::map<int, GameObject*> *actors)
 
 	int i = getFreePosition();
 
-	m_factory->makeEntity("HEALTH POTION", entity, i%m_width, i/m_width);
+	m_factory->makeEntity("SCROLL OF FIREBALL", entity, i%m_width, i/m_width);
 
   actors->insert({entity->m_uid, entity});
 }

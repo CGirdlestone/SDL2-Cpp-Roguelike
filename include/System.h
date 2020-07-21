@@ -25,6 +25,7 @@ public:
 	virtual void notify(UnequipEvent event) {};
 	virtual void notify(UseItemEvent event) {};
 	virtual void notify(PassUserInfoEvent event) {};
+	virtual void notify(MessageEvent event) {};
 };
 
 #endif

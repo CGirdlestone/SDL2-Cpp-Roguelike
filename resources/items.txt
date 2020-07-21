@@ -4,7 +4,7 @@ ITEM: A simple but sharp sword
 WEARABLE: RIGHTHAND
 WEAPON: SLASHING 8
 POSITION:
-NAME: HEALTH POTION
+NAME: SCROLL OF FIREBALL
 RENDERABLE: ~ 0xef 0x3a 0x0c
 ITEM: It doesn't taste great, but you always feel better after drinking it!
 POSITION:

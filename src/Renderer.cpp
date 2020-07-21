@@ -303,21 +303,31 @@ void Renderer::drawCharacterScene(std::map<int, GameObject*> *actors, int index)
 	m_console->update();
 }
 
-void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog, int x, int y, int radius)
+void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog, int radius, std::vector<int> *path)
 {
-	int offsetI;	
+	int offsetI, x, y;	
   m_console->flush();
   drawMap(camera, dungeon, actors);
   drawActors(camera, dungeon, actors);
   drawLog(messageLog, camera->getHeight());
   drawUI();
 	drawPlayerInfo(actors->at(0));
-  offsetI = camera->calculateOffset(x, y);
-	if (checkInRange(x, y, actors->at(0)->position->x, actors->at(0)->position->y, radius)){
- 		m_console->render('x', offsetI % camera->getWidth(), offsetI / camera->getWidth(), m_inViewColour);
-  } else {
- 		m_console->render('o', offsetI % camera->getWidth(), offsetI / camera->getWidth(), m_defaultColour);
+
+	for (int i = 0; i < path->size(); ++i){
+		x = path->at(i) % dungeon->Getm_width();
+		y = path->at(i) / dungeon->Getm_width();
+	
+	  offsetI = camera->calculateOffset(x, y);
+
+		if (checkInRange(x, y, actors->at(0)->position->x, actors->at(0)->position->y, radius)){
+			SDL_Color colour = {0x39, 0x57, 0x1c};
+ 			m_console->fillBackgroundTile(offsetI % camera->getWidth(), offsetI / camera->getWidth(), colour);
+  	} else {
+			SDL_Color colour = {0x9b, 0x1a, 0x0a};
+ 			m_console->fillBackgroundTile(offsetI % camera->getWidth(), offsetI / camera->getWidth(), colour);
+		}
 	}
+
 	m_console->update();
 }
 

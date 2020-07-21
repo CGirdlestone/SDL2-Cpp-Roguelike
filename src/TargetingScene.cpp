@@ -11,7 +11,7 @@
 #include "EventTypes.h"
 #include "SceneTypes.h"
 #include "TargetingScene.h"
-
+#include "Pathfind.h"
 
 TargetingScene::TargetingScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera *camera, DungeonGenerator *dungeon, MessageLog* messageLog):
 m_eventManager(eventManager), m_renderer(renderer), m_entities(entities), m_camera(camera), m_dungeon(dungeon), m_messageLog(messageLog)
@@ -78,8 +78,8 @@ enum KeyPressSurfaces TargetingScene::getEvent(SDL_Event *e)
 void TargetingScene::handleInput(KeyPressSurfaces keyPress)
 {
 	int targetUID;
-
-  if (keyPress == ESCAPE){
+  
+	if (keyPress == ESCAPE){
     m_eventManager->pushEvent(PopScene(1));
   }else if (keyPress == NORTH){
 		m_y -= 1;
@@ -110,6 +110,8 @@ int TargetingScene::getTargetUID()
 	}
 	
 	for (int i = 0; i < static_cast<int>(m_entities->size()); ++i){
+		if (m_entities->at(i)->position == nullptr){ continue; }
+
 		if (m_entities->at(i)->position->x == m_x && m_entities->at(i)->position->y == m_y && i != m_user_uid){
 			if (checkInRange(m_x, m_y, m_entities->at(m_user_uid)->position->x, m_entities->at(m_user_uid)->position->y, radius)){
 				return i;
@@ -129,7 +131,7 @@ void TargetingScene::render()
 	} else if (m_entities->at(m_item_uid)->useable->funcToDo == STATUS){
 		radius = m_entities->at(m_item_uid)->status->radius;
 	}
-	m_renderer->drawTargetingScene(m_camera, m_dungeon, m_entities, m_messageLog, m_x, m_y, radius);
+	m_renderer->drawTargetingScene(m_camera, m_dungeon, m_entities, m_messageLog, radius, &bresenhamLine);
 }
 
 void TargetingScene::update(Uint32 dt)
@@ -139,5 +141,6 @@ void TargetingScene::update(Uint32 dt)
 
 void TargetingScene::onTick()
 {
-
+	bresenhamLine.clear();
+	getBresenhamLine(&bresenhamLine, m_dungeon->Getm_width(), m_x, m_y, m_entities->at(0)->position->x, m_entities->at(0)->position->y);	
 }

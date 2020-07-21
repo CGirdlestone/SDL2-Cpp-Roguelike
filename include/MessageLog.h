@@ -28,7 +28,10 @@ public:
     virtual void notify(DeadEvent event);
     virtual void notify(OnPickUpEvent event);
 		virtual void notify(DropEvent event);
+		virtual void notify(MessageEvent event);
+
 protected:
+
 
 private:
     std::vector<Message> m_messageQueue;

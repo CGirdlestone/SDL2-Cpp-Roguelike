@@ -110,6 +110,7 @@ void InventorySystem::useItem(UseItemEvent event)
 				m_eventManager->pushEvent(PopScene(1));
 				m_eventManager->pushEvent(PassUserInfoEvent(event.m_user_uid, event.m_item_uid));
 				m_eventManager->pushEvent(PushScene(TARGETING));
+				m_eventManager->pushEvent(MessageEvent("Select a target..."));
 			} else {
 				// this branch indicates that a target has been selected and executes the relevant function.
 				m_eventManager->pushEvent(DamageEvent(event.m_target_uid, m_entities->at(event.m_item_uid)->damage->roll));
