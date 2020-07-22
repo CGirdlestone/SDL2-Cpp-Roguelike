@@ -125,6 +125,10 @@ void MessageLog::notify(DeadEvent event)
   std::string defenderName = m_entities->at(event.m_uid)->m_name;
   std::string msg = defenderName + " has been slain!";
   addMessage(msg);
+
+	std::string expGain = "+" + std::to_string(m_entities->at(event.m_uid)->ai->exp) + " xp";
+	SDL_Color colour = {0xef, 0xac, 0x28};
+	addMessage(expGain, colour);
 }
 
 void MessageLog::notify(OnPickUpEvent event)
