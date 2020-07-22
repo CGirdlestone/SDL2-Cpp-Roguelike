@@ -23,6 +23,8 @@ public:
   void processEntities();
   void update(Uint32 dt);
   void onTick();
+	void newGame();
+
 
 private:
   EventManager *m_eventManager;

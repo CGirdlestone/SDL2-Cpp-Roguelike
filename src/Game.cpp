@@ -101,7 +101,7 @@ Game::~Game()
   }
 }
 
-bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize, char* title)
+bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize, const char* title)
 {
   m_dungeon = new DungeonGenerator(mapWidth, mapHeight);
   m_camera = new Camera(width, height, mapWidth, mapHeight);
@@ -146,14 +146,6 @@ void Game::run()
   Uint32 currentTime;
   Uint32 lastTime = 0;
   Uint32 dt = 0;
-
-
-  m_dungeon->createMap(60, 6, 2, 5);
-  m_dungeon->createPlayer(&m_actors);
-  m_dungeon->createEntities(&m_actors);
-  m_dungeon->createItems(&m_actors);
-  m_dungeon->shadowCast(m_actors.at(0)->position->x, m_actors.at(0)->position->y, 10);
-  m_camera->updatePosition(m_actors.at(0)->position->x, m_actors.at(0)->position->y);
 
   m_eventManager->pushEvent(PushScene(STARTMENU));
 

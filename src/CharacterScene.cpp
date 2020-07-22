@@ -61,7 +61,6 @@ enum KeyPressSurfaces CharacterScene::getEvent(SDL_Event *e)
 
 void CharacterScene::handleInput(KeyPressSurfaces keyPress)
 {
-	int inventorySize = m_entities->at(0)->inventory->inventory.size();
 	GameObject* item = m_entities->at(0)->body->slots[static_cast<EquipSlots>(m_index)];
 
   if (keyPress == ESCAPE){

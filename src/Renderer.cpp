@@ -8,7 +8,7 @@
 Renderer::Renderer(Console* console)
 {
   m_console = console;
-  m_defaultColour = {0x18, 0x79, 0x87};
+  m_defaultColour = {0x39, 0x2a, 0x1c};
   m_inViewColour = {0xef, 0xd8, 0xa1};
 }
 
@@ -159,18 +159,47 @@ void Renderer::drawPlayerInfo(GameObject* player)
 	SDL_Color colour = {0x9b, 0x1a, 0x0a};
 	int healthBarWidth = (player->fighter->health * buffer) / player->fighter->maxHealth;
 	std::string health = "Health: " + std::to_string(player->fighter->health) + " / " + std::to_string(player->fighter->maxHealth);
-
-	for (int i = 0; i < health.length(); ++i){
-		m_console->render(&health[i], width + 1 + i, 2, m_inViewColour);
-	}
+	int yPosition = 2;
+	
+	for (int i = 0; i < static_cast<int>(health.length()); ++i){
+		m_console->render(&health[i], width + 1 + i, yPosition, m_inViewColour);
+	} 
+	yPosition += 2;
 	
 	for (int i = 0; i < buffer; ++i){
 		if (i <= healthBarWidth && healthBarWidth != 0){
-			m_console->render(&healthBarChar, width + 1 + i, 4, colour);
+			m_console->render(&healthBarChar, width + 1 + i, yPosition, colour);
 		} else {
-			m_console->render(&healthBarChar, width + 1 + i, 4, m_defaultColour);
+			m_console->render(&healthBarChar, width + 1 + i, yPosition, m_defaultColour);
 		}
+	} 
+	yPosition += 2;
+	
+	colour = {0x3c, 0x9f, 0x9c};
+
+	int expBarWidth = (player->player->exp * buffer) / (player->player->next);
+	std::string exp = "Exp: " + std::to_string(player->player->exp) + " / " + std::to_string(player->player->next);
+
+	for (int i = 0; i < static_cast<int>(exp.length()); ++i){
+		m_console->render(&exp[i], width + 1 + i, yPosition, m_inViewColour);
+	} 
+	yPosition += 2;
+	
+	for (int i = 0; i < buffer; ++i){
+		if (i <= expBarWidth && expBarWidth != 0){
+			m_console->render(&healthBarChar, width + 1 + i, yPosition, colour);
+		} else {
+			m_console->render(&healthBarChar, width + 1 + i, yPosition, m_defaultColour);
+		}
+	} 
+	yPosition += 2;
+	
+	std::string level = "Level: " + std::to_string(player->player->level);
+
+	for (int i = 0; i < static_cast<int>(level.length()); ++i){
+		m_console->render(&level[i], width + 1 + i, yPosition, m_inViewColour);
 	}
+	yPosition += 2;
 }
 
 void Renderer::drawStartMenu(int i)
@@ -211,7 +240,6 @@ void Renderer::drawInventory(std::map<int, GameObject*> *actors, int i)
 	m_console->flush();
 
 	std::string inventoryHeader = "Inventory";
-	int width = m_console->Getm_width() / 2;
 	std::string selectedItem;
 
 	for (int k = 0; k < static_cast<int>(inventoryHeader.length()); ++k){
@@ -313,7 +341,7 @@ void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std
   drawUI();
 	drawPlayerInfo(actors->at(0));
 
-	for (int i = 0; i < path->size(); ++i){
+	for (int i = 0; i < static_cast<int>(path->size()); ++i){
 		x = path->at(i) % dungeon->Getm_width();
 		y = path->at(i) / dungeon->Getm_width();
 	

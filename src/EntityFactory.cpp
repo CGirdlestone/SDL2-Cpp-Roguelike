@@ -196,9 +196,15 @@ void EntityFactory::makeWearableComponent(std::string line, GameObject* entity)
 	entity->wearable = wearable;
 }
 
-void EntityFactory::makeAIComponent(GameObject* entity)
+void EntityFactory::makeAIComponent(std::string line, GameObject* entity)
 {
-	AI* ai = new AI();
+	std::stringstream ss(line);
+
+	int exp;
+
+	ss >> exp;
+	
+	AI* ai = new AI(exp);
 
 	entity->ai = ai;
 }
@@ -335,7 +341,7 @@ void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x
 		} else if (component ==  "ACTOR"){
 			makeActorComponent(entity);
 		} else if (component ==  "AI"){
-			makeAIComponent(entity);
+			makeAIComponent(stats, entity);
 		} else if (component == "PLAYER"){
 			makePlayerComponent(entity);
 		} else if (component ==  "ITEM"){

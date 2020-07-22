@@ -27,7 +27,7 @@ class Game
     Game();
     virtual ~Game();
 
-    bool init(int mapWidth, int mapHheight, int width, int height, int tileSize, char* title);
+    bool init(int mapWidth, int mapHheight, int width, int height, int tileSize, const char* title);
     void run();
 
   protected:

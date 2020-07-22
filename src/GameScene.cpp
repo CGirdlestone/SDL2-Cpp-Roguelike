@@ -1,4 +1,4 @@
-
+#include <iostream>
 #include <map>
 #include "StartScene.h"
 #include "SDL2/SDL.h"
@@ -21,6 +21,16 @@ m_eventManager(eventManager), m_renderer(renderer), m_entities(entities), m_came
 GameScene::~GameScene()
 {
 
+}
+
+void GameScene::newGame()
+{
+	m_dungeon->createMap(60, 6, 2, 5);
+	m_dungeon->createPlayer(m_entities);
+	m_dungeon->createEntities(m_entities);
+	m_dungeon->createItems(m_entities);
+	m_dungeon->shadowCast(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
+	m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
 }
 
 void GameScene::processEntities()

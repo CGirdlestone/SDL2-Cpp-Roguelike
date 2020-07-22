@@ -42,6 +42,13 @@ Actor::~Actor()
 
 }
 
+Player::Player()
+{
+	level = 1;
+	exp = 0;
+	next = 100;
+}
+
 Player::~Player()
 {
 
@@ -49,6 +56,12 @@ Player::~Player()
 
 Item::Item(std::string desc):
 description(desc)
+{
+
+}
+
+AI::AI(int _exp):
+exp(_exp)
 {
 
 }

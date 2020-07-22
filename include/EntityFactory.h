@@ -20,7 +20,7 @@ public:
 	void makeItemComponent(std::string line, GameObject* entity);
 	void makeWeaponComponent(std::string line, GameObject* entity);
 	void makeArmourComponent(std::string line, GameObject* entity);
-	void makeAIComponent(GameObject* entity);
+	void makeAIComponent(std::string line, GameObject* entity);
 	void makeActorComponent(GameObject* entity);
 	void makeInventoryComponent(std::string line, GameObject* entity);
 	void makePositionComponent(GameObject* entity, int x, int y);

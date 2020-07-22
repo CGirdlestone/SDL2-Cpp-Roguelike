@@ -47,6 +47,7 @@ void GameStateManager::notify(PushScene event)
     m_sceneStack.push_back(m_startScene);
   } else if (event.m_scene == GAMESCENE){
     m_sceneStack.push_back(m_gameScene);
+		m_gameScene->newGame();
   } else if (event.m_scene == INVENTORY){
 		m_sceneStack.push_back(m_inventoryScene);
 		m_inventoryScene->resetIndex();

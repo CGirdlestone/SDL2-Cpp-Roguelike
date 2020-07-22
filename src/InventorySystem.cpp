@@ -84,6 +84,21 @@ void InventorySystem::unequipItem(UnequipEvent event)
 	m_entities->at(event.m_actor_uid)->inventory->inventory.push_back(item);
 }
 
+void InventorySystem::decreaseUses(GameObject* item, int user_uid, int item_uid)
+{
+	--item->useable->numUses;
+	
+	if (item->useable->numUses == 0){
+		for (int i = 0; i < static_cast<int>(m_entities->at(user_uid)->inventory->inventory.size()); ++i){
+			if (m_entities->at(user_uid)->inventory->inventory.at(i)->m_uid == item_uid){
+				m_entities->at(user_uid)->inventory->inventory.erase(m_entities->at(user_uid)->inventory->inventory.begin() + i);
+			}
+		}
+	} else if (item->useable->numUses < 0){
+		item->useable->numUses = -1;
+	}
+}
+
 void InventorySystem::useItem(UseItemEvent event)
 {
 	GameObject* item = m_entities->at(event.m_item_uid);
@@ -91,22 +106,12 @@ void InventorySystem::useItem(UseItemEvent event)
 	if (item->useable != nullptr){
 		if(item->useable->funcToDo == HEALING){
 			if (m_entities->at(event.m_user_uid)->fighter->health < m_entities->at(event.m_user_uid)->fighter->maxHealth){
-				--item->useable->numUses;
 				m_eventManager->pushEvent(DamageEvent(event.m_user_uid, -1 * (std::rand()%item->healing->roll + 1)));
-				if (item->useable->numUses == 0){
-					for (int i = 0; i < static_cast<int>(m_entities->at(event.m_user_uid)->inventory->inventory.size()); ++i){
-						if (m_entities->at(event.m_user_uid)->inventory->inventory.at(i)->m_uid == event.m_item_uid){
-							m_entities->at(event.m_user_uid)->inventory->inventory.erase(m_entities->at(event.m_user_uid)->inventory->inventory.begin() + i);
-						}
-					}
-				} else if (item->useable->numUses < 0){
-					item->useable->numUses = -1;
-				}
 				m_eventManager->pushEvent(PopScene(1));
+				decreaseUses(item, event.m_user_uid, event.m_item_uid);
 			} 
 		} else if (item->useable->funcToDo == DIRECTDAMAGE){
 			if (event.m_target_uid == -1){
-				// defer to the targeting scene to allow user selected target. The targeting scene will then fire a second useItem event with the target uid.
 				m_eventManager->pushEvent(PopScene(1));
 				m_eventManager->pushEvent(PassUserInfoEvent(event.m_user_uid, event.m_item_uid));
 				m_eventManager->pushEvent(PushScene(TARGETING));
@@ -114,6 +119,7 @@ void InventorySystem::useItem(UseItemEvent event)
 			} else {
 				// this branch indicates that a target has been selected and executes the relevant function.
 				m_eventManager->pushEvent(DamageEvent(event.m_target_uid, m_entities->at(event.m_item_uid)->damage->roll));
+				decreaseUses(item, event.m_user_uid, event.m_item_uid);
 			}
 		} else if (item->useable->funcToDo == AOE){
 			if (event.m_target_uid == -1){

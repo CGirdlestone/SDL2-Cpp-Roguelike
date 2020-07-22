@@ -19,6 +19,7 @@ public:
 	void equipItem(EquipEvent event);
 	void unequipItem(UnequipEvent event);
 	void useItem(UseItemEvent event);
+	void decreaseUses(GameObject* item, int user_uid, int item_uid);
 
 	virtual void notify(DropEvent event);
   virtual void notify(TakeEvent event);

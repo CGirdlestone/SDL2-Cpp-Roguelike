@@ -47,13 +47,19 @@ struct Actor
 
 struct Player
 {
+	Player();
   ~Player();
+	int level;
+	int exp;
+	int next;
 };
 
 struct AI
 {
-  std::vector<int> path;
+	AI(int _exp);
   ~AI();
+	int exp;
+  std::vector<int> path;
 };
 
 struct Item

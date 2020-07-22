@@ -9,7 +9,7 @@
 class Console
 {
     public:
-        Console(int width, int height, char* title, char* path, int tileSize);
+        Console(int width, int height, const char* title, char* path, int tileSize);
         virtual ~Console();
 
         int Getm_width() { return m_width; }
@@ -44,7 +44,7 @@ class Console
         SDL_Texture *m_texture;
         int m_width;
         int m_height;
-        char *m_title;
+        const char *m_title;
         int m_fullscreen;
         int m_tileSize;
         int m_xBuffer;

@@ -9,7 +9,7 @@
 
 
 
-Console::Console(int width, int height, char* title, char* path, int tileSize)
+Console::Console(int width, int height, const char* title, char* path, int tileSize)
 {
     //ctor
     m_width = width;
