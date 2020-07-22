@@ -264,13 +264,15 @@ float getGradient(int x1, int y1, int xf, int yf)
 
 void getBresenhamLine(std::vector<int> *path, int width, int x1, int y1, int xf, int yf)
 {
-	float error;
+	float error = 0;
 	int x = x1;
 	int y = y1;
 	float m;
 
+	path->push_back(x1 + y1*width);
+
 	if (x1 == xf){
-		if (yf > y1){
+		if (yf >= y1){
 			for (int i = 0; i < yf - y1; ++i){
 				path->push_back(x1 + (y1 + i)*width);
 			}
@@ -282,47 +284,64 @@ void getBresenhamLine(std::vector<int> *path, int width, int x1, int y1, int xf,
 	}	else {
 		m = getGradient(x1, y1, xf, yf);
 
-		error = std::abs(m);
 
 		if (m >= -1 && m <= 1){
-			if (xf > x1){
+
+			if (xf >= x1){
 				for (int i = 0; i < xf - x1; ++i){
 					error += std::abs(m);
 					if (error > 0.5){
-						y = m < 0 ? y - 1 : y + 1;
+						if (yf >= y1){
+							y += 1;
+						} else {
+							y -= 1;
+						}
 						error -= 1.0;
 					}
 					path->push_back((x1+i) + y * width);
 				}
 			} else if (x1 > xf){
-				for (int i = 0; i < x1 - xf; --i){
+				for (int i = 0; i < x1 - xf; ++i){
 					error += std::abs(m);
 					if (error > 0.5){
-						y = m < 0 ? y + 1 : y - 1;
+						if (yf >= y1){
+							y += 1;
+						} else {
+							y -= 1;
+						}
 						error -= 1.0;
 					}
 					path->push_back((x1-i) + y * width);
 				}
 			}
 		} else {
-			m = 1 / m;
-			if (yf > y1){
+			m = 1.0 / m;
+
+			if (yf >= y1){
 				for (int i = 0; i < yf - y1; ++i){
 					error += std::abs(m);
 					if (error > 0.5){
-						x = m < 0 ? x + 1 : x - 1;
+						if (xf >= x1){
+							x += 1;
+						} else {
+							x -= 1;
+						}
 						error -= 1.0;
 					}
-					path->push_back(x + (y+i) * width);
+					path->push_back(x + (y1+i) * width);
 				}
 			} else if (y1 > yf) {
-				for (int i = 0; i < y1 - yf; --i){
+				for (int i = 0; i < y1 - yf; ++i){
 					error += std::abs(m);
 					if (error > 0.5){
-						x = m < 0 ? x - 1 : x + 1;
+						if (x1 >= xf){
+							x -= 1;
+						} else {
+							x += 1;
+						}
 						error -= 1.0;
 					}
-					path->push_back(x + (y-i) * width);
+					path->push_back(x + (y1-i) * width);
 				}
 			}
 		}
