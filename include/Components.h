@@ -158,5 +158,10 @@ struct Consumable
 	~Consumable();
 };
 
+struct Stairs
+{
+	Stairs();
+	~Stairs();
+};
 
 #endif

@@ -200,3 +200,13 @@ Consumable::~Consumable()
 {
 
 }
+
+Stairs::Stairs()
+{
+
+}
+
+Stairs::~Stairs()
+{
+
+}

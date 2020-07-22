@@ -16,7 +16,6 @@
 
 DungeonGenerator::DungeonGenerator(int width, int height)
 {
-  //ctor
   m_width = width;
   m_height = height;
   recomputeFOV = false;
@@ -29,7 +28,6 @@ DungeonGenerator::DungeonGenerator(int width, int height)
 
 DungeonGenerator::~DungeonGenerator()
 {
-  //dtor
   delete[] m_level;
   m_level = nullptr;
 
@@ -478,10 +476,6 @@ void DungeonGenerator::createMap(int threshold, int steps, int underPop, int ove
     fillBorder();
     hollowSolidChunks();
   }
-
-
-  //tidyBorder();
-
 }
 
 float DungeonGenerator::getGradient(float x1, float y1, float x2, float y2)
@@ -651,4 +645,44 @@ void DungeonGenerator::createItems(std::map<int, GameObject*> *actors)
 	m_factory->makeEntity("SCROLL OF FIREBALL", entity, i%m_width, i/m_width);
 
   actors->insert({entity->m_uid, entity});
+}
+
+void DungeonGenerator::placeStairs(std::map<int, GameObject*> *actors)
+{
+	GameObject *entity = new GameObject();	
+
+	int i = getFreePosition();
+
+	m_factory->makeStairs(entity, i%m_width, i/m_width);
+
+	actors->insert({entity->m_uid, entity});
+}
+
+void DungeonGenerator::descendDungeon(std::map<int, GameObject*> *actors)
+{
+	GameObject* player = actors->at(0);
+	std::vector<GameObject*> playerInventory = player->inventory->inventory;
+
+	std::map<int, GameObject*> newActors;
+	
+	newActors.insert({0, player});
+
+	for (auto item : playerInventory){
+		newActors.insert({item->m_uid, item});
+	}
+	
+	std::map<int, GameObject*>::iterator actorIt = actors->begin();
+	for (actorIt; actorIt != actors->end(); ++actorIt){
+		std::map<int, GameObject*>::iterator it = newActors.find(actorIt->second->m_uid);
+		if (it == newActors.end()){
+			delete actorIt->second;
+		}
+	}
+
+	actors->swap(newActors);
+	
+	createMap(60, 6, 2, 5);
+
+	createEntities(actors);
+	createItems(actors);	
 }

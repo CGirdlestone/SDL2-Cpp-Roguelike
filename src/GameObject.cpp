@@ -23,6 +23,7 @@ GameObject::GameObject()
 	areaDamage = nullptr;
 	status = nullptr;
 	consumable = nullptr;
+	stairs = nullptr;
 }
 
 GameObject::~GameObject()
@@ -115,5 +116,10 @@ GameObject::~GameObject()
 	if(consumable != nullptr){
 		delete consumable;
 		consumable = nullptr;
+	}
+	
+	if(stairs != nullptr){
+		delete stairs;
+		stairs = nullptr;
 	}
 }

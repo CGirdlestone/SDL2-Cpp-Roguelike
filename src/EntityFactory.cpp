@@ -376,3 +376,16 @@ void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x
 	++m_uid;
 }
 
+void EntityFactory::makeStairs(GameObject* entity, int x, int y)
+{
+	std::string line = "< 0xef 0xd8 0xa1";
+	makePositionComponent(entity, x, y);
+	makeRenderableComponent(line, entity);
+	Stairs *stairs = new Stairs();
+
+	entity->stairs = stairs;
+	entity->m_name = "stairs";
+	entity->m_uid = m_uid;
+	++m_uid;
+}
+

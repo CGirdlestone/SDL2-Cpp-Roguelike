@@ -32,6 +32,7 @@ public:
 	AreaDamage *areaDamage;
 	Status *status;
 	Consumable *consumable;
+	Stairs *stairs;
 
 protected:
 

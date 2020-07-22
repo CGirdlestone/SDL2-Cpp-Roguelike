@@ -29,6 +29,17 @@ void GameScene::newGame()
 	m_dungeon->createPlayer(m_entities);
 	m_dungeon->createEntities(m_entities);
 	m_dungeon->createItems(m_entities);
+	m_dungeon->placeStairs(m_entities);
+	m_dungeon->shadowCast(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
+	m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
+}
+
+void GameScene::nextLevel()
+{
+	m_dungeon->createMap(60, 6, 2, 5);
+	m_dungeon->createEntities(m_entities);
+	m_dungeon->createItems(m_entities);
+	m_dungeon->placeStairs(m_entities);
 	m_dungeon->shadowCast(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
 	m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
 }
@@ -70,6 +81,20 @@ void GameScene::processEntities()
     }
   }
   m_playerTurn = true;
+}
+
+bool GameScene::checkDescend()
+{
+	std::map<int, GameObject*>::iterator iter;
+
+	for (iter = m_entities->begin(); iter != m_entities->end(); ++iter){
+		if (iter->second->stairs != nullptr){
+			if (iter->second->position->x == m_entities->at(0)->position->x && iter->second->position->y == m_entities->at(0)->position->y){
+				return true;
+			}
+		} 
+	}
+	return false;
 }
 
 enum KeyPressSurfaces GameScene::getEvent(SDL_Event *e)
@@ -132,6 +157,9 @@ enum KeyPressSurfaces GameScene::getEvent(SDL_Event *e)
 
 							case SDLK_c:
 							return SHOWCHARSCREEN;
+
+							case SDLK_RETURN:
+							return USE;
           }
       }
   }
@@ -184,6 +212,11 @@ void GameScene::handleInput(KeyPressSurfaces keyPress)
 		m_eventManager->pushEvent(PushScene(INVENTORY));
 	} else if (keyPress == SHOWCHARSCREEN){
 		m_eventManager->pushEvent(PushScene(CHARACTER));
+	} else if (keyPress == USE){
+		if(checkDescend()){
+			nextLevel();
+			m_playerTurn = false;
+		}
 	}
 
   if (!m_playerTurn){

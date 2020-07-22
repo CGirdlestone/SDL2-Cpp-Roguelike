@@ -41,6 +41,7 @@ public:
 	void loadData(std::string filename);
 
 	void makeEntity(std::string entityName, GameObject* entity, int x, int y);
+	void makeStairs(GameObject* entity, int x, int y);
 
 private:
 	int m_uid;

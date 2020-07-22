@@ -24,7 +24,8 @@ public:
   void update(Uint32 dt);
   void onTick();
 	void newGame();
-
+	bool checkDescend();
+	void nextLevel();
 
 private:
   EventManager *m_eventManager;
