@@ -12,6 +12,7 @@ public:
   virtual void notify(MoveEvent event) {};
   virtual void notify(AttackEvent event) {};
   virtual void notify(OnHitEvent event) {};
+	virtual void notify(OnCriticalHitEvent event) {};
   virtual void notify(OnMissEvent event) {};
   virtual void notify(DamageEvent event) {};
   virtual void notify(DeadEvent event) {};

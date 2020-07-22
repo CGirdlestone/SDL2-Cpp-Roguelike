@@ -18,6 +18,7 @@ MessageLog::MessageLog(int x_buffer, int y_buffer, EventManager* eventManager, s
     m_eventManager = eventManager;
     m_entities = entities;
     m_eventManager->registerSystem(ONHIT, this);
+    m_eventManager->registerSystem(CRITICALHIT, this);
     m_eventManager->registerSystem(ONMISS, this);
     m_eventManager->registerSystem(DAMAGE, this);
     m_eventManager->registerSystem(DEAD, this);
@@ -95,6 +96,14 @@ void MessageLog::notify(OnHitEvent event)
   addMessage(msg);
 }
 
+
+void MessageLog::notify(OnCriticalHitEvent event)
+{
+  std::string attackerName = m_entities->at(event.m_attacker_uid)->m_name;
+  std::string defenderName = m_entities->at(event.m_defender_uid)->m_name;
+  std::string msg = attackerName + " hits " + defenderName + " - CRITICAL HIT";
+  addMessage(msg);
+}
 
 void MessageLog::notify(OnMissEvent event)
 {

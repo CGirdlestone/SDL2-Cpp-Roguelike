@@ -38,6 +38,14 @@ struct OnHitEvent : Event
   int m_defender_uid;
 };
 
+struct OnCriticalHitEvent : Event
+{
+	OnCriticalHitEvent(int attacker_uid, int defender_uid);
+	virtual ~OnCriticalHitEvent();
+  int m_attacker_uid;
+  int m_defender_uid;
+};
+
 struct OnMissEvent : Event
 {
   OnMissEvent(int attacker_uid, int defender_uid);

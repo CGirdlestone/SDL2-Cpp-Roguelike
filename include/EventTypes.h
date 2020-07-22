@@ -7,6 +7,7 @@ enum EventTypes
     MOVE,
     ATTACK,
     ONHIT,
+		CRITICALHIT,
     ONMISS,
     DAMAGE,
     DEAD,

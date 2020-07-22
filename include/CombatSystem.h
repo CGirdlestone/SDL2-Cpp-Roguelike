@@ -16,12 +16,14 @@ public:
   virtual ~CombatSystem();
   void doAttack(AttackEvent event);
   void calculateDamage(OnHitEvent event);
+	void calculateDamage(OnCriticalHitEvent event);
   void applyDamage(DamageEvent event);
   void onDead(DeadEvent event);
 
 
   virtual void notify(AttackEvent event);
   virtual void notify(OnHitEvent event);
+  virtual void notify(OnCriticalHitEvent event);
   virtual void notify(DamageEvent event);
   virtual void notify(DeadEvent event);
 private:

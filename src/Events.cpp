@@ -43,6 +43,17 @@ OnHitEvent::~OnHitEvent()
 
 }
 
+OnCriticalHitEvent::OnCriticalHitEvent(int attacker_uid, int defender_uid):
+m_attacker_uid(attacker_uid), m_defender_uid(defender_uid)
+{
+  m_type = CRITICALHIT;
+}
+
+OnCriticalHitEvent::~OnCriticalHitEvent()
+{
+
+}
+
 OnMissEvent::OnMissEvent(int attacker_uid, int defender_uid):
 m_attacker_uid(attacker_uid), m_defender_uid(defender_uid)
 {

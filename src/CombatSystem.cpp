@@ -46,6 +46,16 @@ void CombatSystem::calculateDamage(OnHitEvent event)
 
 }
 
+void CombatSystem::calculateDamage(OnCriticalHitEvent event)
+{
+	int dmg;
+
+	dmg = std::rand()%6 + 1 + m_entities->at(event.m_attacker_uid)->fighter->power;
+
+	DamageEvent damageEvent = DamageEvent(event.m_defender_uid, dmg*2);
+	m_eventManager->pushEvent(damageEvent);
+}
+
 void CombatSystem::applyDamage(DamageEvent event)
 {
   if (m_entities->at(event.m_uid)->fighter != nullptr){
@@ -78,6 +88,11 @@ void CombatSystem::notify(AttackEvent event)
 void CombatSystem::notify(OnHitEvent event)
 {
   // to do
+  calculateDamage(event);
+}
+
+void CombatSystem::notify(OnCriticalHitEvent event)
+{
   calculateDamage(event);
 }
 
