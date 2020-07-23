@@ -206,3 +206,13 @@ MessageEvent::~MessageEvent()
 {
 
 }
+
+PlayerTurnOverEvent::PlayerTurnOverEvent()
+{
+	m_type = PLAYERTURNOVER;
+}
+
+PlayerTurnOverEvent::~PlayerTurnOverEvent()
+{
+
+}

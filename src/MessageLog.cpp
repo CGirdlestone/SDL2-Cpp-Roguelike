@@ -137,7 +137,7 @@ void MessageLog::notify(DeadEvent event)
 
 	if (event.m_uid != 0){
 		std::string expGain = "+" + std::to_string(m_entities->at(event.m_uid)->ai->exp) + " xp";
-		SDL_Color colour = {0xef, 0xac, 0x28};
+		SDL_Color colour = {0x59, 0x7d, 0xce};
 		addMessage(expGain, colour);
 	}
 }

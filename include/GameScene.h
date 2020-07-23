@@ -26,6 +26,7 @@ public:
 	void newGame();
 	bool checkDescend();
 	void nextLevel();
+	void finishPlayerTurn(){m_playerTurn = false; };
 
 private:
   EventManager *m_eventManager;

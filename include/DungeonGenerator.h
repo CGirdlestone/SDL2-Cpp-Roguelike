@@ -39,6 +39,7 @@ class DungeonGenerator
     void createItems(std::map<int, GameObject*> *actors);
 		void placeStairs(std::map<int, GameObject*> *actors);
 		void descendDungeon(std::map<int, GameObject*> *actors);
+		void repositionPlayer(GameObject* player);
 		
     char *m_level;
     int *m_fovMap;

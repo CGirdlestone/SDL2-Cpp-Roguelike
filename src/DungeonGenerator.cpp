@@ -658,6 +658,13 @@ void DungeonGenerator::placeStairs(std::map<int, GameObject*> *actors)
 	actors->insert({entity->m_uid, entity});
 }
 
+void DungeonGenerator::repositionPlayer(GameObject* player)
+{
+	int i = getFreePosition();
+	player->position->x = i%m_width;
+	player->position->y = i/m_width;	
+}
+
 void DungeonGenerator::descendDungeon(std::map<int, GameObject*> *actors)
 {
 	GameObject* player = actors->at(0);
@@ -666,8 +673,15 @@ void DungeonGenerator::descendDungeon(std::map<int, GameObject*> *actors)
 	
 	newActors.insert({0, player});
 
-	for (auto item : player->inventory->inventory){
-		newActors.insert({item->m_uid, item});
+	for (int i = 0; i < static_cast<int>(player->inventory->inventory.size()); ++i){
+		newActors.insert({player->inventory->inventory.at(i)->m_uid, player->inventory->inventory.at(i)});
+	}
+
+	std::map<EquipSlots, GameObject*>::iterator it;
+	for (it = player->body->slots.begin(); it != player->body->slots.end(); ++it){
+		if (it->second != nullptr){
+			newActors.insert({it->second->m_uid, it->second});
+		}
 	}
 
 	std::map<int, GameObject*>::iterator actorIt;
@@ -684,10 +698,10 @@ void DungeonGenerator::descendDungeon(std::map<int, GameObject*> *actors)
 	
 	createMap(60, 6, 2, 5);
 
-	int i = getFreePosition();
-	player->position->x = i%m_width;
-	player->position->y = i/m_width;	
+	repositionPlayer(player);
 
 	createEntities(actors);
 	createItems(actors);	
+
+	++m_uid;
 }

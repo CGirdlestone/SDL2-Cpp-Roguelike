@@ -29,6 +29,7 @@ class Game
     virtual ~Game();
 
     bool init(int mapWidth, int mapHheight, int width, int height, int tileSize, const char* title);
+		void createConsole(int width, int height, const char* title, int tileSize);
     void run();
 
   protected:

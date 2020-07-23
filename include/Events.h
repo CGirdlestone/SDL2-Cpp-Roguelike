@@ -157,4 +157,10 @@ struct MessageEvent : Event
 	std::string m_msg;
 };
 
+struct PlayerTurnOverEvent : Event
+{
+	PlayerTurnOverEvent();
+	~PlayerTurnOverEvent();
+};
+
 #endif

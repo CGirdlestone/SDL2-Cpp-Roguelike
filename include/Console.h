@@ -9,7 +9,7 @@
 class Console
 {
     public:
-        Console(int width, int height, const char* title, char* path, int tileSize);
+        Console(int width, int height, const char* title, const char* path, int tileSize);
         virtual ~Console();
 
         int Getm_width() { return m_width; }
@@ -20,11 +20,11 @@ class Console
         int getXBuffer(){return m_xBuffer;}
         int getYBuffer(){return m_yBuffer;}
 
-        bool init(char* path);
+        bool init(const char* path);
         bool createWindow();
         bool createRenderer();
         bool initImage();
-        bool loadMedia(char* path);
+        bool loadMedia(const char* path);
         void createTiles();
         void render(char* c, int x, int y, SDL_Color colour);
         void render(int i, int x, int y, SDL_Color colour);

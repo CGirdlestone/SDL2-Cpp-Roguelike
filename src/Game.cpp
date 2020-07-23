@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <time.h>
 #include <string>
+#include <fstream>
 
 #include "DungeonGenerator.h"
 #include "Console.h"
@@ -107,11 +108,26 @@ Game::~Game()
   }
 }
 
+void Game::createConsole(int width, int height, const char* title, int tilesize)
+{
+	std::ifstream file;
+	std::string line;
+	std::string path = "./resources/";
+	
+	file.open("./resources/font.txt");
+	if (file.is_open()){
+		getline(file, line);
+		path += line;
+		m_console = new Console(width, height, title, path.c_str(), tilesize);
+	}
+}
+
 bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize, const char* title)
 {
   m_dungeon = new DungeonGenerator(mapWidth, mapHeight);
   m_camera = new Camera(width, height, mapWidth, mapHeight);
-  m_console = new Console(width, height, title, (char*)"./resources/Cheepicus_8x8x2.png", tileSize);
+	//m_console = new Console(width, height, title, (char*)"./resources/Cheepicus_8x8x2.png", tileSize);
+	createConsole(width, height, title, tileSize);
 
   m_eventManager = new EventManager();
   m_messageLog = new MessageLog(width, 8, m_eventManager, &m_actors);

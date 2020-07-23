@@ -109,6 +109,7 @@ void InventorySystem::useItem(UseItemEvent event)
 				m_eventManager->pushEvent(DamageEvent(event.m_user_uid, -1 * (std::rand()%item->healing->roll + 1)));
 				m_eventManager->pushEvent(PopScene(1));
 				decreaseUses(item, event.m_user_uid, event.m_item_uid);
+				m_eventManager->pushEvent(PlayerTurnOverEvent());
 			} 
 		} else if (item->useable->funcToDo == DIRECTDAMAGE){
 			if (event.m_target_uid == -1){
@@ -120,6 +121,7 @@ void InventorySystem::useItem(UseItemEvent event)
 				// this branch indicates that a target has been selected and executes the relevant function.
 				m_eventManager->pushEvent(DamageEvent(event.m_target_uid, m_entities->at(event.m_item_uid)->damage->roll));
 				decreaseUses(item, event.m_user_uid, event.m_item_uid);
+				m_eventManager->pushEvent(PlayerTurnOverEvent());
 			}
 		} else if (item->useable->funcToDo == AOE){
 			if (event.m_target_uid == -1){

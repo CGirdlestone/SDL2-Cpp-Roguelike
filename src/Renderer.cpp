@@ -8,8 +8,8 @@
 Renderer::Renderer(Console* console)
 {
   m_console = console;
-  m_defaultColour = {0x39, 0x2a, 0x1c};
-  m_inViewColour = {0xef, 0xd8, 0xa1};
+  m_defaultColour = {0x44, 0x24, 0x34};
+  m_inViewColour = {0xde, 0xed, 0xd6};
 }
 
 Renderer::~Renderer()
@@ -36,7 +36,6 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, 
   int x;
   int y = 0;
   int offsetI;
-  //SDL_Color colour = {0xef, 0xd8, 0xa1};
   bool occupied;
 
   for (int i = 0; i < dungeon->Getm_width() * dungeon->Getm_height(); ++i){
@@ -106,7 +105,7 @@ void Renderer::drawActors(Camera* camera, DungeonGenerator* dungeon, std::map<in
 
 void Renderer::drawMenuOutline()
 {
-  SDL_Color colour = {0xef, 0xb7, 0x75};
+  SDL_Color colour = {0xda, 0xd4, 0x5e};
   int xBuffer = m_console->getXBuffer();
   int yBuffer = m_console->getYBuffer();
   int height = m_console->Getm_height();
@@ -161,7 +160,7 @@ void Renderer::drawPlayerInfo(GameObject* player)
 	int width = m_console->Getm_width();
 	int buffer = m_console->getXBuffer()-2;
 	char healthBarChar = '=';
-	SDL_Color colour = {0x9b, 0x1a, 0x0a};
+	SDL_Color colour = {0xd0, 0x46, 0x48};
 	int healthBarWidth = (player->fighter->health * buffer) / player->fighter->maxHealth;
 	std::string health = "Health: " + std::to_string(player->fighter->health) + " / " + std::to_string(player->fighter->maxHealth);
 	int yPosition = 2;
@@ -180,7 +179,7 @@ void Renderer::drawPlayerInfo(GameObject* player)
 	} 
 	yPosition += 2;
 	
-	colour = {0x3c, 0x9f, 0x9c};
+	colour = {0x59, 0x7d, 0xce};
 
 	int expBarWidth = (player->player->exp * buffer) / (player->player->next);
 	std::string exp = "Exp: " + std::to_string(player->player->exp) + " / " + std::to_string(player->player->next);

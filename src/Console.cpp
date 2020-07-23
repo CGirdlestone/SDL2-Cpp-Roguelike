@@ -9,7 +9,7 @@
 
 
 
-Console::Console(int width, int height, const char* title, char* path, int tileSize)
+Console::Console(int width, int height, const char* title, const char* path, int tileSize)
 {
     //ctor
     m_width = width;
@@ -41,7 +41,7 @@ Console::~Console()
     m_texture = nullptr;
 }
 
-bool Console::init(char* path)
+bool Console::init(const char* path)
 {
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0){
@@ -87,7 +87,7 @@ bool Console::createRenderer()
         printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     } else {
-        SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0x00);
+        SDL_SetRenderDrawColor(m_renderer, 0x14, 0x0c, 0x1c, 0x00);
         return true;
     }
 }
@@ -102,7 +102,7 @@ bool Console::initImage()
     return true;
 }
 
-bool Console::loadMedia(char* path)
+bool Console::loadMedia(const char* path)
 {
 
   SDL_Surface *loadedSurface = IMG_Load(path);

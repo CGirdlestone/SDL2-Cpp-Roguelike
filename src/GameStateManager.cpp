@@ -20,6 +20,7 @@ m_eventManager(eventManager), m_entities(entities)
   m_eventManager->registerSystem(QUIT, this);
 	m_eventManager->registerSystem(PASSUSERINFO, this);
 	m_eventManager->registerSystem(DEAD, this);
+	m_eventManager->registerSystem(PLAYERTURNOVER, this);
 
   m_startScene = nullptr;
   m_gameScene = nullptr;
@@ -43,7 +44,6 @@ GameStateManager::~GameStateManager()
 
 void GameStateManager::notify(PushScene event)
 {
-  //TO DO
   if (event.m_scene == STARTMENU){
     m_sceneStack.push_back(m_startScene);
   } else if (event.m_scene == GAMESCENE){
@@ -84,6 +84,11 @@ void GameStateManager::notify(PassUserInfoEvent event)
 {
 	m_targetingScene->m_user_uid = event.m_user_uid;
 	m_targetingScene->m_item_uid = event.m_item_uid;
+}
+
+void GameStateManager::notify(PlayerTurnOverEvent event)
+{
+	m_gameScene->finishPlayerTurn();
 }
 
 void GameStateManager::processInput(SDL_Event *e)
