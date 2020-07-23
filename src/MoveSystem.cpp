@@ -26,13 +26,14 @@ bool MoveSystem::checkMove(int dx, int dy, int uid)
     if (m_dungeon->m_level[(m_entities->at(uid)->position->x + dx) + m_dungeon->Getm_width() * (m_entities->at(uid)->position->y + dy)] != '.'){
       return false;
     } else{
-      for (int i = 0; i < static_cast<int>(m_entities->size()); i++){
-        if (i == uid){ continue; }
-        if (m_entities->at(i)->fighter == nullptr){ continue; }
-        if (!(m_entities->at(i)->fighter->isAlive)){ continue; }
+			std::map<int, GameObject*>::iterator it;
+      for (it = m_entities->begin(); it != m_entities->end(); ++it){
+        if (it->first == uid){ continue; }
+        if (it->second->fighter == nullptr){ continue; }
+        if (!(it->second->fighter->isAlive)){ continue; }
 
-        if (m_entities->at(uid)->position->x + dx == m_entities->at(i)->position->x && m_entities->at(uid)->position->y + dy == m_entities->at(i)->position->y && m_entities->at(i)->fighter->isAlive){
-          AttackEvent attackEvent = AttackEvent(uid, i);
+        if (m_entities->at(uid)->position->x + dx == it->second->position->x && m_entities->at(uid)->position->y + dy == it->second->position->y && it->second->fighter->isAlive){
+          AttackEvent attackEvent = AttackEvent(uid, it->first);
           m_eventManager->pushEvent(attackEvent);
           return false;
         }

@@ -19,6 +19,7 @@ m_eventManager(eventManager), m_entities(entities)
   m_eventManager->registerSystem(PUSHSCENE, this);
   m_eventManager->registerSystem(QUIT, this);
 	m_eventManager->registerSystem(PASSUSERINFO, this);
+	m_eventManager->registerSystem(DEAD, this);
 
   m_startScene = nullptr;
   m_gameScene = nullptr;
@@ -70,6 +71,13 @@ void GameStateManager::notify(PopScene event)
 void GameStateManager::notify(QuitEvent event)
 {
   playing = false;
+}
+
+void GameStateManager::notify(DeadEvent event)
+{
+	if (event.m_uid == 0){
+		playing = false;
+	}
 }
 
 void GameStateManager::notify(PassUserInfoEvent event)

@@ -101,8 +101,9 @@ Game::~Game()
   delete m_sceneManager;
   m_sceneManager = nullptr;
 
-  for (int i = 0; i < static_cast<int>(m_actors.size()); i++){
-    delete m_actors[i];
+	std::map<int, GameObject*>::iterator it;
+  for (it = m_actors.begin(); it != m_actors.end(); ++it){
+    delete it->second;
   }
 }
 

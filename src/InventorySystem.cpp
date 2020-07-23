@@ -28,17 +28,17 @@ InventorySystem::~InventorySystem()
 
 void InventorySystem::pickUpItem(TakeEvent event)
 {
+	std::map<int, GameObject*>::iterator it;
+  for (it = m_entities->begin(); it !=m_entities->end(); ++it){
+    if(event.m_uid == it->second->m_uid){ continue; }
+    if(it->second->position == nullptr){ continue; }
+		if(it->second->item == nullptr){ continue; }
 
-  for (int i = 0; i < static_cast<int>(m_entities->size()); ++i){
-    if(event.m_uid == i){ continue; }
-    if(m_entities->at(i)->position == nullptr){ continue; }
-		if(m_entities->at(i)->item == nullptr){ continue; }
-
-    if (m_entities->at(i)->position->x == event.m_x && m_entities->at(i)->position->y == event.m_y){
-      m_entities->at(event.m_uid)->inventory->inventory.push_back(m_entities->at(i));
-      delete m_entities->at(i)->position;
-      m_entities->at(i)->position = nullptr;
-      m_eventManager->pushEvent(OnPickUpEvent(event.m_uid, m_entities->at(i)->m_name));
+    if (it->second->position->x == event.m_x && it->second->position->y == event.m_y){
+      m_entities->at(event.m_uid)->inventory->inventory.push_back(it->second);
+      delete it->second->position;
+      it->second->position = nullptr;
+      m_eventManager->pushEvent(OnPickUpEvent(event.m_uid, it->second->m_name));
       break;
     }
   }

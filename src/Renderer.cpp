@@ -39,7 +39,7 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, 
   //SDL_Color colour = {0xef, 0xd8, 0xa1};
   bool occupied;
 
-  for (int i = 0; i < dungeon->Getm_width() * dungeon->Getm_height(); i++){
+  for (int i = 0; i < dungeon->Getm_width() * dungeon->Getm_height(); ++i){
     x = i % dungeon->Getm_width();
 
     if (!(x >= camera->getX() && x < camera->getX() + camera->getWidth() && y >= camera->getY() && y < camera->getY() + camera->getHeight())){
@@ -51,11 +51,12 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, 
 
     occupied = false;
     if (dungeon->m_fovMap[i] == 1){
+			
+			std::map<int, GameObject*>::iterator it;
+      for(it = actors->begin(); it != actors->end(); ++it){
+        if (it->second->position == nullptr){ continue; }
 
-      for(int j = 0; j < static_cast<int>(actors->size()); ++j){
-        if (actors->at(j)->position == nullptr){ continue; }
-
-        if (actors->at(j)->position->x + actors->at(j)->position->y*dungeon->Getm_width() == i){
+        if (it->second->position->x + it->second->position->y*dungeon->Getm_width() == i){
           occupied = true;
         }
       }
@@ -65,10 +66,12 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, 
       }
     } else if (dungeon->m_fovMap[i] == 0){
       if (dungeon->m_exploredMap[i] == 1){
-        for(int j = 0; j < static_cast<int>(actors->size()); ++j){
-          if (actors->at(j)->position == nullptr){ continue; }
 
-          if (actors->at(j)->position->x + actors->at(j)->position->y*dungeon->Getm_width() == i){
+				std::map<int, GameObject*>::iterator it;
+        for (it = actors->begin(); it != actors->end(); ++it){
+          if (it->second->position == nullptr){ continue; }
+
+          if (it->second->position->x + it->second->position->y*dungeon->Getm_width() == i){
             occupied = true;
           }
         }
@@ -87,13 +90,15 @@ void Renderer::drawActors(Camera* camera, DungeonGenerator* dungeon, std::map<in
   int mapArrayIndex;
   int offsetI;
   if (!actors->empty()){
-    for (int i = static_cast<int>(actors->size())-1; i >= 0 ; --i){
-      if (actors->at(i)->position == nullptr){ continue; }
 
-      mapArrayIndex = actors->at(i)->position->x + actors->at(i)->position->y*dungeon->Getm_width();
+		std::map<int, GameObject*>::reverse_iterator it;
+    for (it = actors->rbegin(); it != actors->rend(); ++it){
+      if (it->second->position == nullptr){ continue; }
+
+      mapArrayIndex = it->second->position->x + it->second->position->y*dungeon->Getm_width();
       if (dungeon->m_fovMap[mapArrayIndex] == 1){
-        offsetI = camera->calculateOffset(actors->at(i)->position->x, actors->at(i)->position->y);
-        m_console->render(&actors->at(i)->renderable->chr, offsetI % camera->getWidth(), offsetI / camera->getWidth(), actors->at(i)->renderable->colour);
+        offsetI = camera->calculateOffset(it->second->position->x, it->second->position->y);
+        m_console->render(&it->second->renderable->chr, offsetI % camera->getWidth(), offsetI / camera->getWidth(), it->second->renderable->colour);
       }
     }
   }

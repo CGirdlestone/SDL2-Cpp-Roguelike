@@ -27,6 +27,7 @@ public:
   void notify(PopScene event);
   void notify(QuitEvent event);
   void notify(PassUserInfoEvent event);
+	void notify(DeadEvent event);
   void pushScene(SceneTypes scene);
   void popScene(int i);
   void render();

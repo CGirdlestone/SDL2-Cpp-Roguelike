@@ -47,15 +47,15 @@ void DungeonGenerator::initialiseMap(int threshold)
 
   std::srand(time(0));
 
-  if(!m_level){
+  if(m_level == nullptr){
     m_level = new char[m_width * m_height];
   }
 
-  if(!m_fovMap){
+  if(m_fovMap == nullptr){
     m_fovMap = new int[m_width * m_height];
   }
 
-  if(!m_exploredMap){
+  if(m_exploredMap == nullptr){
     m_exploredMap = new int[m_width * m_height];
   }
 
@@ -661,27 +661,32 @@ void DungeonGenerator::placeStairs(std::map<int, GameObject*> *actors)
 void DungeonGenerator::descendDungeon(std::map<int, GameObject*> *actors)
 {
 	GameObject* player = actors->at(0);
-	std::vector<GameObject*> playerInventory = player->inventory->inventory;
 
 	std::map<int, GameObject*> newActors;
 	
 	newActors.insert({0, player});
 
-	for (auto item : playerInventory){
+	for (auto item : player->inventory->inventory){
 		newActors.insert({item->m_uid, item});
 	}
-	
-	std::map<int, GameObject*>::iterator actorIt = actors->begin();
-	for (actorIt; actorIt != actors->end(); ++actorIt){
-		std::map<int, GameObject*>::iterator it = newActors.find(actorIt->second->m_uid);
+
+	std::map<int, GameObject*>::iterator actorIt;
+	for (actorIt = actors->begin(); actorIt != actors->end(); ){
+		std::map<int, GameObject*>::iterator it = newActors.find(actorIt->first);
 		if (it == newActors.end()){
 			delete actorIt->second;
+			actorIt->second = nullptr;
+			actors->erase(actorIt++);
+		} else {
+			++actorIt;
 		}
 	}
-
-	actors->swap(newActors);
 	
 	createMap(60, 6, 2, 5);
+
+	int i = getFreePosition();
+	player->position->x = i%m_width;
+	player->position->y = i/m_width;	
 
 	createEntities(actors);
 	createItems(actors);	

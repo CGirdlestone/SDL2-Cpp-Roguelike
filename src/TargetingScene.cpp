@@ -109,12 +109,13 @@ int TargetingScene::getTargetUID()
 		radius = m_entities->at(m_item_uid)->status->radius;
 	}
 	
-	for (int i = 0; i < static_cast<int>(m_entities->size()); ++i){
-		if (m_entities->at(i)->position == nullptr){ continue; }
+	std::map<int, GameObject*>::iterator it;
+	for (it = m_entities->begin(); it != m_entities->end(); ++it){
+		if (it->second->position == nullptr){ continue; }
 
-		if (m_entities->at(i)->position->x == m_x && m_entities->at(i)->position->y == m_y && i != m_user_uid){
+		if (it->second->position->x == m_x && it->second->position->y == m_y && it->second->m_uid != m_user_uid){
 			if (checkInRange(m_x, m_y, m_entities->at(m_user_uid)->position->x, m_entities->at(m_user_uid)->position->y, radius)){
-				return i;
+				return it->second->m_uid;
 			}
 		}
 	}

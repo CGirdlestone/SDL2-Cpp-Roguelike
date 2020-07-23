@@ -62,7 +62,7 @@ void CombatSystem::applyDamage(DamageEvent event)
     m_entities->at(event.m_uid)->fighter->health -= event.m_damage;
 
     if (m_entities->at(event.m_uid)->fighter->health <= 0){
-      m_entities->at(event.m_uid)->fighter->isAlive = false;
+			m_entities->at(event.m_uid)->fighter->isAlive = false;
       DeadEvent deadEvent = DeadEvent(event.m_uid);
       m_eventManager->pushEvent(deadEvent);
     } else if (m_entities->at(event.m_uid)->fighter->health > m_entities->at(event.m_uid)->fighter->maxHealth){
@@ -87,7 +87,6 @@ void CombatSystem::notify(AttackEvent event)
 
 void CombatSystem::notify(OnHitEvent event)
 {
-  // to do
   calculateDamage(event);
 }
 
@@ -98,12 +97,10 @@ void CombatSystem::notify(OnCriticalHitEvent event)
 
 void CombatSystem::notify(DamageEvent event)
 {
-  // to do
   applyDamage(event);
 }
 
 void CombatSystem::notify(DeadEvent event)
 {
-  // to do
   onDead(event);
 }

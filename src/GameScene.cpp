@@ -49,31 +49,32 @@ void GameScene::processEntities()
   int j;
   int x, y;
 
-  for (int i = 1; i < static_cast<int>(m_entities->size()); ++i){
-    if (m_entities->at(i)->ai != nullptr && m_entities->at(i)->fighter != nullptr){
-      if (m_entities->at(i)->fighter->isAlive){
-        if (m_dungeon->m_fovMap[m_entities->at(i)->position->x + m_entities->at(i)->position->y * m_dungeon->Getm_width()] == 1){
-          m_entities->at(i)->ai->path.clear();
-          aStar(m_dungeon->m_level, &m_entities->at(i)->ai->path, m_dungeon->Getm_width(), m_dungeon->Getm_height(), m_entities->at(i)->position->x, m_entities->at(i)->position->y, m_entities->at(0)->position->x, m_entities->at(0)->position->y);
+	std::map<int, GameObject*>::iterator it;
+  for (it = m_entities->begin(); it != m_entities->end(); ++it){
+    if (it->second->ai != nullptr && it->second->fighter != nullptr){
+      if (it->second->fighter->isAlive){
+        if (m_dungeon->m_fovMap[it->second->position->x + it->second->position->y * m_dungeon->Getm_width()] == 1){
+          it->second->ai->path.clear();
+          aStar(m_dungeon->m_level, &it->second->ai->path, m_dungeon->Getm_width(), m_dungeon->Getm_height(), it->second->position->x, it->second->position->y, m_entities->at(0)->position->x, m_entities->at(0)->position->y);
 
-          j = m_entities->at(i)->ai->path.back();
-          m_entities->at(i)->ai->path.pop_back();
+          j = it->second->ai->path.back();
+          it->second->ai->path.pop_back();
 
           x = j % m_dungeon->Getm_width();
           y = j / m_dungeon->Getm_width();
 
-          MoveEvent moveEvent = MoveEvent(x - m_entities->at(i)->position->x, y - m_entities->at(i)->position->y, i);
+          MoveEvent moveEvent = MoveEvent(x - it->second->position->x, y - it->second->position->y, it->first);
           m_eventManager->pushEvent(moveEvent);
 
         } else {
-          if (m_entities->at(i)->ai->path.size() > 0){
-            j = m_entities->at(i)->ai->path.back();
-            m_entities->at(i)->ai->path.pop_back();
+          if (it->second->ai->path.size() > 0){
+            j = it->second->ai->path.back();
+            it->second->ai->path.pop_back();
 
             x = j % m_dungeon->Getm_width();
             y = j / m_dungeon->Getm_width();
 
-            MoveEvent moveEvent = MoveEvent(x - m_entities->at(i)->position->x, y - m_entities->at(i)->position->y, i);
+            MoveEvent moveEvent = MoveEvent(x - it->second->position->x, y - it->second->position->y, it->first);
             m_eventManager->pushEvent(moveEvent);
           }
         }
@@ -215,7 +216,6 @@ void GameScene::handleInput(KeyPressSurfaces keyPress)
 	} else if (keyPress == USE){
 		if(checkDescend()){
 			nextLevel();
-			m_playerTurn = false;
 		}
 	}
 
