@@ -84,6 +84,53 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, 
   }
 }
 
+void Renderer::drawMiniMap(DungeonGenerator* dungeon, std::map<int, GameObject*> *actors)
+{
+	int mapOriginX = (m_console->Getm_width() + 1) * m_console->getTileSize();
+	int mapOriginY = (m_console->Getm_height() - 1) * m_console->getTileSize();
+
+	SDL_Color player = {0x6d, 0xc2, 0xca};
+	SDL_Color enemy = {0xd0, 0x46, 0x48};
+	SDL_Color item = {0x34, 0x65, 0x24};
+
+	SDL_Color lightWall = {0x75, 0x71, 0x61};
+	SDL_Color darkWall = {0x4e, 0x4a, 0x4e};
+
+	for (int i = 0; i < dungeon->Getm_width() * dungeon->Getm_height(); ++i){
+		if (dungeon->m_level[i] == ' '){ continue; }	
+		if (dungeon->m_exploredMap[i] == 0){ continue; }
+		
+		if (dungeon->m_fovMap[i] == 0){
+			if (dungeon->m_level[i] == '#'){
+				m_console->fillBackgroundTile(i%dungeon->Getm_width(), i/dungeon->Getm_width(), darkWall, 255, 2, mapOriginX, mapOriginY);
+			} else {
+				m_console->fillBackgroundTile(i%dungeon->Getm_width(), i/dungeon->Getm_width(), m_defaultColour, 255, 2, mapOriginX, mapOriginY);
+			}
+		} else if (dungeon->m_fovMap[i] == 1){
+			if (dungeon->m_level[i] == '#'){
+				m_console->fillBackgroundTile(i%dungeon->Getm_width(), i/dungeon->Getm_width(), lightWall, 255, 2, mapOriginX, mapOriginY);
+			} else {
+				m_console->fillBackgroundTile(i%dungeon->Getm_width(), i/dungeon->Getm_width(), m_inViewColour, 255, 2, mapOriginX, mapOriginY);
+			}
+		}
+	}
+	
+	std::map<int, GameObject*>::iterator it;
+	for (it = actors->begin(); it != actors->end(); ++it){
+		if (it->second->position == nullptr){ continue; }
+
+		if (dungeon->m_fovMap[it->second->position->x + it->second->position->y * dungeon->Getm_width()] == 0){ continue; }		
+
+		if (it->first == 0){
+			m_console->fillBackgroundTile(it->second->position->x, it->second->position->y, player, 255, 2, mapOriginX, mapOriginY);
+		} else if (it->second->item != nullptr){
+			m_console->fillBackgroundTile(it->second->position->x, it->second->position->y, item, 255, 2, mapOriginX, mapOriginY);
+		} else if (it->second->ai != nullptr){
+			m_console->fillBackgroundTile(it->second->position->x, it->second->position->y, enemy, 255, 2, mapOriginX, mapOriginY);
+		}
+	}
+}
+
 void Renderer::drawActors(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors)
 {
   int mapArrayIndex;
@@ -352,10 +399,10 @@ void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std
 	  offsetI = camera->calculateOffset(x, y);
 
 		if (checkInRange(x, y, actors->at(0)->position->x, actors->at(0)->position->y, radius)){
-			SDL_Color colour = {0x39, 0x57, 0x1c};
+			SDL_Color colour = {0x6d, 0xaa, 0x2c};
  			m_console->fillBackgroundTile(offsetI % camera->getWidth(), offsetI / camera->getWidth(), colour);
   	} else {
-			SDL_Color colour = {0x9b, 0x1a, 0x0a};
+			SDL_Color colour = {0xd0, 0x46, 0x48};
  			m_console->fillBackgroundTile(offsetI % camera->getWidth(), offsetI / camera->getWidth(), colour);
 		}
 	}
@@ -371,5 +418,6 @@ void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::ma
   drawLog(messageLog, camera->getHeight());
   drawUI();
 	drawPlayerInfo(actors->at(0));
+	drawMiniMap(dungeon, actors);
   m_console->update();
 }

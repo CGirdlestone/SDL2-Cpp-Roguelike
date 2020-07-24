@@ -16,7 +16,7 @@ class Console
         void Setm_width(int val) { m_width = val; }
         int Getm_height() { return m_height; }
         void Setm_height(int val) { m_height = val; }
-
+				int getTileSize() { return m_tileSize; } 
         int getXBuffer(){return m_xBuffer;}
         int getYBuffer(){return m_yBuffer;}
 
@@ -34,6 +34,7 @@ class Console
         void setFullscreen();
         SDL_Renderer* getRenderer(){return m_renderer;};
 				void fillBackgroundTile(int x, int y, SDL_Color colour);
+				void fillBackgroundTile(int x, int y, SDL_Color colour, int alpha, int tileSize, int originX, int originY);
 
     protected:
 

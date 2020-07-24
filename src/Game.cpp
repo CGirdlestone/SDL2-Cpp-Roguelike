@@ -126,7 +126,6 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
 {
   m_dungeon = new DungeonGenerator(mapWidth, mapHeight);
   m_camera = new Camera(width, height, mapWidth, mapHeight);
-	//m_console = new Console(width, height, title, (char*)"./resources/Cheepicus_8x8x2.png", tileSize);
 	createConsole(width, height, title, tileSize);
 
   m_eventManager = new EventManager();

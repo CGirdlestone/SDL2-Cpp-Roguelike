@@ -30,7 +30,8 @@ public:
 	void drawCharacterScene(std::map<int, GameObject*> *actors, int index);
 	void drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog, int radius, std::vector<int> *path);
 	bool checkInRange(int x, int y, int i, int j, int radius){ return (x-i)*(x-i) + (y-j)*(y-j) <= radius*radius;};
-
+	void drawMiniMap(DungeonGenerator* dungeon, std::map<int, GameObject*> *actors);
+	
 private:
   Console* m_console;
   SDL_Color m_defaultColour;
