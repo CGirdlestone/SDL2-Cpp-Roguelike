@@ -382,6 +382,47 @@ void Renderer::drawCharacterScene(std::map<int, GameObject*> *actors, int index)
 	m_console->update();
 }
 
+void Renderer::drawPauseMenu(int index, Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog)
+{
+	m_console->flush();
+	
+  drawMap(camera, dungeon, actors);
+  drawActors(camera, dungeon, actors);
+  drawLog(messageLog, camera->getHeight());
+  drawUI();
+	drawPlayerInfo(actors->at(0));
+
+  int width = m_console->Getm_width() + m_console->getXBuffer();
+  int height = m_console->Getm_height() + m_console->getYBuffer();
+  std::string startText = "CONTINUE";
+  std::string exitText = "EXIT GAME";
+	int x, y;
+	
+  for (int j = 0; j < static_cast<int>(startText.length()); ++j){
+		x = width/2 + j - 5;
+		y = height/2;
+
+    if (index == 0){
+      m_console->render(&startText[j], x, y, m_inViewColour);
+    } else {
+      m_console->render(&startText[j], x, y, m_defaultColour);
+    }
+  }
+
+  for (int j = 0; j < static_cast<int>(exitText.length()); ++j){
+		x = width/2 + j - 5;
+		y = height/2;
+    
+		if (index == 1){
+      m_console->render(&exitText[j], x, y+4, m_inViewColour);
+    } else {
+      m_console->render(&exitText[j], x, y+4, m_defaultColour);
+    }
+  }
+	
+	m_console->update();
+}
+
 void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog, int radius, std::vector<int> *path)
 {
 	int offsetI, x, y;	

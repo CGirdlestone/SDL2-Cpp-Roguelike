@@ -35,8 +35,9 @@ class DungeonGenerator
     void doRecomputeFOV(int x, int y, int radius);
 		int getFreePosition();
     void createPlayer(std::map<int, GameObject*> *actors);
-    void createEntities(std::map<int, GameObject*> *actors);
+    void createMobs(std::map<int, GameObject*> *actors);
     void createItems(std::map<int, GameObject*> *actors);
+		void createEntity(std::map<int, GameObject*> *actors, std::string entityName);
 		void placeStairs(std::map<int, GameObject*> *actors);
 		void descendDungeon(std::map<int, GameObject*> *actors);
 		void repositionPlayer(GameObject* player);

@@ -602,49 +602,40 @@ void DungeonGenerator::doRecomputeFOV(int x, int y, int radius)
 int DungeonGenerator::getFreePosition()
 {
 	int i;
-	bool playerPlaced = false;
 	
-	while(!playerPlaced){
+	while(true){
 		i = std::rand()%(m_width * m_height);
-		if (m_level[i] != '.'){
-			continue;
+		if (m_level[i] == '.'){
+			break;
 		}
-		playerPlaced = true;
 	}
 	return i;
 }
 
-void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
+void DungeonGenerator::createEntity(std::map<int, GameObject*> *actors, std::string entityName)
 {
-  GameObject *player = new GameObject();
-	
-	int i = getFreePosition();
-
-	m_factory->makeEntity("PLAYER", player, i%m_width, i/m_width);
-
-  actors->insert({player->m_uid, player});
-}
-
-void DungeonGenerator::createEntities(std::map<int, GameObject*> *actors)
-{
-  GameObject *entity = new GameObject();
+	GameObject *entity = new GameObject();
 
 	int i = getFreePosition();
 
-  m_factory->makeEntity("ORC", entity, i%m_width, i/m_width);
+	m_factory->makeEntity(entityName, entity, i%m_width, i/m_width);
 
 	actors->insert({entity->m_uid, entity});
 }
 
+void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
+{
+	createEntity(actors, "PLAYER");
+}
+
+void DungeonGenerator::createMobs(std::map<int, GameObject*> *actors)
+{
+	createEntity(actors, "ORC");
+}
+
 void DungeonGenerator::createItems(std::map<int, GameObject*> *actors)
 {
-  GameObject *entity = new GameObject();
-
-	int i = getFreePosition();
-
-	m_factory->makeEntity("SCROLL OF FIREBALL", entity, i%m_width, i/m_width);
-
-  actors->insert({entity->m_uid, entity});
+	createEntity(actors, "SCROLL OF FIREBALL");
 }
 
 void DungeonGenerator::placeStairs(std::map<int, GameObject*> *actors)
@@ -700,8 +691,9 @@ void DungeonGenerator::descendDungeon(std::map<int, GameObject*> *actors)
 
 	repositionPlayer(player);
 
-	createEntities(actors);
+	createMobs(actors);
 	createItems(actors);	
+	placeStairs(actors);
 
 	++m_uid;
 }

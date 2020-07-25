@@ -27,7 +27,7 @@ void GameScene::newGame()
 {
 	m_dungeon->createMap(60, 6, 2, 5);
 	m_dungeon->createPlayer(m_entities);
-	m_dungeon->createEntities(m_entities);
+	m_dungeon->createMobs(m_entities);
 	m_dungeon->createItems(m_entities);
 	m_dungeon->placeStairs(m_entities);
 	m_dungeon->shadowCast(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
@@ -99,7 +99,7 @@ enum KeyPressSurfaces GameScene::getEvent(SDL_Event *e)
 {
   while(SDL_PollEvent(e)){
       if (e->type == SDL_QUIT){
-          return ESCAPE;
+          return EXITGAME;
       } else if (e->type == SDL_KEYDOWN){
           switch(e->key.keysym.sym){
               case SDLK_UP:
@@ -167,7 +167,7 @@ enum KeyPressSurfaces GameScene::getEvent(SDL_Event *e)
 void GameScene::handleInput(KeyPressSurfaces keyPress)
 {
   if (keyPress == ESCAPE){
-      m_eventManager->pushEvent(QuitEvent());
+      m_eventManager->pushEvent(PushScene(PAUSEMENU));
   } else if (keyPress == WEST){
     MoveEvent moveEvent = MoveEvent(-1, 0, 0);
     m_eventManager->pushEvent(moveEvent);
@@ -214,6 +214,8 @@ void GameScene::handleInput(KeyPressSurfaces keyPress)
 		if(checkDescend()){
 			nextLevel();
 		}
+	} else if (keyPress == EXITGAME){
+		m_eventManager->pushEvent(QuitEvent());
 	}
 
   if (!m_playerTurn){

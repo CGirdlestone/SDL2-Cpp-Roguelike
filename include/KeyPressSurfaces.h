@@ -30,6 +30,7 @@ enum KeyPressSurfaces
 		DROPITEM,
 		SHOWCHARSCREEN,
 		USE,
+		EXITGAME,
 };
 
 extern KeyPressSurfaces Key;

@@ -9,6 +9,9 @@ enum SceneTypes
     INVENTORY,
 		CHARACTER,
 		TARGETING,
+		PAUSEMENU,
+		GAMEOVERSCENE,
+		HELPMENU,
 };
 
 extern SceneTypes SceneType;

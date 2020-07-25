@@ -27,6 +27,7 @@ m_eventManager(eventManager), m_entities(entities)
 	m_inventoryScene = nullptr;
 	m_characterScene = nullptr;
 	m_targetingScene = nullptr;
+	m_pauseScene = nullptr;
 
   playing = true;
 }
@@ -40,6 +41,7 @@ GameStateManager::~GameStateManager()
 	m_inventoryScene = nullptr;
 	m_characterScene = nullptr;
 	m_targetingScene = nullptr;
+	m_pauseScene = nullptr;
 };
 
 void GameStateManager::notify(PushScene event)
@@ -57,6 +59,9 @@ void GameStateManager::notify(PushScene event)
 		m_characterScene->resetIndex();
 	} else if (event.m_scene == TARGETING){
 		m_sceneStack.push_back(m_targetingScene);
+		m_targetingScene->resetIndex();
+	} else if (event.m_scene == PAUSEMENU){
+		m_sceneStack.push_back(m_pauseScene);
 		m_targetingScene->resetIndex();
 	}
 }

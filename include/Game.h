@@ -21,6 +21,7 @@
 #include "InventoryScene.h"
 #include "CharacterScene.h"
 #include "TargetingScene.h"
+#include "PauseScene.h"
 
 class Game
 {
@@ -58,6 +59,7 @@ class Game
 		InventoryScene *m_inventoryScene;
 		CharacterScene *m_characterScene;
 		TargetingScene *m_targetingScene;
+		PauseScene *m_pauseScene;
 };
 
 

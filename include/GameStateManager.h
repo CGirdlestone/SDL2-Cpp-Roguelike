@@ -13,6 +13,7 @@
 #include "InventoryScene.h"
 #include "CharacterScene.h"
 #include "TargetingScene.h"
+#include "PauseScene.h"
 #include "SceneTypes.h"
 
 
@@ -41,6 +42,7 @@ public:
 	InventoryScene *m_inventoryScene;
 	CharacterScene *m_characterScene;
 	TargetingScene *m_targetingScene;
+	PauseScene *m_pauseScene;
 
 private:
   EventManager* m_eventManager;
