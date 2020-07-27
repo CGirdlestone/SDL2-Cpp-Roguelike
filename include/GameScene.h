@@ -3,6 +3,8 @@
 
 #include <map>
 #include "SDL2/SDL.h"
+#include "EntityFactory.h"
+#include "LootManager.h"
 #include "Renderer.h"
 #include "KeyPressSurfaces.h"
 #include "EventManager.h"

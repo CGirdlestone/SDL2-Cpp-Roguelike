@@ -2,6 +2,8 @@
 #define GAME_H
 
 #include <map>
+#include "EntityFactory.h"
+#include "LootManager.h"
 #include "DungeonGenerator.h"
 #include "Console.h"
 #include "Renderer.h"
@@ -36,12 +38,14 @@ class Game
   protected:
 
   private:
+		EntityFactory* m_factory;
     DungeonGenerator* m_dungeon;
     Console* m_console;
     MessageLog* m_messageLog;
     Camera *m_camera;
     Renderer* m_renderer;
     EventManager* m_eventManager;
+		LootManager* m_lootManager;
     MoveSystem* m_moveSystem;
     CombatSystem* m_combatSystem;
     InventorySystem* m_inventorySystem;
@@ -60,6 +64,7 @@ class Game
 		CharacterScene *m_characterScene;
 		TargetingScene *m_targetingScene;
 		PauseScene *m_pauseScene;
+		
 };
 
 

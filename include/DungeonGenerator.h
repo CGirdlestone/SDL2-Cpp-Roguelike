@@ -9,7 +9,7 @@
 class DungeonGenerator
 {
   public:
-    DungeonGenerator(int width, int height);
+    DungeonGenerator(int width, int height, EntityFactory* factory);
     virtual ~DungeonGenerator();
 
     int Getm_width() { return m_width; }
@@ -52,9 +52,8 @@ class DungeonGenerator
   private:
     int m_width;
     int m_height;
-		int m_uid;
-		
 		EntityFactory* m_factory;
+		int m_uid;
 };
 
 #endif // DUNGEONGENERATOR_H

@@ -1,34 +1,35 @@
-obj/main.o: src/main.cpp include/Game.h include/DungeonGenerator.h \
+obj/main.o: src/main.cpp include/Game.h include/EntityFactory.h \
  include/GameObject.h include/Components.h include/DamageTypes.h \
  include/Slots.h include/UseableFunctionEnum.h include/StatusTypes.h \
- include/EntityFactory.h include/Console.h include/Tile.h \
- include/Renderer.h include/Message.h include/MessageLog.h \
- include/EventManager.h include/EventTypes.h include/Events.h \
- include/SceneTypes.h include/System.h include/Camera.h \
+ include/LootManager.h include/System.h include/Events.h \
+ include/EventTypes.h include/SceneTypes.h include/DungeonGenerator.h \
+ include/Console.h include/Tile.h include/Renderer.h include/Message.h \
+ include/MessageLog.h include/EventManager.h include/Camera.h \
  include/KeyPressSurfaces.h include/MoveSystem.h include/CombatSystem.h \
  include/InventorySystem.h include/PlayerSystem.h \
  include/GameStateManager.h include/Scene.h include/GameScene.h \
  include/StartScene.h include/InventoryScene.h include/CharacterScene.h \
  include/TargetingScene.h include/PauseScene.h
 include/Game.h:
-include/DungeonGenerator.h:
+include/EntityFactory.h:
 include/GameObject.h:
 include/Components.h:
 include/DamageTypes.h:
 include/Slots.h:
 include/UseableFunctionEnum.h:
 include/StatusTypes.h:
-include/EntityFactory.h:
+include/LootManager.h:
+include/System.h:
+include/Events.h:
+include/EventTypes.h:
+include/SceneTypes.h:
+include/DungeonGenerator.h:
 include/Console.h:
 include/Tile.h:
 include/Renderer.h:
 include/Message.h:
 include/MessageLog.h:
 include/EventManager.h:
-include/EventTypes.h:
-include/Events.h:
-include/SceneTypes.h:
-include/System.h:
 include/Camera.h:
 include/KeyPressSurfaces.h:
 include/MoveSystem.h:

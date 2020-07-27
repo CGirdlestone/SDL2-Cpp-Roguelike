@@ -14,13 +14,10 @@
 #include "Slots.h"
 #include "EntityFactory.h"
 
-DungeonGenerator::DungeonGenerator(int width, int height)
+DungeonGenerator::DungeonGenerator(int width, int height, EntityFactory* factory):
+m_width(width), m_height(height), m_factory(factory), m_uid(0)
 {
-  m_width = width;
-  m_height = height;
   recomputeFOV = false;
-	m_uid = 0;
-	m_factory = new EntityFactory();
 	m_factory->loadData("./resources/player.txt");
 	m_factory->loadData("./resources/items.txt");
 	m_factory->loadData("./resources/mobs.txt");

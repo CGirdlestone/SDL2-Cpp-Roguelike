@@ -5,6 +5,8 @@
 #include <string>
 #include <fstream>
 
+#include "EntityFactory.h"
+#include "LootManager.h"
 #include "DungeonGenerator.h"
 #include "Console.h"
 #include "KeyPressSurfaces.h"
@@ -32,7 +34,8 @@
 
 Game::Game()
 {
-  //ctor
+  m_factory = nullptr;
+	m_lootManager = nullptr;
   m_console = nullptr;
   m_dungeon = nullptr;
   m_messageLog = nullptr;
@@ -50,12 +53,16 @@ Game::Game()
 	m_targetingScene = nullptr;
 	m_pauseScene = nullptr;
   m_sceneManager = nullptr;
-
 }
 
 Game::~Game()
 {
-  //dtor
+  delete m_factory;
+	m_factory = nullptr;
+
+	delete m_lootManager;
+	m_lootManager = nullptr;
+
   delete m_console;
   m_console = nullptr;
 
@@ -129,12 +136,16 @@ void Game::createConsole(int width, int height, const char* title, int tilesize)
 
 bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize, const char* title)
 {
-  m_dungeon = new DungeonGenerator(mapWidth, mapHeight);
+
+	m_factory = new EntityFactory();
+  m_dungeon = new DungeonGenerator(mapWidth, mapHeight, m_factory);
   m_camera = new Camera(width, height, mapWidth, mapHeight);
 	createConsole(width, height, title, tileSize);
 
   m_eventManager = new EventManager();
   m_messageLog = new MessageLog(width, 8, m_eventManager, &m_actors);
+	m_lootManager = new LootManager(m_eventManager, m_dungeon, &m_actors, m_factory);
+	m_lootManager->loadLootTables("./resources/loot_table.txt");
   m_combatSystem = new CombatSystem(m_eventManager, &m_actors);
   m_inventorySystem = new InventorySystem(m_eventManager, &m_actors);
   m_moveSystem = new MoveSystem(m_eventManager, &m_actors, m_dungeon);
