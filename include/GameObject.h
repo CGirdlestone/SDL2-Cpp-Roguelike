@@ -2,14 +2,36 @@
 #define GAMEOBJECT_H
 
 #include <string>
+#include <vector>
 
-#include "Components.h"
+struct Position;
+struct Renderable;
+struct Fighter;
+struct Actor;
+struct Player;
+struct AI;
+struct Item;
+struct Inventory;
+struct Weapon;
+struct Armour;
+struct Wearable;
+struct Body;
+struct Useable;
+struct Healing;
+struct Damage;
+struct AreaDamage;
+struct Status;
+struct Consumable;
+struct Stairs;
 
 class GameObject
 {
 public:
 	GameObject();
   ~GameObject();
+
+	void serialise(std::vector<uint8_t> &byteVector);
+	int deserialise(char* buffer, int i);
 
   std::string m_name;
 	int m_uid;

@@ -29,6 +29,14 @@ public:
 	bool checkDescend();
 	void nextLevel();
 	void finishPlayerTurn(){m_playerTurn = false; };
+	void serialiseGameState(std::vector<uint8_t> &byteVector);
+	void addSaveFileDelimiter(std::vector<uint8_t> &byteVector);
+	int parseGameObjects(int i, char* buffer, int length);
+	int parseMap(int i, char* buffer, int length);
+	int parseExploredMap(int i, char* buffer, int length);
+	bool checkIfSaveFileDelimiter(int i, char* buffer, int length);
+	void saveGame();
+	void loadGame();
 
 private:
   EventManager *m_eventManager;

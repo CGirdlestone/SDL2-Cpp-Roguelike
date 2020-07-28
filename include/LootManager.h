@@ -6,6 +6,7 @@
 #include "System.h"
 #include "DungeonGenerator.h"
 #include "Events.h"
+#include "Components.h"
 #include "GameObject.h"
 #include "EntityFactory.h"
 

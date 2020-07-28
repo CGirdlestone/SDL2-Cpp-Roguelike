@@ -123,3 +123,18 @@ GameObject::~GameObject()
 		stairs = nullptr;
 	}
 }
+
+void GameObject::serialise(std::vector<uint8_t> &byteVector)
+{
+
+}
+
+int GameObject::deserialise(char* buffer, int i)
+{
+
+
+	return i;
+}
+
+
+

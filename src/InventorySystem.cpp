@@ -111,7 +111,7 @@ void InventorySystem::useItem(UseItemEvent event)
 				decreaseUses(item, event.m_user_uid, event.m_item_uid);
 				m_eventManager->pushEvent(PlayerTurnOverEvent());
 			} 
-		} else if (item->useable->funcToDo == DIRECTDAMAGE){
+		} else if (item->useable->funcToDo == DIRECTDAMAGE || item->useable->funcToDo == AOE || item->useable->funcToDo == STATUS){
 			if (event.m_target_uid == -1){
 				m_eventManager->pushEvent(PopScene(1));
 				m_eventManager->pushEvent(PassUserInfoEvent(event.m_user_uid, event.m_item_uid));
@@ -119,21 +119,15 @@ void InventorySystem::useItem(UseItemEvent event)
 				m_eventManager->pushEvent(MessageEvent("Select a target..."));
 			} else {
 				// this branch indicates that a target has been selected and executes the relevant function.
-				m_eventManager->pushEvent(DamageEvent(event.m_target_uid, m_entities->at(event.m_item_uid)->damage->roll));
+				if (item->useable->funcToDo == DIRECTDAMAGE){
+					m_eventManager->pushEvent(DamageEvent(event.m_target_uid, m_entities->at(event.m_item_uid)->damage->roll));
+				} else if (item->useable->funcToDo == AOE){
+					
+				} else if (item->useable->funcToDo == STATUS){
+
+				}
 				decreaseUses(item, event.m_user_uid, event.m_item_uid);
 				m_eventManager->pushEvent(PlayerTurnOverEvent());
-			}
-		} else if (item->useable->funcToDo == AOE){
-			if (event.m_target_uid == -1){
-			
-			} else {
-
-			}
-		} else if (item->useable->funcToDo == STATUS){
-			if (event.m_target_uid == -1){
-
-			} else {
-
 			}
 		}
 	}

@@ -3,6 +3,7 @@
 
 #include "System.h"
 #include "Events.h"
+#include "Components.h"
 #include "GameObject.h"
 #include "DungeonGenerator.h"
 

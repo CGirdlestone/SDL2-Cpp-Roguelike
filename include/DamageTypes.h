@@ -4,6 +4,7 @@
 
 enum DamageTypes
 {
+	NODAMAGETYPE,
   SLASHING,
   PIERCING,
   BLUDGEONING,

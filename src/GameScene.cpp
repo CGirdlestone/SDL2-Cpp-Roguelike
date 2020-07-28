@@ -1,5 +1,7 @@
 #include <iostream>
 #include <map>
+#include <fstream>
+#include "GameObject.h"
 #include "StartScene.h"
 #include "SDL2/SDL.h"
 #include "Renderer.h"
@@ -39,6 +41,184 @@ void GameScene::nextLevel()
 	m_dungeon->descendDungeon(m_entities);
 	m_dungeon->shadowCast(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
 	m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
+}
+
+bool GameScene::checkIfSaveFileDelimiter(int i, char* buffer, int length)
+{
+	int numBytes = 4;
+
+	if (i <= length - 4 * numBytes * 8){
+		int count = 0;
+		for (int k = 3; k >= 0; --k){
+			int total = 0;
+			for (int j = numBytes - 1; j >= 0; --j){
+				total = (total << 8) + buffer[i + j + k * numBytes * 8];
+			}
+			if (total == 0){ ++count; }
+		}
+		if (count == 4){
+			// When 4 null bytes are encountered, this indicates that we've reached the end of the GameObjects so we break out of this loop and return i
+			return true;
+		}
+	}
+	return false;
+}
+
+int GameScene::parseGameObjects(int i, char* buffer, int length)
+{
+	int numBytes = 4;
+
+	while(true){
+		GameObject* g = new GameObject();
+
+		i = g->deserialise(buffer, i);
+
+		m_entities->insert({g->m_uid, g});
+
+		if (checkIfSaveFileDelimiter(i, buffer, length)){ 
+			i += 4 * numBytes * 8;
+			break;
+		}
+
+	}
+	return i;
+}
+
+int GameScene::parseMap(int i, char* buffer, int length)
+{
+	int numBytes = 4;
+	char* level = new char[m_dungeon->Getm_width() * m_dungeon->Getm_height()];
+	
+	int j = 0;
+	int letter;
+
+	while(true){
+		letter = 0;		
+
+		for (int k = numBytes - 1; k >= 0; --k){
+			letter = (letter << 8) + buffer[i + k];
+		}
+		i += numBytes * 8;
+		level[j] = static_cast<char>(letter);
+
+		if (checkIfSaveFileDelimiter(i, buffer, length)){ 
+			i += 4 * numBytes * 8;
+			break;
+		}
+		++j;
+	}
+	
+	for (int j = 0; j < m_dungeon->Getm_width() * m_dungeon->Getm_height(); ++j){
+		m_dungeon->m_level[j] = level[j];
+	}
+
+	delete[] level;
+
+	return i;
+}
+
+int GameScene::parseExploredMap(int i, char* buffer, int length)
+{
+	int numBytes = 4;
+	char* exploredLevel = new char[m_dungeon->Getm_width() * m_dungeon->Getm_height()];
+	
+	int j = 0;
+	int flag;
+
+	while(true){
+		flag = 0;		
+
+		for (int k = numBytes - 1; k >= 0; --k){
+			flag = (flag << 8) + buffer[i + k];
+		}
+		i += numBytes * 8;
+		exploredLevel[j] = flag;
+
+		if (checkIfSaveFileDelimiter(i, buffer, length)){ 
+			i += 4 * numBytes * 8;
+			break;
+		}
+		++j;
+	}
+	
+	for (int j = 0; j < m_dungeon->Getm_width() * m_dungeon->Getm_height(); ++j){
+		m_dungeon->m_exploredMap[j] = exploredLevel[j];
+	}
+
+	delete[] exploredLevel;
+
+	return i;
+}
+
+void GameScene::addSaveFileDelimiter(std::vector<uint8_t> &byteVector)
+{
+	int end = 0;
+	
+	for (int i = 0; i < 4; ++i){
+		serialiseInt(byteVector, end);
+	}
+}
+
+void GameScene::serialiseGameState(std::vector<uint8_t> &byteVector)
+{
+	std::map<int, GameObject*>::iterator it;
+
+	for (it = m_entities->begin(); it != m_entities->end(); ++it){
+		it->second->serialise(byteVector);
+	}
+	
+	addSaveFileDelimiter(byteVector);
+
+	for (int i = 0; i < m_dungeon->Getm_width() * m_dungeon->Getm_height(); ++i){
+		serialiseInt(byteVector, static_cast<int>(m_dungeon->m_level[i]));
+	}
+
+	addSaveFileDelimiter(byteVector);
+
+	for (int i = 0; i < m_dungeon->Getm_width() * m_dungeon->Getm_height(); ++i){
+		serialiseInt(byteVector, static_cast<int>(m_dungeon->m_exploredMap[i]));
+	}
+
+	addSaveFileDelimiter(byteVector);
+}
+
+void GameScene::saveGame()
+{
+	std::vector<uint8_t> byteVector;
+
+	serialiseGameState(byteVector);
+
+	std::ofstream file("save.txt");
+
+	for (int i = 0; i < static_cast<int>(byteVector.size()); ++i){
+		file.write(reinterpret_cast<char*>(&byteVector.at(i)), sizeof(reinterpret_cast<char*>(&byteVector.at(i))));
+	}
+
+	file.close();
+}
+
+void GameScene::loadGame()
+{
+	std::ifstream file("save.txt");
+
+	file.seekg(0, file.end);
+	int length = file.tellg();
+	file.seekg(0, file.beg);
+
+	char* buffer = new char[length];
+
+	file.read(buffer, length);
+
+	file.close();
+	
+	int byteIndex = 0;
+	try {
+		byteIndex = parseGameObjects(byteIndex, buffer, length);
+		byteIndex = parseMap(byteIndex, buffer, length);
+		byteIndex = parseExploredMap(byteIndex, buffer, length);
+	} catch (...) {
+		
+	}	
 }
 
 void GameScene::processEntities()

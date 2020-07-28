@@ -43,30 +43,33 @@ enum KeyPressSurfaces TargetingScene::getEvent(SDL_Event *e)
 				case SDLK_RIGHT:
 				return EAST;
 
+				case SDLK_KP_1:
+				return SOUTHWEST;
+
         case SDLK_KP_2:
         return SOUTH;
+
+				case SDLK_KP_3:
+				return SOUTHEAST;
+
+				case SDLK_KP_4:
+				return WEST;
+
+				case SDLK_KP_6:
+				return EAST;
+
+				case SDLK_KP_7:
+				return NORTHWEST;
 
 				case SDLK_KP_8:
 				return NORTH;
 
-        case SDLK_i:
-        return ESCAPE;
-
-				case SDLK_e:
-				return WEAR;
-
-				case SDLK_d:
-				return DROPITEM;
+				case SDLK_KP_9:
+				return NORTHEAST;
 
 				case SDLK_ESCAPE:
 				return ESCAPE;
 		  
-				case SDLK_c:
-				return SHOWCHARSCREEN;
-
-				case SDLK_q:
-				return USE;
-
 				case SDLK_RETURN:
 				return USE;
       }
@@ -89,6 +92,18 @@ void TargetingScene::handleInput(KeyPressSurfaces keyPress)
 		m_x -= 1;
 	} else if (keyPress == EAST){
 		m_x += 1;
+	} else if (keyPress == SOUTHEAST){
+		m_y += 1;
+		m_x += 1;
+	} else if (keyPress == SOUTHWEST){
+		m_y += 1;
+		m_x -= 1;
+	} else if (keyPress == NORTHWEST){
+		m_y -= 1;
+		m_x -= 1;
+	} else if (keyPress == NORTHEAST){
+		m_y -= 1;
+		m_x +=1 ;
 	} else if (keyPress == USE){
 		targetUID = getTargetUID();
 		if (targetUID != -1){

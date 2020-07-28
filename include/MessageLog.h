@@ -9,6 +9,7 @@
 #include "Message.h"
 #include "EventManager.h"
 #include "System.h"
+#include "Components.h"
 #include "GameObject.h"
 
 class MessageLog : System

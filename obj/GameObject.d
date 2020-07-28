@@ -1,9 +1,2 @@
-obj/GameObject.o: src/GameObject.cpp include/GameObject.h \
- include/Components.h include/DamageTypes.h include/Slots.h \
- include/UseableFunctionEnum.h include/StatusTypes.h
+obj/GameObject.o: src/GameObject.cpp include/GameObject.h
 include/GameObject.h:
-include/Components.h:
-include/DamageTypes.h:
-include/Slots.h:
-include/UseableFunctionEnum.h:
-include/StatusTypes.h:

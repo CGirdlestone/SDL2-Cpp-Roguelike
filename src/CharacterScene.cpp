@@ -9,6 +9,7 @@
 #include "Events.h"
 #include "EventTypes.h"
 #include "SceneTypes.h"
+#include "Components.h"
 #include "CharacterScene.h"
 #include "Slots.h"
 
