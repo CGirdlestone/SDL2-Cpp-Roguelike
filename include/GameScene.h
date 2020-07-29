@@ -34,6 +34,8 @@ public:
 	int parseGameObjects(int i, char* buffer, int length);
 	int parseMap(int i, char* buffer, int length);
 	int parseExploredMap(int i, char* buffer, int length);
+	int parseDungeonDepth(int i, char* buffer, int length);
+	void mapUIDsToGameObjects();
 	bool checkIfSaveFileDelimiter(int i, char* buffer, int length);
 	void saveGame();
 	void loadGame();

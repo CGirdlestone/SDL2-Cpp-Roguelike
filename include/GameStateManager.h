@@ -30,6 +30,7 @@ public:
   void notify(PassUserInfoEvent event);
 	void notify(DeadEvent event);
 	void notify(PlayerTurnOverEvent event);
+	void notify(LoadEvent event);
   void pushScene(SceneTypes scene);
   void popScene(int i);
   void render();

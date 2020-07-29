@@ -163,4 +163,10 @@ struct PlayerTurnOverEvent : Event
 	~PlayerTurnOverEvent();
 };
 
+struct LoadEvent : Event
+{
+	LoadEvent();
+	~LoadEvent();
+};
+
 #endif

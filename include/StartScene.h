@@ -22,6 +22,8 @@ private:
   EventManager *m_eventManager;
   Renderer *m_renderer;
   int m_i;
+	int m_options;
+	bool hasSaveFile;
 };
 
 #endif

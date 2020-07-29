@@ -33,6 +33,7 @@ public:
 	void pushEvent(PassUserInfoEvent event);
 	void pushEvent(MessageEvent event);
 	void pushEvent(PlayerTurnOverEvent event);
+	void pushEvent(LoadEvent event);
 
 private:
   std::map<EventTypes, std::vector<System*>> m_subscribers;

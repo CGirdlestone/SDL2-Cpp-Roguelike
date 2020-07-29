@@ -216,3 +216,13 @@ PlayerTurnOverEvent::~PlayerTurnOverEvent()
 {
 
 }
+
+LoadEvent::LoadEvent()
+{
+	m_type = LOADGAME;
+}
+
+LoadEvent::~LoadEvent()
+{
+
+}

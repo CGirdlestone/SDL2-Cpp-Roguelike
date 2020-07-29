@@ -46,14 +46,13 @@ class DungeonGenerator
     int *m_fovMap;
     int *m_exploredMap;
     bool recomputeFOV;
-
+		int m_uid;
   protected:
 
   private:
     int m_width;
     int m_height;
 		EntityFactory* m_factory;
-		int m_uid;
 };
 
 #endif // DUNGEONGENERATOR_H

@@ -23,7 +23,7 @@ public:
   void drawMenuOutline();
   void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog);
 	void drawPlayerInfo(GameObject* player);
-  void drawStartMenu(int i);
+  void drawStartMenu(int i, int options);
 	void drawInventory(std::map<int, GameObject*> *actors, int i);
 	void drawEquippedItem(std::string slot, std::string item, int y, int index);
 	void drawEquippedItem(std::string slot, int y, int index);

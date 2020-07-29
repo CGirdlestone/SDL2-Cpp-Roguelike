@@ -23,6 +23,7 @@ enum EventTypes
 		PASSUSERINFO,
 		MESSAGE,
 		PLAYERTURNOVER,
+		LOADGAME,
 };
 
 extern EventTypes EventType;

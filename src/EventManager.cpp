@@ -169,3 +169,11 @@ void EventManager::pushEvent(PlayerTurnOverEvent event)
 		m_subscribers.at(event.m_type).at(i)->notify(event);
 	}
 }
+
+void EventManager::pushEvent(LoadEvent event)
+{
+	for (int i = 0; i < static_cast<int>(m_subscribers.at(event.m_type).size()); ++i)
+	{
+		m_subscribers.at(event.m_type).at(i)->notify(event);
+	}
+}

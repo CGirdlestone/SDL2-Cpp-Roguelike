@@ -28,6 +28,7 @@ public:
 	virtual void notify(PassUserInfoEvent event) {};
 	virtual void notify(MessageEvent event) {};
 	virtual void notify(PlayerTurnOverEvent event) {};
+	virtual void notify(LoadEvent event) {};
 };
 
 #endif

@@ -253,33 +253,51 @@ void Renderer::drawPlayerInfo(GameObject* player)
 	yPosition += 2;
 }
 
-void Renderer::drawStartMenu(int i)
+void Renderer::drawStartMenu(int i, int options)
 {
   int width = m_console->Getm_width() + m_console->getXBuffer();
   int height = m_console->Getm_height() + m_console->getYBuffer();
   std::string name = "ROGUELIKE";
   std::string startText = "START GAME";
   std::string exitText = "EXIT GAME";
+	std::string continueText = "CONTINUE";
+
+	int yPosition = height/2 - 4;
 
   m_console->flush();
 
   for (int j = 0; j < static_cast<int>(name.length()); ++j){
-    m_console->render(&name[j], width/2 + j - 5, height/2-4, m_defaultColour);
+    m_console->render(&name[j], width/2 + j - 5, yPosition, m_defaultColour);
   }
+	
+	yPosition += 2;
+
+	if (options == 3){
+  	for (int j = 0; j < static_cast<int>(continueText.length()); ++j){
+    	if (i == 0){
+      	m_console->render(&continueText[j], width/2 + j - 5, yPosition, m_inViewColour);
+    	} else {
+      	m_console->render(&continueText[j], width/2 + j - 5, yPosition, m_defaultColour);
+    	}
+  	}
+		yPosition += 2;
+	}
+	
 
   for (int j = 0; j < static_cast<int>(startText.length()); ++j){
-    if (i == 0){
-      m_console->render(&startText[j], width/2 + j - 5, height/2, m_inViewColour);
+    if ((options == 3 && i == 1) || (options == 2 && i == 0)){
+      m_console->render(&startText[j], width/2 + j - 5, yPosition, m_inViewColour);
     } else {
-      m_console->render(&startText[j], width/2 + j - 5, height/2, m_defaultColour);
+      m_console->render(&startText[j], width/2 + j - 5, yPosition, m_defaultColour);
     }
   }
+	yPosition += 2;
 
   for (int j = 0; j < static_cast<int>(exitText.length()); ++j){
-    if (i == 1){
-      m_console->render(&exitText[j], width/2 + j - 5, height/2+4, m_inViewColour);
+    if ((options == 3 && i == 2) || (options == 2 && i == 1)){
+      m_console->render(&exitText[j], width/2 + j - 5, yPosition, m_inViewColour);
     } else {
-      m_console->render(&exitText[j], width/2 + j - 5, height/2+4, m_defaultColour);
+      m_console->render(&exitText[j], width/2 + j - 5, yPosition, m_defaultColour);
     }
   }
 

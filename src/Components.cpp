@@ -14,12 +14,12 @@ void serialiseInt(std::vector<uint8_t> &byteVector, int x)
 
 void serialiseString(std::vector<uint8_t> &byteVector, std::string stringToSerialise)
 {
-	int stringLength = stringToSerialise.length();
+	int size = stringToSerialise.length();
 	int letterCode;
 
-	serialiseInt(byteVector, stringLength);
+	serialiseInt(byteVector, size);
 	
-	for (int i = 0; i < stringLength; ++i){
+	for (int i = 0; i < size; ++i){
 		letterCode = static_cast<int>(stringToSerialise[i]);
 		serialiseInt(byteVector, letterCode);
 	}
@@ -372,7 +372,7 @@ Inventory::~Inventory()
 {
 
 }
-
+#include <iostream>
 void Inventory::serialise(std::vector<uint8_t> &byteVector)
 {
 	int inventorySize = static_cast<int>(inventory.size());
@@ -386,7 +386,32 @@ void Inventory::serialise(std::vector<uint8_t> &byteVector)
 
 int Inventory::deserialise(char* buffer, int i)
 {
+	int numBytes = 4;
+	int _capacity = 0;
+	int _inventorySize = 0;
 
+	for (int j = numBytes - 1; j >= 0; --j){
+		_capacity = (_capacity << 8) + buffer[i + j];
+	}
+	i += numBytes * 8;
+	capacity = _capacity;
+
+	std::cout << _capacity << std::endl;
+	
+	for (int j = numBytes - 1; j >= 0; --j){
+		_inventorySize = (_inventorySize << 8) + buffer[i + j];
+	}
+	i += numBytes * 8;
+	
+	int uid = 0;
+	for (int k = 0; k < _inventorySize; ++k){
+		uid = 0;
+		for (int j = numBytes - 1; j >= 0; --j){
+			uid = (uid << 8) + buffer[i + j];
+		}
+		i += numBytes * 8;
+		inventoryMirror.push_back(uid);
+	}
 	return i;
 }
 
@@ -779,6 +804,11 @@ int Damage::deserialise(char* buffer, int i)
 
 AreaDamage::AreaDamage(int _radius, int _roll, int _splashRadius, DamageTypes _type, int _chance):
 radius(_radius), roll(_roll), splashRadius(_splashRadius), type(_type), chance(_chance)
+{
+
+}
+
+AreaDamage::AreaDamage()
 {
 
 }

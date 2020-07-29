@@ -41,6 +41,7 @@ void GameScene::nextLevel()
 	m_dungeon->descendDungeon(m_entities);
 	m_dungeon->shadowCast(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
 	m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
+	saveGame();
 }
 
 bool GameScene::checkIfSaveFileDelimiter(int i, char* buffer, int length)
@@ -57,7 +58,7 @@ bool GameScene::checkIfSaveFileDelimiter(int i, char* buffer, int length)
 			if (total == 0){ ++count; }
 		}
 		if (count == 4){
-			// When 4 null bytes are encountered, this indicates that we've reached the end of the GameObjects so we break out of this loop and return i
+			// When 4 null bytes are encountered, this indicates that we've reached the end of a block of data (GameObjects, map etc) so we break out of this loop and return i
 			return true;
 		}
 	}
@@ -72,7 +73,7 @@ int GameScene::parseGameObjects(int i, char* buffer, int length)
 		GameObject* g = new GameObject();
 
 		i = g->deserialise(buffer, i);
-
+		
 		m_entities->insert({g->m_uid, g});
 
 		if (checkIfSaveFileDelimiter(i, buffer, length)){ 
@@ -100,16 +101,16 @@ int GameScene::parseMap(int i, char* buffer, int length)
 		}
 		i += numBytes * 8;
 		level[j] = static_cast<char>(letter);
+		++j;
 
 		if (checkIfSaveFileDelimiter(i, buffer, length)){ 
 			i += 4 * numBytes * 8;
 			break;
 		}
-		++j;
 	}
 	
-	for (int j = 0; j < m_dungeon->Getm_width() * m_dungeon->Getm_height(); ++j){
-		m_dungeon->m_level[j] = level[j];
+	for (int l = 0; l < m_dungeon->Getm_width() * m_dungeon->Getm_height(); ++l){
+		m_dungeon->m_level[l] = level[l];
 	}
 
 	delete[] level;
@@ -134,8 +135,7 @@ int GameScene::parseExploredMap(int i, char* buffer, int length)
 		i += numBytes * 8;
 		exploredLevel[j] = flag;
 
-		if (checkIfSaveFileDelimiter(i, buffer, length)){ 
-			i += 4 * numBytes * 8;
+		if (i == length){
 			break;
 		}
 		++j;
@@ -146,6 +146,24 @@ int GameScene::parseExploredMap(int i, char* buffer, int length)
 	}
 
 	delete[] exploredLevel;
+
+	return i;
+}
+
+int GameScene::parseDungeonDepth(int i, char* buffer, int length)
+{
+	int numBytes = 4;
+	int depth = 0;
+
+	for (int j = numBytes - 1; j >= 0; --j){
+		depth = (depth << 8) + buffer[i + j];
+	}
+	m_dungeon->m_uid = depth;
+	i += numBytes * 8;
+
+	if (checkIfSaveFileDelimiter(i, buffer, length)){ 
+		i += 4 * numBytes * 8;
+	}
 
 	return i;
 }
@@ -169,6 +187,10 @@ void GameScene::serialiseGameState(std::vector<uint8_t> &byteVector)
 	
 	addSaveFileDelimiter(byteVector);
 
+	serialiseInt(byteVector, m_dungeon->m_uid);
+
+	addSaveFileDelimiter(byteVector);
+
 	for (int i = 0; i < m_dungeon->Getm_width() * m_dungeon->Getm_height(); ++i){
 		serialiseInt(byteVector, static_cast<int>(m_dungeon->m_level[i]));
 	}
@@ -178,8 +200,6 @@ void GameScene::serialiseGameState(std::vector<uint8_t> &byteVector)
 	for (int i = 0; i < m_dungeon->Getm_width() * m_dungeon->Getm_height(); ++i){
 		serialiseInt(byteVector, static_cast<int>(m_dungeon->m_exploredMap[i]));
 	}
-
-	addSaveFileDelimiter(byteVector);
 }
 
 void GameScene::saveGame()
@@ -195,6 +215,22 @@ void GameScene::saveGame()
 	}
 
 	file.close();
+}
+
+void GameScene::mapUIDsToGameObjects()
+{
+	int item_uid;
+	for (int i = 0; i < static_cast<int>(m_entities->at(0)->inventory->inventoryMirror.size()); ++i){
+		item_uid = m_entities->at(0)->inventory->inventoryMirror.at(i);
+		m_entities->at(0)->inventory->inventory.push_back(m_entities->at(item_uid));
+	}
+
+	std::map<int, int>::iterator it;
+	for (it = m_entities->at(0)->body->slotsMirror.begin(); it != m_entities->at(0)->body->slotsMirror.end(); ++it){
+		if (it->second == 0) { continue; }
+
+		m_entities->at(0)->body->slots[static_cast<EquipSlots>(it->first)] = m_entities->at(it->second);
+	}
 }
 
 void GameScene::loadGame()
@@ -213,11 +249,16 @@ void GameScene::loadGame()
 	
 	int byteIndex = 0;
 	try {
+		m_dungeon->initialiseMap(60);
 		byteIndex = parseGameObjects(byteIndex, buffer, length);
+		byteIndex = parseDungeonDepth(byteIndex, buffer, length);
 		byteIndex = parseMap(byteIndex, buffer, length);
 		byteIndex = parseExploredMap(byteIndex, buffer, length);
+		mapUIDsToGameObjects();
+		m_dungeon->shadowCast(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
+		m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
 	} catch (...) {
-		
+		std::cout << "Something went wrong..." << std::endl;	
 	}	
 }
 

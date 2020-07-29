@@ -21,6 +21,7 @@ m_eventManager(eventManager), m_entities(entities)
 	m_eventManager->registerSystem(PASSUSERINFO, this);
 	m_eventManager->registerSystem(DEAD, this);
 	m_eventManager->registerSystem(PLAYERTURNOVER, this);
+	m_eventManager->registerSystem(LOADGAME, this);
 
   m_startScene = nullptr;
   m_gameScene = nullptr;
@@ -94,6 +95,12 @@ void GameStateManager::notify(PassUserInfoEvent event)
 void GameStateManager::notify(PlayerTurnOverEvent event)
 {
 	m_gameScene->finishPlayerTurn();
+}
+
+void GameStateManager::notify(LoadEvent event)
+{
+	m_sceneStack.push_back(m_gameScene);
+	m_gameScene->loadGame();
 }
 
 void GameStateManager::processInput(SDL_Event *e)
