@@ -396,8 +396,6 @@ int Inventory::deserialise(char* buffer, int i)
 	i += numBytes * 8;
 	capacity = _capacity;
 
-	std::cout << _capacity << std::endl;
-	
 	for (int j = numBytes - 1; j >= 0; --j){
 		_inventorySize = (_inventorySize << 8) + buffer[i + j];
 	}

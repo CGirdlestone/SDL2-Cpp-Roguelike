@@ -166,7 +166,8 @@ void aStar(char* world, vector<int> *path, int width, int height, int x1, int y1
 {
   int g, h;
   int i, x, y;
-  bool addChild = true;
+  bool addChild;
+	bool inClosedList;
   const int SIDE_STEP = 10;
   const int DIAGONAL_STEP = 14;
   Node *currentNode = nullptr;
@@ -176,6 +177,8 @@ void aStar(char* world, vector<int> *path, int width, int height, int x1, int y1
   vector<Node*> closedList;
   vector<int> neighbours;
 
+	std::string tmp;
+
   h = calculate_h(x1, y1, xf, yf);
 
   Node* start = new Node(x1, y1, 0, h, h, nullptr);
@@ -183,12 +186,12 @@ void aStar(char* world, vector<int> *path, int width, int height, int x1, int y1
   openList.push_back(start);
 
   while (!openList.empty()){
-    addChild = true;
 
     sort(openList.begin(), openList.end(), compareNodes);
     currentNode = openList.back();
     openList.pop_back();
-
+		std::cout << "current x: " << currentNode->_x << " current y: " << currentNode->_y << std::endl;
+		std::cout << "Open list size: " << openList.size() << std::endl;
     closedList.push_back(currentNode);
     if (currentNode->equals(xf, yf)){
       while(currentNode->_parent != nullptr){
@@ -201,6 +204,8 @@ void aStar(char* world, vector<int> *path, int width, int height, int x1, int y1
     getNeighbours(&neighbours, width, height, currentNode->_x, currentNode->_y);
 
     while(neighbours.size() > 0){
+    	addChild = false;
+			inClosedList = false;
       i = neighbours.back();
       neighbours.pop_back();
 
@@ -222,23 +227,23 @@ void aStar(char* world, vector<int> *path, int width, int height, int x1, int y1
       h = calculate_h(x, y, xf, yf);
 
       child = new Node(x, y, g, h, g+h, currentNode);
+			
+      for(int i = 0; i < static_cast<int>(closedList.size()); ++i){
+				if (closedList.at(i)->equals(child)){
+					inClosedList = true;
+					if (child->_g < closedList.at(i)->_g){
+						addChild = true;
+						break;
+					}
+				}
+			}
 
-      for(int i = 0; i < closedList.size(); ++i){
-        if (closedList.at(i)->equals(child)){
-          for(int i = 0; i < openList.size(); ++i){
-            if (openList.at(i)->equals(child) && child->_g > openList.at(i)->_g){
-              addChild = false;
-            }
-          }
-        }
-      }
-
-      if(addChild){
-        openList.push_back(child);
-      } else {
-        delete child;
-        child = nullptr;
-      }
+			if (addChild || !inClosedList){
+				openList.push_back(child);
+			} else {
+				delete child;
+				child = nullptr;
+			}
     }
   }
 

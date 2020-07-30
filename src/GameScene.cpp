@@ -58,7 +58,8 @@ bool GameScene::checkIfSaveFileDelimiter(int i, char* buffer, int length)
 			if (total == 0){ ++count; }
 		}
 		if (count == 4){
-			// When 4 null bytes are encountered, this indicates that we've reached the end of a block of data (GameObjects, map etc) so we break out of this loop and return i
+			/* When 4 null bytes are encountered, this indicates that we've reached the end of a block of data (GameObjects, map etc) 
+			 * so we break out of this loop and return i */
 			return true;
 		}
 	}

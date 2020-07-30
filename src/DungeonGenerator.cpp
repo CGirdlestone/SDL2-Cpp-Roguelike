@@ -573,7 +573,7 @@ void DungeonGenerator::castOctant(int x, int y, int radius, float bottomSlope, f
         if (a*a + b*b <= radius*radius){
           m_fovMap[(y+b)*m_width+x+a] = 1;
           m_exploredMap[(y+b)*m_width+x+a] = 1;
-        }
+				}
       }
     }
   }
