@@ -7,16 +7,18 @@
 
 #include "SDL2/SDL.h"
 
+#include "EntityFactory.h"
 #include "DungeonGenerator.h"
 #include "Components.h"
 #include "GameObject.h"
 #include "DamageTypes.h"
 #include "Slots.h"
-#include "EntityFactory.h"
+#include "Pathfind.h"
 
 DungeonGenerator::DungeonGenerator(int width, int height, EntityFactory* factory):
-m_width(width), m_height(height), m_factory(factory), m_uid(0)
+m_width(width), m_height(height), m_factory(factory)
 {
+	m_uid = 0;
   recomputeFOV = false;
 	m_factory->loadData("./resources/player.txt");
 	m_factory->loadData("./resources/items.txt");
@@ -467,8 +469,6 @@ void DungeonGenerator::createMap(int threshold, int steps, int underPop, int ove
     }
 
     removeLoneWalls(3);
-    removeLoneWalls(0);
-    removeLoneWalls(2);
 
     fillBorder();
     hollowSolidChunks();
@@ -589,9 +589,10 @@ void DungeonGenerator::shadowCast(int x, int y, int radius)
 void DungeonGenerator::doRecomputeFOV(int x, int y, int radius)
 {
   recomputeFOV = false;
-  for (int i = 0; i < m_width * m_height; i++){
-    m_fovMap[i] = 0;
-  }
+
+	for (int i = 0; i < m_width * m_height; ++i){
+		m_fovMap[i] = 0;
+	}
 
   shadowCast(x, y, radius);
 }

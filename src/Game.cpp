@@ -141,6 +141,7 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_dungeon = new DungeonGenerator(mapWidth, mapHeight, m_factory);
   m_camera = new Camera(width, height, mapWidth, mapHeight);
 	createConsole(width, height, title, tileSize);
+  m_renderer = new Renderer(m_console);
 
   m_eventManager = new EventManager();
   m_messageLog = new MessageLog(width, 8, m_eventManager, &m_actors);
@@ -150,7 +151,6 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_inventorySystem = new InventorySystem(m_eventManager, &m_actors);
   m_moveSystem = new MoveSystem(m_eventManager, &m_actors, m_dungeon);
 	m_playerSystem = new PlayerSystem(m_eventManager, &m_actors);
-  m_renderer = new Renderer(m_console);
 
   m_sceneManager = new GameStateManager(m_eventManager, &m_actors);
   m_startScene = new StartScene(m_eventManager, m_renderer);

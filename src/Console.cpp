@@ -148,11 +148,12 @@ void Console::fillBackgroundTile(int x, int y, SDL_Color colour, int alpha, int 
 
 void Console::createTiles()
 {
-    int textureSize = m_tileSize * m_tileSize;
+	int tileSetDim = 16;
+	int numAsciiChars = tileSetDim * tileSetDim;
 
-    for(int i = 0; i < textureSize; i++){
-        m_glyphs.push_back(Tile(i%m_tileSize, i/m_tileSize, m_tileSize));
-    }
+  for(int i = 0; i < numAsciiChars; i++){
+  	m_glyphs.push_back(Tile(i%tileSetDim, i/tileSetDim, m_tileSize));
+  }
 }
 
 void Console::render(char* c, int x, int y, SDL_Color colour){

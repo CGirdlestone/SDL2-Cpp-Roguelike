@@ -31,6 +31,7 @@ enum KeyPressSurfaces
 		SHOWCHARSCREEN,
 		USE,
 		EXITGAME,
+		SHOOT,
 };
 
 extern KeyPressSurfaces Key;

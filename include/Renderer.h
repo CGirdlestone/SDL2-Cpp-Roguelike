@@ -22,13 +22,13 @@ public:
   void drawUI();
   void drawMenuOutline();
   void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog);
-	void drawPlayerInfo(GameObject* player);
+	void drawPlayerInfo(GameObject* player, DungeonGenerator* dungeon);
   void drawStartMenu(int i, int options);
 	void drawInventory(std::map<int, GameObject*> *actors, int i);
 	void drawEquippedItem(std::string slot, std::string item, int y, int index);
 	void drawEquippedItem(std::string slot, int y, int index);
 	void drawCharacterScene(std::map<int, GameObject*> *actors, int index);
-	void drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog, int radius, std::vector<int> *path);
+	void drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog, int radius, std::vector<int> *path, int splashRadius, int _x, int _y);
 	bool checkInRange(int x, int y, int i, int j, int radius){ return (x-i)*(x-i) + (y-j)*(y-j) <= radius*radius;};
 	void drawMiniMap(DungeonGenerator* dungeon, std::map<int, GameObject*> *actors);
 	void drawPauseMenu(int i, Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog);

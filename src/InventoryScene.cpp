@@ -84,14 +84,12 @@ void InventoryScene::handleInput(KeyPressSurfaces keyPress)
 		EquipEvent equipEvent = EquipEvent(0, m_entities->at(0)->inventory->inventory.at(m_index)->m_uid);
 		m_eventManager->pushEvent(equipEvent);
 	} else if (keyPress == DROPITEM){
-		// TO DO
 		DropEvent dropEvent = DropEvent(0, m_entities->at(0)->inventory->inventory.at(m_index)->m_uid, x, y);
 		m_eventManager->pushEvent(DropEvent(dropEvent));
 	} else if (keyPress == SHOWCHARSCREEN){
 		m_eventManager->pushEvent(PopScene(1));
 		m_eventManager->pushEvent(PushScene(CHARACTER));
 	} else if (keyPress == USE){
-		//
 		m_eventManager->pushEvent(UseItemEvent(0, m_entities->at(0)->inventory->inventory.at(m_index)->m_uid));
 	}
 }

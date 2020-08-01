@@ -57,13 +57,12 @@ void StartScene::handleInput(KeyPressSurfaces keyPress)
   } else if (keyPress == MENUDOWN){
     m_i = m_i + 1 > m_options - 1 ? 0 : m_i + 1;
   } else if (keyPress == PRESS){
-		if (m_options == 2 && m_i == 1){
+		if ((m_options == 2 && m_i == 1) || (m_options == 3 && m_i == 2)){
     	m_eventManager->pushEvent(QuitEvent());
 		} else if ((m_options == 2 && m_i == 0) || (m_options == 3 && m_i == 1)){
     	PushScene transition = PushScene(GAMESCENE);
     	m_eventManager->pushEvent(transition);
 		} else if (m_options == 3 && m_i == 0){
-			// load game
 			m_eventManager->pushEvent(LoadEvent());
 		}
   }

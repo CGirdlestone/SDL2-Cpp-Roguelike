@@ -59,6 +59,9 @@ void GameStateManager::notify(PushScene event)
 		m_sceneStack.push_back(m_characterScene);
 		m_characterScene->resetIndex();
 	} else if (event.m_scene == TARGETING){
+		if (static_cast<int>(m_sceneStack.size()) == 1){
+			m_sceneStack.push_back(m_gameScene);
+		}
 		m_sceneStack.push_back(m_targetingScene);
 		m_targetingScene->resetIndex();
 	} else if (event.m_scene == PAUSEMENU){

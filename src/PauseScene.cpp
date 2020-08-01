@@ -35,6 +35,9 @@ enum KeyPressSurfaces PauseScene::getEvent(SDL_Event *e)
 
         case SDLK_RETURN:
         return PRESS;
+
+				case SDLK_ESCAPE:
+				return ESCAPE;
       }
     }
   }
@@ -44,16 +47,16 @@ enum KeyPressSurfaces PauseScene::getEvent(SDL_Event *e)
 void PauseScene::handleInput(KeyPressSurfaces keyPress)
 {
   if (keyPress == ESCAPE){
-  
+		m_eventManager->pushEvent(PopScene(1));
 	} else if (keyPress == MENUUP){
     m_i = m_i - 1 < 0 ? 1 : m_i - 1;
   } else if (keyPress == MENUDOWN){
     m_i = m_i + 1 > 1 ? 0 : m_i + 1;
   } else if (keyPress == PRESS and m_i == 0){
     m_eventManager->pushEvent(PopScene(1));
-  }else if (keyPress == PRESS and m_i == 1){
+  } else if (keyPress == PRESS and m_i == 1){
     m_eventManager->pushEvent(QuitEvent());
-  }
+	}
 }
 
 void PauseScene::render()

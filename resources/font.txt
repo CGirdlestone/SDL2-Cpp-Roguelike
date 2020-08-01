@@ -1,1 +1,5 @@
+Talryth_square_15x15.png
+Cheepicus_15x15.png
+Kren_13x13.png
+Bisasam_20x20_ascii.png
 Cheepicus_16x16.png

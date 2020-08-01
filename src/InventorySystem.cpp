@@ -102,7 +102,7 @@ void InventorySystem::decreaseUses(GameObject* item, int user_uid, int item_uid)
 void InventorySystem::useItem(UseItemEvent event)
 {
 	GameObject* item = m_entities->at(event.m_item_uid);
-
+	
 	if (item->useable != nullptr){
 		if(item->useable->funcToDo == HEALING){
 			if (m_entities->at(event.m_user_uid)->fighter->health < m_entities->at(event.m_user_uid)->fighter->maxHealth){

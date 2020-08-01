@@ -190,8 +190,6 @@ void aStar(char* world, vector<int> *path, int width, int height, int x1, int y1
     sort(openList.begin(), openList.end(), compareNodes);
     currentNode = openList.back();
     openList.pop_back();
-		std::cout << "current x: " << currentNode->_x << " current y: " << currentNode->_y << std::endl;
-		std::cout << "Open list size: " << openList.size() << std::endl;
     closedList.push_back(currentNode);
     if (currentNode->equals(xf, yf)){
       while(currentNode->_parent != nullptr){

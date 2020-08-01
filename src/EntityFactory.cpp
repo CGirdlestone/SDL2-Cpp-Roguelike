@@ -106,7 +106,7 @@ UseableFunctionEnums EntityFactory::getFunctionEnum(std::string stringEnum)
 		return HEALING;
 	} else if (stringEnum == "DIRECTDAMAGE"){
 		return DIRECTDAMAGE;
-	} else if (stringEnum == "AREA DAMAGE"){
+	} else if (stringEnum == "AREADAMAGE"){
 		return AOE;
 	} else if (stringEnum == "STATUS"){
 		return STATUS;
@@ -295,7 +295,18 @@ void EntityFactory::makeDamageComponent(std::string line, GameObject* entity)
 
 void EntityFactory::makeAreaDamageComponent(std::string line, GameObject* entity)
 {
+	std::stringstream ss(line);
+	int roll, radius, chance, splashRadius;
+	std::string damageTypeString;
+	DamageTypes damageType;
+	
+	ss >> radius >> splashRadius >> roll >> damageTypeString >> chance;
 
+	damageType = getDamageTypeEnum(damageTypeString);
+	
+	AreaDamage *aoe = new AreaDamage(radius, roll, splashRadius, damageType, chance);
+	
+	entity->areaDamage = aoe;	
 }
 
 void EntityFactory::makeStatusComponent(std::string line, GameObject* entity)

@@ -12,6 +12,7 @@
 #include "EventTypes.h"
 #include "SceneTypes.h"
 #include "GameScene.h"
+#include "Slots.h"
 
 
 GameScene::GameScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog):
@@ -380,6 +381,9 @@ enum KeyPressSurfaces GameScene::getEvent(SDL_Event *e)
 
 							case SDLK_RETURN:
 							return USE;
+							
+							case SDLK_s:
+							return SHOOT;
           }
       }
   }
@@ -438,6 +442,12 @@ void GameScene::handleInput(KeyPressSurfaces keyPress)
 		}
 	} else if (keyPress == EXITGAME){
 		m_eventManager->pushEvent(QuitEvent());
+	} else if (keyPress == SHOOT){
+		if (m_entities->at(0)->body->slots.at(LEFTHAND) != nullptr){
+			if (m_entities->at(0)->body->slots.at(LEFTHAND)->damage != nullptr && m_entities->at(0)->body->slots.at(LEFTHAND)->useable != nullptr){
+				m_eventManager->pushEvent(UseItemEvent(0, m_entities->at(0)->body->slots.at(LEFTHAND)->m_uid));
+			} 
+		}
 	}
 
   if (!m_playerTurn){
