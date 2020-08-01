@@ -24,6 +24,7 @@
 #include "CharacterScene.h"
 #include "TargetingScene.h"
 #include "PauseScene.h"
+#include "GameOverScene.h"
 
 class Game
 {
@@ -64,6 +65,7 @@ class Game
 		CharacterScene *m_characterScene;
 		TargetingScene *m_targetingScene;
 		PauseScene *m_pauseScene;
+		GameOverScene *m_gameOverScene;
 		
 };
 

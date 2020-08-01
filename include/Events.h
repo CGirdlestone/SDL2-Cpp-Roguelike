@@ -169,4 +169,10 @@ struct LoadEvent : Event
 	~LoadEvent();
 };
 
+struct RestartEvent : Event
+{
+	RestartEvent();
+	~RestartEvent();
+};
+
 #endif

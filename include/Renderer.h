@@ -32,6 +32,7 @@ public:
 	bool checkInRange(int x, int y, int i, int j, int radius){ return (x-i)*(x-i) + (y-j)*(y-j) <= radius*radius;};
 	void drawMiniMap(DungeonGenerator* dungeon, std::map<int, GameObject*> *actors);
 	void drawPauseMenu(int i, Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog);
+	void drawGameOver(int i, std::vector<std::string> &deathMessages, int totalLines);
 	
 private:
   Console* m_console;

@@ -14,6 +14,7 @@
 #include "CharacterScene.h"
 #include "TargetingScene.h"
 #include "PauseScene.h"
+#include "GameOverScene.h"
 #include "SceneTypes.h"
 
 
@@ -31,6 +32,7 @@ public:
 	void notify(DeadEvent event);
 	void notify(PlayerTurnOverEvent event);
 	void notify(LoadEvent event);
+	void notify(RestartEvent event);
   void pushScene(SceneTypes scene);
   void popScene(int i);
   void render();
@@ -44,6 +46,7 @@ public:
 	CharacterScene *m_characterScene;
 	TargetingScene *m_targetingScene;
 	PauseScene *m_pauseScene;
+	GameOverScene *m_gameOverScene;
 
 private:
   EventManager* m_eventManager;

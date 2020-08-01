@@ -10,6 +10,7 @@
 #include "GameScene.h"
 #include "InventoryScene.h"
 #include "CharacterScene.h"
+#include "GameOverScene.h"
 #include "SceneTypes.h"
 
 GameStateManager::GameStateManager(EventManager* eventManager, std::map<int, GameObject*> *entities):
@@ -22,6 +23,7 @@ m_eventManager(eventManager), m_entities(entities)
 	m_eventManager->registerSystem(DEAD, this);
 	m_eventManager->registerSystem(PLAYERTURNOVER, this);
 	m_eventManager->registerSystem(LOADGAME, this);
+	m_eventManager->registerSystem(RESTART, this);
 
   m_startScene = nullptr;
   m_gameScene = nullptr;
@@ -29,6 +31,7 @@ m_eventManager(eventManager), m_entities(entities)
 	m_characterScene = nullptr;
 	m_targetingScene = nullptr;
 	m_pauseScene = nullptr;
+	m_gameOverScene = nullptr;
 
   playing = true;
 }
@@ -43,6 +46,7 @@ GameStateManager::~GameStateManager()
 	m_characterScene = nullptr;
 	m_targetingScene = nullptr;
 	m_pauseScene = nullptr;
+	m_gameOverScene = nullptr;
 };
 
 void GameStateManager::notify(PushScene event)
@@ -67,7 +71,7 @@ void GameStateManager::notify(PushScene event)
 	} else if (event.m_scene == PAUSEMENU){
 		m_sceneStack.push_back(m_pauseScene);
 		m_targetingScene->resetIndex();
-	}
+	} 
 }
 
 void GameStateManager::notify(PopScene event)
@@ -85,7 +89,8 @@ void GameStateManager::notify(QuitEvent event)
 void GameStateManager::notify(DeadEvent event)
 {
 	if (event.m_uid == 0){
-		playing = false;
+		m_sceneStack.push_back(m_gameOverScene);
+		m_gameOverScene->deleteSave();
 	}
 }
 
@@ -104,6 +109,13 @@ void GameStateManager::notify(LoadEvent event)
 {
 	m_sceneStack.push_back(m_gameScene);
 	m_gameScene->loadGame();
+}
+
+void GameStateManager::notify(RestartEvent event)
+{
+	while (m_sceneStack.size() > 1){
+		m_sceneStack.pop_back();
+	}
 }
 
 void GameStateManager::processInput(SDL_Event *e)

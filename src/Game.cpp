@@ -31,6 +31,7 @@
 #include "CharacterScene.h"
 #include "TargetingScene.h"
 #include "PauseScene.h"
+#include "GameOverScene.h"
 
 Game::Game()
 {
@@ -52,6 +53,7 @@ Game::Game()
 	m_characterScene = nullptr;
 	m_targetingScene = nullptr;
 	m_pauseScene = nullptr;
+	m_gameOverScene = nullptr;
   m_sceneManager = nullptr;
 }
 
@@ -111,6 +113,9 @@ Game::~Game()
 	delete m_pauseScene;
 	m_pauseScene = nullptr;
 
+	delete m_gameOverScene;
+	m_gameOverScene = nullptr;
+
   delete m_sceneManager;
   m_sceneManager = nullptr;
 
@@ -159,6 +164,7 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
 	m_characterScene = new CharacterScene(m_eventManager, m_renderer, &m_actors);
   m_targetingScene = new TargetingScene(m_eventManager, m_renderer, &m_actors, m_camera, m_dungeon, m_messageLog);
 	m_pauseScene = new PauseScene(m_eventManager, m_renderer, m_camera, m_dungeon, &m_actors, m_messageLog);
+	m_gameOverScene = new GameOverScene(m_eventManager, m_renderer);
 
   m_sceneManager->m_startScene = m_startScene;
   m_sceneManager->m_gameScene = m_gameScene;
@@ -166,6 +172,7 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
 	m_sceneManager->m_characterScene = m_characterScene;
 	m_sceneManager->m_targetingScene = m_targetingScene;
 	m_sceneManager->m_pauseScene = m_pauseScene;
+	m_sceneManager->m_gameOverScene = m_gameOverScene;
 
   m_width = width;
   m_height = height;

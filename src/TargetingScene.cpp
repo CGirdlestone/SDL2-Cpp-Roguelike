@@ -107,8 +107,12 @@ void TargetingScene::handleInput(KeyPressSurfaces keyPress)
 	} else if (keyPress == USE){
 		targetUID = getTargetUID();
 		if (targetUID != -1){
-			m_eventManager->pushEvent(UseItemEvent(m_user_uid, m_item_uid, targetUID));
-			m_eventManager->pushEvent(PopScene(1));
+			if (m_entities->at(targetUID)->fighter != nullptr){
+				if (m_entities->at(targetUID)->fighter->isAlive){
+					m_eventManager->pushEvent(UseItemEvent(m_user_uid, m_item_uid, targetUID));
+					m_eventManager->pushEvent(PopScene(1));
+				}
+			}
 		}
 	}
 }

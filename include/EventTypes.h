@@ -24,6 +24,7 @@ enum EventTypes
 		MESSAGE,
 		PLAYERTURNOVER,
 		LOADGAME,
+		RESTART,
 };
 
 extern EventTypes EventType;

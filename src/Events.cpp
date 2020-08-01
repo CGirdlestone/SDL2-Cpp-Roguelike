@@ -226,3 +226,13 @@ LoadEvent::~LoadEvent()
 {
 
 }
+
+RestartEvent::RestartEvent()
+{
+	m_type = RESTART;
+}
+
+RestartEvent::~RestartEvent()
+{
+
+}

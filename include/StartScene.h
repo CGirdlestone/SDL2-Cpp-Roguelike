@@ -17,6 +17,7 @@ public:
   void handleInput(KeyPressSurfaces keyPress);
   void update(Uint32 dt);
   void onTick();
+	void reset(){m_i = 0; m_options = 0;};
 
 private:
   EventManager *m_eventManager;

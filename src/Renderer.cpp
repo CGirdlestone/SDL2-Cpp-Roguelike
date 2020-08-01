@@ -289,6 +289,14 @@ void Renderer::drawStartMenu(int i, int options)
 
 	int yPosition = height/2 - 4;
 
+	if ((options == 2 && i == 0) || (options == 3 && options == 1)){
+		startText = ">" + startText;
+	} else if ((options == 2 && i == 1) || (options == 3 && i == 2)){
+		exitText = ">" + exitText;
+	} else {
+		continueText = ">" + continueText;
+	}
+
   m_console->flush();
 
   for (int j = 0; j < static_cast<int>(name.length()); ++j){
@@ -298,9 +306,10 @@ void Renderer::drawStartMenu(int i, int options)
 	yPosition += 2;
 
 	if (options == 3){
+		
   	for (int j = 0; j < static_cast<int>(continueText.length()); ++j){
     	if (i == 0){
-      	m_console->render(&continueText[j], width/2 + j - 5, yPosition, colour);
+      	m_console->render(&continueText[j], width/2 - 1 + j - 5, yPosition, colour);
     	} else {
       	m_console->render(&continueText[j], width/2 + j - 5, yPosition, m_inViewColour);
     	}
@@ -311,7 +320,7 @@ void Renderer::drawStartMenu(int i, int options)
 
   for (int j = 0; j < static_cast<int>(startText.length()); ++j){
     if ((options == 3 && i == 1) || (options == 2 && i == 0)){
-      m_console->render(&startText[j], width/2 + j - 5, yPosition, colour);
+      m_console->render(&startText[j], width/2 - 1 + j - 5, yPosition, colour);
     } else {
       m_console->render(&startText[j], width/2 + j - 5, yPosition, m_inViewColour);
     }
@@ -320,7 +329,7 @@ void Renderer::drawStartMenu(int i, int options)
 
   for (int j = 0; j < static_cast<int>(exitText.length()); ++j){
     if ((options == 3 && i == 2) || (options == 2 && i == 1)){
-      m_console->render(&exitText[j], width/2 + j - 5, yPosition, colour);
+      m_console->render(&exitText[j], width/2 - 1 + j - 5, yPosition, colour);
     } else {
       m_console->render(&exitText[j], width/2 + j - 5, yPosition, m_inViewColour);
     }
@@ -559,5 +568,61 @@ void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::ma
   drawUI();
 	drawPlayerInfo(actors->at(0), dungeon);
 	drawMiniMap(dungeon, actors);
+  m_console->update();
+}
+
+void Renderer::drawGameOver(int i, std::vector<std::string> &deathMessages, int totalLines)
+{
+	std::string restart = "Play again";
+	std::string exitGame = "Exit game";
+	
+	SDL_Color highlightColour = {0x63, 0x9b, 0xff};
+	 
+  int width = m_console->Getm_width() + m_console->getXBuffer();
+  int height = m_console->Getm_height() + m_console->getYBuffer();
+
+	int xPosition = width/2 - 15;
+
+	int yPosition = height/2 - 16;
+
+	if (i == 0){
+		restart = ">" + restart;
+	} else if (i == 1){
+		exitGame = ">" + exitGame;
+	}
+
+  m_console->flush();
+
+	for (std::string line : deathMessages){
+  	for (int j = 0; j < static_cast<int>(line.length()); ++j){
+    	m_console->render(&line[j], xPosition + j, yPosition, m_inViewColour);
+  	}
+		yPosition += 2;
+	}
+
+	for (int i = 0; i < static_cast<int>(totalLines - deathMessages.size()); ++i){
+		yPosition += 2;
+	}
+
+	yPosition += 1;
+	
+  for (int j = 0; j < static_cast<int>(restart.length()); ++j){
+    if (i == 0){
+      m_console->render(&restart[j], xPosition - 1 + j + 10, yPosition, highlightColour);
+    } else {
+      m_console->render(&restart[j], xPosition + j + 10, yPosition, m_inViewColour);
+    }
+  }
+	yPosition += 2;
+	
+  for (int j = 0; j < static_cast<int>(exitGame.length()); ++j){
+		if (i == 1){
+      m_console->render(&exitGame[j], xPosition - 1 + j + 10, yPosition, highlightColour);
+    } else {
+      m_console->render(&exitGame[j], xPosition + j + 10, yPosition, m_inViewColour);
+    }
+  }
+	yPosition += 2;
+
   m_console->update();
 }
