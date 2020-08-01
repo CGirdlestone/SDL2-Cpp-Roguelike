@@ -9,6 +9,7 @@
 #include "DamageTypes.h"
 #include "Slots.h"
 #include "UseableFunctionEnum.h"
+#include "EntityType.h"
 
 class EntityFactory
 {
@@ -37,16 +38,24 @@ public:
 	DamageTypes getDamageTypeEnum(std::string stringEnum);
 	EquipSlots getEquipSlotEnum(std::string stringEnum);
 	UseableFunctionEnums getFunctionEnum(std::string stringEnum);
+
+	int simulateNormalDistribution(int level);
+	std::string chooseRandomMob(int level);
+	std::string chooseRandomItem(int level);
 	
 	void loadData(std::string filename);
+	void generateDistributions();
 
-	void makeEntity(std::string entityName, GameObject* entity, int x, int y);
+	void makeEntity(std::string entityName, GameObject* entity, int x, int y); 
+	void makeEntity(int level, EntityType type, GameObject* entity, int x, int y); 
 	void makeStairs(GameObject* entity, int x, int y);
 
 private:
 	int m_uid;
 	std::map<std::string, std::vector<std::string>> m_items;
+	std::map<int, std::vector<std::string>> m_itemDistribution;
 	std::map<std::string, std::vector<std::string>> m_mobs;
+	std::map<int, std::vector<std::string>> m_mobDistribution;
 	std::map<std::string, std::vector<std::string>> m_player;
 };
 

@@ -1,4 +1,3 @@
-
 #include "EntityFactory.h"
 #include <iostream>
 #include <fstream>
@@ -10,6 +9,7 @@
 #include "SDL2/SDL.h"
 #include "UseableFunctionEnum.h"
 #include "StatusTypes.h"
+#include "EntityType.h"
 
 EntityFactory::EntityFactory()
 {
@@ -59,6 +59,47 @@ void EntityFactory::loadData(std::string filename)
 				m_player.insert({name, components});
 			}
 		}
+	}
+}
+
+void EntityFactory::generateDistributions(){
+	std::map<std::string, std::vector<std::string>>::iterator it;
+	std::vector<std::string>::iterator vecIt;
+	std::string line;
+	int level, _exp;
+
+
+	for (it = m_items.begin(); it != m_items.end(); ++it){
+		for (vecIt = it->second.begin(); vecIt != it->second.end(); ++vecIt){
+			line = (*vecIt);
+			if (line.substr(0, line.find(":")) == "ITEM"){
+				level = stoi(line.substr(line.find(";")+1, line.size()));
+				break;
+			}
+		}
+		if (m_itemDistribution.find(level) != m_itemDistribution.end()){
+			m_itemDistribution.at(level).push_back(it->first);
+		} else {
+			std::vector<std::string> vec = {it->first};
+			m_itemDistribution.insert({level, vec});
+		}
+	}
+
+	for (it = m_mobs.begin(); it != m_mobs.end(); ++it){
+		for (vecIt = it->second.begin(); vecIt != it->second.end(); ++vecIt){
+			line = (*vecIt);
+			if (line.substr(0, line.find(":")) == "AI"){
+				std::stringstream ss(line.substr(line.find(":")+2, line.size()));
+				ss >> _exp >> level;
+				break;
+			}
+		}
+		if (m_mobDistribution.find(level) != m_mobDistribution.end()){
+			m_mobDistribution.at(level).push_back(it->first);
+		} else {
+			std::vector<std::string> vec = {it->first};
+			m_mobDistribution.insert({level, vec});
+		}		
 	}
 }
 
@@ -143,7 +184,10 @@ void EntityFactory::makeFighterComponent(std::string line, GameObject* entity)
 
 void EntityFactory::makeItemComponent(std::string line, GameObject* entity)
 {
-	Item* item = new Item(line);
+	std::string desc = line.substr(0, line.find(";"));
+	int level = stoi(line.substr(line.find(";")+1, line.size()));	
+
+	Item* item = new Item(desc, level);
 
 	entity->item = item;
 }
@@ -200,11 +244,11 @@ void EntityFactory::makeAIComponent(std::string line, GameObject* entity)
 {
 	std::stringstream ss(line);
 
-	int exp;
+	int exp, level;
 
-	ss >> exp;
+	ss >> exp >> level;
 	
-	AI* ai = new AI(exp);
+	AI* ai = new AI(exp, level);
 
 	entity->ai = ai;
 }
@@ -321,8 +365,130 @@ void EntityFactory::makeConsumableComponent(GameObject* entity)
 	entity->consumable = c;
 }
 
+int EntityFactory::simulateNormalDistribution(int level){
+	int score = 0;
+	int mean = 6;
+	int numRolls = 6;
+	int numSides = 3;
+	
+	for (int i = 0; i < numRolls; ++i){
+		score += rand() % numSides + 1;
+	}
+	
+	return score + level - mean - numRolls > 0 ? score + level - mean - numRolls : 1;
+}
+
+std::string EntityFactory::chooseRandomMob(int level){
+	int mobLevel;
+	int randomIndex;	
+	std::string entityName;
+
+	mobLevel = simulateNormalDistribution(level);
+
+	if (m_mobDistribution.find(mobLevel) != m_mobDistribution.end()){
+		randomIndex = rand() % m_mobDistribution.at(mobLevel).size();
+		entityName = m_mobDistribution.at(mobLevel).at(randomIndex);
+		return entityName;
+	}
+
+	return chooseRandomMob(level);
+}
+
+std::string EntityFactory::chooseRandomItem(int level){
+	int itemLevel;
+	int randomIndex;
+	std::string entityName;
+
+	itemLevel = simulateNormalDistribution(level);
+	
+	if (m_itemDistribution.find(itemLevel) != m_itemDistribution.end()){
+		randomIndex = rand() % m_mobDistribution.at(itemLevel).size();
+		entityName = m_itemDistribution.at(itemLevel).at(randomIndex);
+		return entityName;
+	}
+
+	return chooseRandomItem(level);
+}
+
+
 void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x, int y)
 {
+	std::vector<std::string> components;
+	
+	if (m_mobs.find(entityName) != m_mobs.end()){
+		components = m_mobs.at(entityName);
+	}
+
+	if (m_items.find(entityName) != m_items.end()){
+		components = m_items.at(entityName);
+	}
+
+	if (m_player.find(entityName) != m_player.end()){
+		components = m_player.at(entityName);
+	}
+
+	std::string component;
+	std::string stats;
+
+	for (std::string s : components){
+		component = s.substr(0, s.find(":"));
+		stats = s.substr(s.find(":")+1, s.length());
+		if (component == "RENDERABLE"){
+			makeRenderableComponent(stats, entity);
+		} else if (component == "POSITION"){
+			makePositionComponent(entity, x, y);
+		} else if (component == "FIGHTER"){
+			makeFighterComponent(stats, entity);
+		} else if (component ==  "ACTOR"){
+			makeActorComponent(entity);
+		} else if (component ==  "AI"){
+			makeAIComponent(stats, entity);
+		} else if (component == "PLAYER"){
+			makePlayerComponent(entity);
+		} else if (component ==  "ITEM"){
+			makeItemComponent(stats, entity);
+		} else if (component == "WEAPON"){
+			makeWeaponComponent(stats, entity);
+		} else if (component ==  "ARMOUR"){
+			makeArmourComponent(stats, entity);
+		} else if (component ==  "WEARABLE"){
+			makeWearableComponent(stats, entity);
+		} else if (component ==  "BODY"){
+			makeBodyComponent(entity);
+		} else if (component == "INVENTORY"){
+			makeInventoryComponent(s, entity);
+		} else if (component == "USEABLE"){
+			makeUseableComponent(stats, entity);
+		} else if (component == "HEALING"){
+			makeHealingComponent(stats, entity);
+		} else if (component == "DIRECTDAMAGE"){
+			makeDamageComponent(stats, entity);
+		} else if (component == "AREADAMAGE"){
+			makeAreaDamageComponent(stats, entity);
+		} else if (component == "STATUS"){
+			makeStatusComponent(stats, entity);
+		} else if (component == "CONSUMABLE"){
+			makeConsumableComponent(entity);
+		}
+	}
+
+	entity->m_name = entityName;
+	entity->m_uid = m_uid;
+	++m_uid;
+}
+
+void EntityFactory::makeEntity(int level, EntityType type, GameObject* entity, int x, int y)
+{
+	std::string entityName;
+
+	if (type == PLAYERENTITY){
+		entityName = "PLAYER";
+	} else if (type == MOBENTITY){
+		entityName = chooseRandomMob(level);
+	} else if (type == ITEMENTITY){
+		entityName = chooseRandomItem(level);
+	}
+
 	std::vector<std::string> components;
 	
 	if (m_mobs.find(entityName) != m_mobs.end()){

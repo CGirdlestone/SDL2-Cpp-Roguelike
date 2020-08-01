@@ -274,8 +274,8 @@ int Player::deserialise(char* buffer, int i)
 }
 
 
-Item::Item(std::string desc):
-description(desc)
+Item::Item(std::string desc, int _level):
+description(desc), level(_level)
 {
 
 }
@@ -293,6 +293,7 @@ Item::~Item()
 void Item::serialise(std::vector<uint8_t> &byteVector)
 {
 	serialiseString(byteVector, description);
+	serialiseInt(byteVector, level);
 }
 
 int Item::deserialise(char* buffer, int i)
@@ -319,11 +320,19 @@ int Item::deserialise(char* buffer, int i)
 
 	delete[] desc;
 
+	int _level = 0;
+
+	for (int j = numBytes - 1; j >= 0; --j){
+		_level = (_level << 8) + buffer[i + j];
+	}
+	i += numBytes * 8;
+	level = _level;
+
 	return i;
 }
 
-AI::AI(int _exp):
-exp(_exp)
+AI::AI(int _exp, int _level):
+exp(_exp), level(_level)
 {
 
 }
@@ -341,18 +350,26 @@ AI::~AI()
 void AI::serialise(std::vector<uint8_t> &byteVector)
 {
 	serialiseInt(byteVector, exp);
+	serialiseInt(byteVector, level);
 }
 
 int AI::deserialise(char* buffer, int i)
 {
 	int numBytes = 4;
 	int _exp = 0;
-
+	int _level = 0;
+	
 	for (int j = numBytes - 1; j >= 0; --j){
 		_exp = (_exp << 8) + buffer[i + j];
 	}
 	i += numBytes * 8;
 	exp = _exp;
+
+	for (int j = numBytes - 1; j >= 0; --j){
+		_level = (_level << 8) + buffer[i + j];
+	}
+	i += numBytes * 8;
+	level = _level;
 
 	return i;
 }

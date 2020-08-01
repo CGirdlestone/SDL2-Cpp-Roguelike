@@ -72,10 +72,11 @@ struct Player
 
 struct AI
 {
-	AI(int _exp);
+	AI(int _exp, int _level);
 	AI();
   ~AI();
 	int exp;
+	int level;
   std::vector<int> path;
 	void serialise(std::vector<uint8_t> &byteVector);
 	int deserialise(char* buffer, int i);
@@ -84,7 +85,8 @@ struct AI
 struct Item
 {
   std::string description;
-  Item(std::string desc);
+	int level;
+  Item(std::string desc, int _level);
 	Item();
   ~Item();
 	void serialise(std::vector<uint8_t> &byteVector);

@@ -13,6 +13,7 @@
 #include "GameObject.h"
 #include "DamageTypes.h"
 #include "Slots.h"
+#include "EntityType.h"
 #include "Pathfind.h"
 
 DungeonGenerator::DungeonGenerator(int width, int height, EntityFactory* factory):
@@ -23,6 +24,7 @@ m_width(width), m_height(height), m_factory(factory)
 	m_factory->loadData("./resources/player.txt");
 	m_factory->loadData("./resources/items.txt");
 	m_factory->loadData("./resources/mobs.txt");
+	m_factory->generateDistributions();
 }
 
 DungeonGenerator::~DungeonGenerator()
@@ -610,30 +612,65 @@ int DungeonGenerator::getFreePosition()
 	return i;
 }
 
-void DungeonGenerator::createEntity(std::map<int, GameObject*> *actors, std::string entityName)
+void DungeonGenerator::createEntity(std::map<int, GameObject*> *actors, EntityType type)
 {
 	GameObject *entity = new GameObject();
 
 	int i = getFreePosition();
 
-	m_factory->makeEntity(entityName, entity, i%m_width, i/m_width);
+	m_factory->makeEntity(m_uid, type, entity, i%m_width, i/m_width);
 
 	actors->insert({entity->m_uid, entity});
 }
 
 void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
 {
-	createEntity(actors, "PLAYER");
+	createEntity(actors, PLAYERENTITY);
+	
+	GameObject *entity = new GameObject();
+	
+	int i;
+	int x, y;
+	int healthPotionX, healthPotionY;
+
+	while (true){
+		i = actors->at(0)->position->x + actors->at(0)->position->y * m_width;
+		x = rand() % 5 - 2;
+		y = rand() % 5 - 2;
+		
+		healthPotionX = i % m_width + x;
+		healthPotionY = i / m_width + y;
+		if (m_level[healthPotionX + healthPotionY * m_width] == '.'){
+			break;
+		}
+	}
+	m_factory->makeEntity("POTION OF HEALING", entity, healthPotionX, healthPotionY);
+	
+	actors->insert({entity->m_uid, entity});
 }
 
 void DungeonGenerator::createMobs(std::map<int, GameObject*> *actors)
 {
-	createEntity(actors, "ORC");
+	int numMonstersMin = 8;
+	int numMonstersMax = 16;
+
+	int numMonsters = rand()%(numMonstersMax - numMonstersMin) + numMonstersMin;
+
+	for (int i = 0; i < numMonsters; ++i){
+		createEntity(actors, MOBENTITY);
+	}
 }
 
 void DungeonGenerator::createItems(std::map<int, GameObject*> *actors)
 {
-	createEntity(actors, "SCROLL OF FIREBALL");
+	int numItemsMin = 8;
+	int numItemsMax = 16;
+
+	int numItems = rand()%(numItemsMax - numItemsMin) + numItemsMin;
+
+	for (int i = 0; i < numItems; ++i){
+		createEntity(actors, ITEMENTITY);
+	}
 }
 
 void DungeonGenerator::placeStairs(std::map<int, GameObject*> *actors)

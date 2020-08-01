@@ -89,9 +89,10 @@ void Renderer::drawMiniMap(DungeonGenerator* dungeon, std::map<int, GameObject*>
 	int mapOriginX = (m_console->Getm_width() + 2) * m_console->getTileSize();
 	int mapOriginY = (m_console->Getm_height() - 2) * m_console->getTileSize();
 
-	SDL_Color player = {0x6d, 0xc2, 0xca};
+	SDL_Color player = {0x00, 0x00, 0x00};
 	SDL_Color enemy = {0xd0, 0x46, 0x48};
 	SDL_Color item = {0x34, 0x65, 0x24};
+	SDL_Color other = {0x22, 0x20, 0x34};
 
 	SDL_Color lightWall = {0x75, 0x71, 0x61};
 	SDL_Color darkWall = {0x4e, 0x4a, 0x4e};
@@ -127,6 +128,8 @@ void Renderer::drawMiniMap(DungeonGenerator* dungeon, std::map<int, GameObject*>
 			m_console->fillBackgroundTile(it->second->position->x, it->second->position->y, item, 255, 2, mapOriginX, mapOriginY);
 		} else if (it->second->ai != nullptr){
 			m_console->fillBackgroundTile(it->second->position->x, it->second->position->y, enemy, 255, 2, mapOriginX, mapOriginY);
+		} else {
+			m_console->fillBackgroundTile(it->second->position->x, it->second->position->y, other, 255, 2, mapOriginX, mapOriginY);
 		}
 	}
 }

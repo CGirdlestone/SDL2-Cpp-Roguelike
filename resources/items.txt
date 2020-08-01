@@ -1,34 +1,34 @@
 NAME: SWORD
 RENDERABLE: | 0x75 0x71 0x61
-ITEM: A simple but sharp sword.
+ITEM: A simple but sharp sword.; 1
 WEARABLE: RIGHTHAND
 WEAPON: SLASHING 8
 POSITION:
 
 NAME: DAGGER
 RENDERABLE: | 0x4e 0x4a 0x4e
-ITEM: A plain dagger.
+ITEM: A plain dagger.; 1
 WEARABLE: RIGHTHAND
 WEAPON: PIERCING 4
 POSITION:
 
 NAME: SPEAR
 RENDERABLE: / 0x75 0x71 0x61
-ITEM: A spear
+ITEM: A spear.; 1
 WEARABLE: RIGHTHAND
 WEAPON: PIERCING 6
 POSITION:
 
 NAME: MACE
 RENDERABLE: | 0x75 0x71 0x61
-ITEM: A crude mace.
+ITEM: A crude mace.; 1
 WEARABLE: RIGHTHAND
 WEAPON: BLUDGEONING 6
 POSITION:
 
 NAME: HUNTING BOW
 RENDERABLE: } 0x8f 0x56 0x3b
-ITEM: A simple hunting bow
+ITEM: A simple hunting bow.; 1
 WEARABLE: LEFTHAND
 POSITION:
 USEABLE: DIRECTDAMAGE -1
@@ -36,34 +36,34 @@ DIRECTDAMAGE: 8 6 PIERCING 0
 
 NAME: SHIELD
 RENDERABLE: ) 0x8f 0x56 0x3b
-ITEM: A round shield
+ITEM: A round shield.; 1
 WEARABLE: LEFTHAND
 POSITION:
 
 NAME: LEATHER ARMOUR
 RENDERABLE: ( 0x44 0x24 0x34
-ITEM: Boiled leather inlaid with metal strips. 
+ITEM: Boiled leather inlaid with metal strips.; 2
 WEARABLE: BODY
 ARMOUR: SLASHING NODAMAGETYPE
 POSITION:
 
 NAME: FUR ARMOUR
 RENDERABLE: ( 0x4e 0x4a 0x4e
-ITEM: 
+ITEM: This was probably a wolf at one point...; 1
 WEARABLE: BODY
 ARMOUR: ICE NODAMAGETYPE
 POSITION:
 
 NAME: CHAINMAIL
 RENDERABLE: ( 0x75 0x71 0x61
-ITEM: A riveted mail hauberk.
+ITEM: A riveted mail hauberk.; 3
 WEARABLE: BODY
 ARMOUR: SLASHING FIRE
 POSITION:
 
 NAME: POTION OF HEALING
 RENDERABLE: ! 0xd0 0x46 0x48
-ITEM: It doesn't taste great, but you always feel better after drinking it!
+ITEM: It doesn't taste great, but you always feel better after drinking it!; 1
 POSITION:
 USEABLE: HEALING 1
 HEALING: 10
@@ -71,7 +71,7 @@ CONSUMABLE:
 
 NAME: POTION OF GREATER HEALING
 RENDERABLE: ! 0xac 0x32 0x32
-ITEM: It doesn't taste great, but you always feel better after drinking it!
+ITEM: It doesn't taste great, but you always feel better after drinking it!; 3
 POSITION:
 USEABLE: HEALING 1
 HEALING: 20
@@ -79,14 +79,14 @@ CONSUMABLE:
 
 NAME: SCROLL OF FIREBALL
 RENDERABLE: ? 0xd0 0x46 0x48
-ITEM: Burn, baby burn!
+ITEM: Burn, baby burn!; 2
 POSITION:
 USEABLE: AREADAMAGE 1
 AREADAMAGE: 6 2 10 FIRE 10
 
 NAME: SCROLL OF LIGHTNING
 RENDERABLE: ? 0x6d 0xc2 0xca
-ITEM: Electric!
+ITEM: Electric!; 1
 POSITION:
 USEABLE: DIRECTDAMAGE 1
 DIRECTDAMAGE: 8 10 LIGHTNING 2

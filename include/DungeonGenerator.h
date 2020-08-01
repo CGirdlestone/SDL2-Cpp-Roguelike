@@ -37,7 +37,7 @@ class DungeonGenerator
     void createPlayer(std::map<int, GameObject*> *actors);
     void createMobs(std::map<int, GameObject*> *actors);
     void createItems(std::map<int, GameObject*> *actors);
-		void createEntity(std::map<int, GameObject*> *actors, std::string entityName);
+		void createEntity(std::map<int, GameObject*> *actors, EntityType type);
 		void placeStairs(std::map<int, GameObject*> *actors);
 		void descendDungeon(std::map<int, GameObject*> *actors);
 		void repositionPlayer(GameObject* player);
