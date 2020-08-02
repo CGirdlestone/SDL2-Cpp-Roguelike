@@ -9,9 +9,10 @@
 #include "EventTypes.h"
 #include "Components.h"
 #include "UseableFunctionEnum.h"
+#include "DungeonGenerator.h"
 
-InventorySystem::InventorySystem(EventManager* eventManager, std::map<int, GameObject*> *entities):
-m_eventManager(eventManager), m_entities(entities)
+InventorySystem::InventorySystem(EventManager* eventManager, std::map<int, GameObject*> *entities, DungeonGenerator *dungeon):
+m_eventManager(eventManager), m_entities(entities), m_dungeon(dungeon)
 {
   m_eventManager->registerSystem(TAKE, this);
 	m_eventManager->registerSystem(DROP, this);
@@ -36,6 +37,10 @@ void InventorySystem::pickUpItem(TakeEvent event)
 
     if (it->second->position->x == event.m_x && it->second->position->y == event.m_y){
       m_entities->at(event.m_uid)->inventory->inventory.push_back(it->second);
+
+			int i = it->second->position->x + it->second->position->y * m_dungeon->Getm_width();
+			m_dungeon->removeObjectFromTile(it->second, i);
+
       delete it->second->position;
       it->second->position = nullptr;
       m_eventManager->pushEvent(OnPickUpEvent(event.m_uid, it->second->m_name));
@@ -53,6 +58,9 @@ void InventorySystem::dropItem(DropEvent event)
 		if (m_entities->at(event.m_actor_uid)->inventory->inventory.at(i)->m_uid == event.m_item_uid){
 			m_entities->at(event.m_actor_uid)->inventory->inventory.erase(m_entities->at(event.m_actor_uid)->inventory->inventory.begin() + i);
 			m_entities->at(event.m_item_uid)->position = new Position(x, y);
+
+			int i = x + y * m_dungeon->Getm_width();
+			m_dungeon->moveObjectToTile(m_entities->at(event.m_item_uid), i);
 		}
 	}
 }

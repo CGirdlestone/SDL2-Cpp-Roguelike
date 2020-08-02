@@ -48,8 +48,14 @@ bool MoveSystem::checkMove(int dx, int dy, int uid)
 void MoveSystem::moveEntity(int dx, int dy, int uid)
 {
   if (checkMove(dx, dy, uid)){
-    m_entities->at(uid)->position->x += dx;
+    int previousPos = m_entities->at(uid)->position->x + m_entities->at(uid)->position->y * m_dungeon->Getm_width();
+
+		m_entities->at(uid)->position->x += dx;
     m_entities->at(uid)->position->y += dy;
+	
+    int newPos = m_entities->at(uid)->position->x + m_entities->at(uid)->position->y * m_dungeon->Getm_width();
+		m_dungeon->removeObjectFromTile(m_entities->at(uid), previousPos);
+		m_dungeon->moveObjectToTile(m_entities->at(uid), newPos);		
 
     if (uid == 0){
       m_dungeon->recomputeFOV = true;

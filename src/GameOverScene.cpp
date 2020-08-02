@@ -15,7 +15,7 @@ m_eventManager(eventManager), m_renderer(renderer)
 {
 	m_i = 0;
 	loadDeathMessage();
-	timer = 75;
+	timer = 50;
 	ticks = 0;
 	numChars = 1;
 	numLines = 0;

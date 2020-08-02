@@ -33,6 +33,7 @@ void GameScene::newGame()
 	m_dungeon->createMobs(m_entities);
 	m_dungeon->createItems(m_entities);
 	m_dungeon->placeStairs(m_entities);
+	m_dungeon->populateGrid(m_entities);
 	m_dungeon->shadowCast(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
 	m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
 }
@@ -40,6 +41,7 @@ void GameScene::newGame()
 void GameScene::nextLevel()
 {
 	m_dungeon->descendDungeon(m_entities);
+	m_dungeon->populateGrid(m_entities);
 	m_dungeon->shadowCast(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
 	m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
 	saveGame();

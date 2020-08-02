@@ -41,6 +41,11 @@ class DungeonGenerator
 		void placeStairs(std::map<int, GameObject*> *actors);
 		void descendDungeon(std::map<int, GameObject*> *actors);
 		void repositionPlayer(GameObject* player);
+		std::vector<GameObject*> getObjectsAtTile(int i);
+		void removeObjectFromTile(GameObject* entity, int i);
+		void moveObjectToTile(GameObject* entity, int i);
+		void clearGrid();
+		void populateGrid(std::map<int, GameObject*> *actors);
 		
     char *m_level;
     int *m_fovMap;
@@ -50,6 +55,7 @@ class DungeonGenerator
   protected:
 
   private:
+		std::map<int, std::vector<GameObject*>> m_grid;
     int m_width;
     int m_height;
 		EntityFactory* m_factory;

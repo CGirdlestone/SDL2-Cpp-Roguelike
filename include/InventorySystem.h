@@ -6,13 +6,14 @@
 #include "System.h"
 #include "Events.h"
 #include "GameObject.h"
+#include "DungeonGenerator.h"
 
 class EventManager;
 
 class InventorySystem : public System
 {
 public:
-  InventorySystem(EventManager* eventManager, std::map<int, GameObject*> *entities);
+  InventorySystem(EventManager* eventManager, std::map<int, GameObject*> *entities, DungeonGenerator *dungeon);
   virtual ~InventorySystem();
   void pickUpItem(TakeEvent event);
 	void dropItem(DropEvent event);
@@ -30,6 +31,7 @@ public:
 private:
   EventManager* m_eventManager;
   std::map<int, GameObject*> *m_entities;
+	DungeonGenerator *m_dungeon;
 };
 
 

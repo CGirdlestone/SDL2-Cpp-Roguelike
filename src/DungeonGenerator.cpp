@@ -25,6 +25,10 @@ m_width(width), m_height(height), m_factory(factory)
 	m_factory->loadData("./resources/items.txt");
 	m_factory->loadData("./resources/mobs.txt");
 	m_factory->generateDistributions();
+	for (int i = 0; i < width * height; ++i){
+		std::vector<GameObject*> tileList;
+		m_grid.insert({i, tileList});
+	}
 }
 
 DungeonGenerator::~DungeonGenerator()
@@ -724,6 +728,8 @@ void DungeonGenerator::descendDungeon(std::map<int, GameObject*> *actors)
 	
 	createMap(60, 6, 2, 5);
 
+	clearGrid();
+
 	repositionPlayer(player);
 
 	createMobs(actors);
@@ -731,4 +737,54 @@ void DungeonGenerator::descendDungeon(std::map<int, GameObject*> *actors)
 	placeStairs(actors);
 
 	++m_uid;
+}
+
+void DungeonGenerator::removeObjectFromTile(GameObject* entity, int i)
+{
+	std::vector<GameObject*>::iterator it = m_grid.at(i).begin();
+
+	for (it = m_grid.at(i).begin(); it != m_grid.at(i).end(); ++it){
+		if ((*it)->m_uid == entity->m_uid){
+			break;
+		}
+	}
+	if (it != m_grid.at(i).end()){
+		m_grid.at(i).erase(it);
+	}
+}
+
+void DungeonGenerator::moveObjectToTile(GameObject* entity, int i)
+{
+	if (m_grid.at(i).empty()){
+		std::vector<GameObject*> vec;
+		vec.push_back(entity);
+		m_grid.at(i) = vec;
+	} else {
+		m_grid.at(i).push_back(entity);
+	}
+}
+
+std::vector<GameObject*> DungeonGenerator::getObjectsAtTile(int i)
+{
+	return m_grid.at(i);
+}
+
+void DungeonGenerator::clearGrid()
+{
+	std::map<int, std::vector<GameObject*>>::iterator it;
+
+	for (it = m_grid.begin(); it != m_grid.end(); ++it){
+		it->second.clear();
+	}
+}
+
+void DungeonGenerator::populateGrid(std::map<int, GameObject*> *actors)
+{
+	std::map<int, GameObject*>::iterator it;
+
+	for (it = actors->begin(); it != actors->end(); ++it){
+		if (it->second->position != nullptr){
+			m_grid.at(it->second->position->x + it->second->position->y * m_width).push_back(it->second);
+		}
+	}
 }
