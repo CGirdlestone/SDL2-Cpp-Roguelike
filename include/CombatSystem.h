@@ -7,6 +7,7 @@
 #include "Events.h"
 #include "Components.h"
 #include "GameObject.h"
+#include "DamageTypes.h"
 
 class EventManager;
 
@@ -20,6 +21,9 @@ public:
 	void calculateDamage(OnCriticalHitEvent event);
   void applyDamage(DamageEvent event);
   void onDead(DeadEvent event);
+	bool isResistantToDamageType(GameObject* defender, DamageTypes type);
+	bool isWeakToDamageType(GameObject* defender, DamageTypes type); 
+	DamageTypes getDamageType(GameObject* attacker);
 
 
   virtual void notify(AttackEvent event);

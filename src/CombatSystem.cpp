@@ -6,6 +6,8 @@
 #include "EventManager.h"
 #include "Events.h"
 #include "EventTypes.h"
+#include "DamageTypes.h"
+#include "Slots.h"
 
 CombatSystem::CombatSystem(EventManager* eventManager, std::map<int, GameObject*> *entities):
 m_eventManager(eventManager), m_entities(entities)
@@ -41,6 +43,14 @@ void CombatSystem::calculateDamage(OnHitEvent event)
 
   dmg = std::rand()%6 + 1 + m_entities->at(event.m_attacker_uid)->fighter->power;
 
+	DamageTypes type = getDamageType(m_entities->at(event.m_attacker_uid));
+	if (isResistantToDamageType(m_entities->at(event.m_defender_uid), type)){
+		dmg = dmg / 2;
+	}
+	if (isWeakToDamageType(m_entities->at(event.m_defender_uid), type)){
+		dmg = dmg * 2;
+	}
+
   DamageEvent damageEvent = DamageEvent(event.m_defender_uid, dmg);
   m_eventManager->pushEvent(damageEvent);
 
@@ -69,6 +79,54 @@ void CombatSystem::applyDamage(DamageEvent event)
 			m_entities->at(event.m_uid)->fighter->health = m_entities->at(event.m_uid)->fighter->maxHealth;
 		}
   }
+}
+
+DamageTypes CombatSystem::getDamageType(GameObject* attacker)
+{
+	if (attacker->body != nullptr){
+		if (attacker->body->slots.at(RIGHTHAND) != nullptr){
+			return attacker->body->slots.at(RIGHTHAND)->weapon->damageType;
+		}
+	}
+	return NODAMAGETYPE;
+}
+
+bool CombatSystem::isResistantToDamageType(GameObject* defender, DamageTypes type)
+{
+	if (type == NODAMAGETYPE) { return false; }
+
+	if (defender->armour != nullptr){
+		if (defender->armour->resistance == type){
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		if (defender->body->slots.at(BODY)->armour->resistance == type){
+			return true;
+		} else {
+			return false;
+		}
+	}	
+}
+
+bool CombatSystem::isWeakToDamageType(GameObject* defender, DamageTypes type)
+{
+	if (type == NODAMAGETYPE) { return false; }
+
+	if (defender->armour != nullptr){
+		if (defender->armour->weakness == type){
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		if (defender->body->slots.at(BODY)->armour->weakness == type){
+			return true;
+		} else {
+			return false;
+		}
+	}	
 }
 
 void CombatSystem::onDead(DeadEvent event)

@@ -28,6 +28,7 @@ public:
 	void newGame();
 	bool checkDescend();
 	void nextLevel();
+	void startOver();
 	void finishPlayerTurn(){m_playerTurn = false; };
 	void serialiseGameState(std::vector<uint8_t> &byteVector);
 	void addSaveFileDelimiter(std::vector<uint8_t> &byteVector);

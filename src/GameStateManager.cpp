@@ -116,6 +116,7 @@ void GameStateManager::notify(RestartEvent event)
 	while (m_sceneStack.size() > 1){
 		m_sceneStack.pop_back();
 	}
+	m_gameScene->startOver();
 }
 
 void GameStateManager::processInput(SDL_Event *e)

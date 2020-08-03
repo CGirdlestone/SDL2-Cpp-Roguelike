@@ -26,6 +26,17 @@ GameScene::~GameScene()
 
 }
 
+void GameScene::startOver()
+{
+	std::map<int, GameObject*>::iterator it;
+	for (it = m_entities->begin(); it != m_entities->end(); ){
+		delete it->second;
+		m_entities->erase(it++);
+	}
+	m_dungeon->clearGrid();
+	m_dungeon->reset();
+}
+
 void GameScene::newGame()
 {
 	m_dungeon->createMap(60, 6, 2, 5);
@@ -41,7 +52,6 @@ void GameScene::newGame()
 void GameScene::nextLevel()
 {
 	m_dungeon->descendDungeon(m_entities);
-	m_dungeon->populateGrid(m_entities);
 	m_dungeon->shadowCast(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
 	m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
 	saveGame();

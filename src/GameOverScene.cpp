@@ -20,7 +20,6 @@ m_eventManager(eventManager), m_renderer(renderer)
 	numChars = 1;
 	numLines = 0;
 	m_deathMessages.push_back(std::string(1, m_completeDeathMessages.at(0)[0]));
-	
 }
 
 GameOverScene::~GameOverScene()
@@ -83,6 +82,7 @@ void GameOverScene::handleInput(KeyPressSurfaces keyPress)
   } else if (keyPress == PRESS){
 		if (m_i == 0){
 			m_eventManager->pushEvent(RestartEvent());
+			m_deathMessages.clear();
 		} else if (m_i == 1){
 			m_eventManager->pushEvent(QuitEvent());
 		}

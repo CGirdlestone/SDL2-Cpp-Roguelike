@@ -629,6 +629,7 @@ void DungeonGenerator::createEntity(std::map<int, GameObject*> *actors, EntityTy
 
 void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
 {
+	std::cout << "making player" << std::endl;
 	createEntity(actors, PLAYERENTITY);
 	
 	GameObject *entity = new GameObject();
@@ -736,6 +737,7 @@ void DungeonGenerator::descendDungeon(std::map<int, GameObject*> *actors)
 	createItems(actors);	
 	placeStairs(actors);
 
+	populateGrid(actors);
 	++m_uid;
 }
 

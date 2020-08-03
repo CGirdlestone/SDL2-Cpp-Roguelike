@@ -389,7 +389,7 @@ Inventory::~Inventory()
 {
 
 }
-#include <iostream>
+
 void Inventory::serialise(std::vector<uint8_t> &byteVector)
 {
 	int inventorySize = static_cast<int>(inventory.size());

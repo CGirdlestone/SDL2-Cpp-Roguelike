@@ -46,6 +46,7 @@ class DungeonGenerator
 		void moveObjectToTile(GameObject* entity, int i);
 		void clearGrid();
 		void populateGrid(std::map<int, GameObject*> *actors);
+		void reset(){ m_uid = 0; m_factory->resetUID(); }
 		
     char *m_level;
     int *m_fovMap;

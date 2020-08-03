@@ -50,6 +50,7 @@ public:
 	void makeEntity(int level, EntityType type, GameObject* entity, int x, int y); 
 	void makeStairs(GameObject* entity, int x, int y);
 
+	void resetUID() { m_uid = 0; }
 private:
 	int m_uid;
 	std::map<std::string, std::vector<std::string>> m_items;
