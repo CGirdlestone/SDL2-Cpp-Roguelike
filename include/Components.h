@@ -120,7 +120,8 @@ struct Armour
 {
   DamageTypes resistance;
   DamageTypes weakness;
-  Armour(DamageTypes _resistance, DamageTypes _weakness);
+	int armourBonus;
+  Armour(DamageTypes _resistance, DamageTypes _weakness, int _armourBonus);
 	Armour();
   ~Armour();
 	void serialise(std::vector<uint8_t> &byteVector);

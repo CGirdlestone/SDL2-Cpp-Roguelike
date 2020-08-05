@@ -215,12 +215,13 @@ void EntityFactory::makeArmourComponent(std::string line, GameObject* entity)
 
 	std::string resistanceString, weaknessString;
 	DamageTypes resistanceEnum, weaknessEnum;
+	int armourBonus;
 
-	ss >> resistanceString >> weaknessString;
+	ss >> resistanceString >> weaknessString >> armourBonus;
 	resistanceEnum = getDamageTypeEnum(resistanceString);
 	weaknessEnum = getDamageTypeEnum(weaknessString);
 
-	Armour* armour = new Armour(resistanceEnum, weaknessEnum);
+	Armour* armour = new Armour(resistanceEnum, weaknessEnum, armourBonus);
 
 	entity->armour = armour;
 }
@@ -410,8 +411,27 @@ std::string EntityFactory::chooseRandomItem(int level){
 	return chooseRandomItem(level);
 }
 
+void EntityFactory::parseStartingItems(std::string line, GameObject* entity, std::map<int, GameObject*> *entities)
+{
+	std::string itemName;
+	std::stringstream ss(line);
+	while (std::getline(ss, itemName, ';')){
+		if (itemName.size() == 0){ break; }
 
-void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x, int y)
+		itemName = itemName.substr(1, itemName.size());
+		std::cout << itemName << std::endl;
+		GameObject* item = new GameObject();
+		makeEntity(itemName, item, entities);
+		if (item->wearable != nullptr){
+			entity->body->slots.at(item->wearable->slot) = item;
+		} else {
+			entity->inventory->inventory.push_back(item);
+		}
+		entities->insert({item->m_uid, item});
+	}
+}
+
+void EntityFactory::makeEntity(std::string entityName, GameObject* entity, std::map<int, GameObject*> *entities)
 {
 	std::vector<std::string> components;
 	
@@ -427,6 +447,10 @@ void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x
 		components = m_player.at(entityName);
 	}
 
+	entity->m_name = entityName;
+	entity->m_uid = m_uid;
+	++m_uid;
+
 	std::string component;
 	std::string stats;
 
@@ -435,8 +459,6 @@ void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x
 		stats = s.substr(s.find(":")+1, s.length());
 		if (component == "RENDERABLE"){
 			makeRenderableComponent(stats, entity);
-		} else if (component == "POSITION"){
-			makePositionComponent(entity, x, y);
 		} else if (component == "FIGHTER"){
 			makeFighterComponent(stats, entity);
 		} else if (component ==  "ACTOR"){
@@ -469,15 +491,83 @@ void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x
 			makeStatusComponent(stats, entity);
 		} else if (component == "CONSUMABLE"){
 			makeConsumableComponent(entity);
+		} else if (component == "STARTING ITEMS"){
+			parseStartingItems(stats, entity, entities);
 		}
+	}
+}
+
+void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x, int y, std::map<int, GameObject*> *entities)
+{
+	std::vector<std::string> components;
+	
+	if (m_mobs.find(entityName) != m_mobs.end()){
+		components = m_mobs.at(entityName);
+	}
+
+	if (m_items.find(entityName) != m_items.end()){
+		components = m_items.at(entityName);
+	}
+
+	if (m_player.find(entityName) != m_player.end()){
+		components = m_player.at(entityName);
 	}
 
 	entity->m_name = entityName;
 	entity->m_uid = m_uid;
 	++m_uid;
+
+
+	std::string component;
+	std::string stats;
+
+	for (std::string s : components){
+		component = s.substr(0, s.find(":"));
+		stats = s.substr(s.find(":")+1, s.length());
+		if (component == "RENDERABLE"){
+			makeRenderableComponent(stats, entity);
+		} else if (component == "FIGHTER"){
+			makeFighterComponent(stats, entity);
+		} else if (component ==  "ACTOR"){
+			makeActorComponent(entity);
+		} else if (component ==  "AI"){
+			makeAIComponent(stats, entity);
+		} else if (component == "PLAYER"){
+			makePlayerComponent(entity);
+		} else if (component ==  "ITEM"){
+			makeItemComponent(stats, entity);
+		} else if (component == "WEAPON"){
+			makeWeaponComponent(stats, entity);
+		} else if (component ==  "ARMOUR"){
+			makeArmourComponent(stats, entity);
+		} else if (component ==  "WEARABLE"){
+			makeWearableComponent(stats, entity);
+		} else if (component ==  "BODY"){
+			makeBodyComponent(entity);
+		} else if (component == "INVENTORY"){
+			makeInventoryComponent(s, entity);
+		} else if (component == "USEABLE"){
+			makeUseableComponent(stats, entity);
+		} else if (component == "HEALING"){
+			makeHealingComponent(stats, entity);
+		} else if (component == "DIRECTDAMAGE"){
+			makeDamageComponent(stats, entity);
+		} else if (component == "AREADAMAGE"){
+			makeAreaDamageComponent(stats, entity);
+		} else if (component == "STATUS"){
+			makeStatusComponent(stats, entity);
+		} else if (component == "CONSUMABLE"){
+			makeConsumableComponent(entity);
+		} else if (component == "STARTING ITEMS"){
+			parseStartingItems(stats, entity, entities);
+		}
+	}
+
+	Position* p = new Position(x, y);
+	entity->position = p;
 }
 
-void EntityFactory::makeEntity(int level, EntityType type, GameObject* entity, int x, int y)
+void EntityFactory::makeEntity(int level, EntityType type, GameObject* entity, int x, int y, std::map<int, GameObject*> *entities)
 {
 	std::string entityName;
 
@@ -503,6 +593,10 @@ void EntityFactory::makeEntity(int level, EntityType type, GameObject* entity, i
 		components = m_player.at(entityName);
 	}
 
+	entity->m_name = entityName;
+	entity->m_uid = m_uid;
+	++m_uid;
+
 	std::string component;
 	std::string stats;
 
@@ -511,8 +605,6 @@ void EntityFactory::makeEntity(int level, EntityType type, GameObject* entity, i
 		stats = s.substr(s.find(":")+1, s.length());
 		if (component == "RENDERABLE"){
 			makeRenderableComponent(stats, entity);
-		} else if (component == "POSITION"){
-			makePositionComponent(entity, x, y);
 		} else if (component == "FIGHTER"){
 			makeFighterComponent(stats, entity);
 		} else if (component ==  "ACTOR"){
@@ -545,12 +637,12 @@ void EntityFactory::makeEntity(int level, EntityType type, GameObject* entity, i
 			makeStatusComponent(stats, entity);
 		} else if (component == "CONSUMABLE"){
 			makeConsumableComponent(entity);
+		} else if (component == "STARTING ITEMS"){
+			parseStartingItems(stats, entity, entities);
 		}
 	}
-
-	entity->m_name = entityName;
-	entity->m_uid = m_uid;
-	++m_uid;
+	Position* p = new Position(x, y);
+	entity->position = p;
 }
 
 void EntityFactory::makeStairs(GameObject* entity, int x, int y)

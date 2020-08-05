@@ -97,7 +97,7 @@ void LootManager::generateLoot(DeadEvent event)
 	if (item != "NONE"){
 		GameObject* entity = new GameObject();
 
-		m_factory->makeEntity(item, entity, m_entities->at(event.m_uid)->position->x, m_entities->at(event.m_uid)->position->y);
+		m_factory->makeEntity(item, entity, m_entities->at(event.m_uid)->position->x, m_entities->at(event.m_uid)->position->y, m_entities);
 
 		m_entities->insert({entity->m_uid, entity});
 	}

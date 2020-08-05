@@ -32,7 +32,9 @@ bool MoveSystem::checkMove(int dx, int dy, int uid)
 				for (GameObject* entity : entities){
 					if (entity->m_uid == uid) { continue; }
 					if (entity->fighter == nullptr) { continue; }
-					if (m_entities->at(uid)->ai != nullptr && entity->ai != nullptr) { continue; }
+					if (m_entities->at(uid)->ai != nullptr && entity->ai != nullptr){ 
+						return false; 
+					}
 	
           if (entity->fighter->isAlive){
 						AttackEvent attackEvent = AttackEvent(uid, entity->m_uid);

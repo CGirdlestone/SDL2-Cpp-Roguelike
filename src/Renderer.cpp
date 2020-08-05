@@ -289,7 +289,7 @@ void Renderer::drawStartMenu(int i, int options)
 
 	int yPosition = height/2 - 4;
 
-	if ((options == 2 && i == 0) || (options == 3 && options == 1)){
+	if ((options == 2 && i == 0) || (options == 3 && i == 1)){
 		startText = ">" + startText;
 	} else if ((options == 2 && i == 1) || (options == 3 && i == 2)){
 		exitText = ">" + exitText;

@@ -622,14 +622,13 @@ void DungeonGenerator::createEntity(std::map<int, GameObject*> *actors, EntityTy
 
 	int i = getFreePosition();
 
-	m_factory->makeEntity(m_uid, type, entity, i%m_width, i/m_width);
+	m_factory->makeEntity(m_uid, type, entity, i%m_width, i/m_width, actors);
 
 	actors->insert({entity->m_uid, entity});
 }
 
 void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
 {
-	std::cout << "making player" << std::endl;
 	createEntity(actors, PLAYERENTITY);
 	
 	GameObject *entity = new GameObject();
@@ -649,7 +648,7 @@ void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
 			break;
 		}
 	}
-	m_factory->makeEntity("POTION OF HEALING", entity, healthPotionX, healthPotionY);
+	m_factory->makeEntity("POTION OF HEALING", entity, healthPotionX, healthPotionY, actors);
 	
 	actors->insert({entity->m_uid, entity});
 }

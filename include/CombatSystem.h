@@ -24,7 +24,10 @@ public:
 	bool isResistantToDamageType(GameObject* defender, DamageTypes type);
 	bool isWeakToDamageType(GameObject* defender, DamageTypes type); 
 	DamageTypes getDamageType(GameObject* attacker);
-
+	int getAttackerHitModifiers(GameObject* attacker);
+	int getDefenderHitModifiers(GameObject* defender);
+	int getAttackerDamageModifiers(GameObject* attacker);
+	int getDefenderDamageModifiers(GameObject* defender);
 
   virtual void notify(AttackEvent event);
   virtual void notify(OnHitEvent event);

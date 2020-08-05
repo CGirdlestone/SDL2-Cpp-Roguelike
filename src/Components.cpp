@@ -476,8 +476,8 @@ int Weapon::deserialise(char* buffer, int i)
 	return i;
 }
 
-Armour::Armour(DamageTypes _resistance, DamageTypes _weakness):
-resistance(_resistance), weakness(_weakness)
+Armour::Armour(DamageTypes _resistance, DamageTypes _weakness, int _armourBonus):
+resistance(_resistance), weakness(_weakness), armourBonus(_armourBonus)
 {
 
 }
@@ -496,6 +496,7 @@ void Armour::serialise(std::vector<uint8_t> &byteVector)
 {
 	serialiseInt(byteVector, static_cast<int>(resistance));
 	serialiseInt(byteVector, static_cast<int>(weakness));
+	serialiseInt(byteVector, armourBonus);
 }
 
 int Armour::deserialise(char* buffer, int i)
@@ -503,6 +504,7 @@ int Armour::deserialise(char* buffer, int i)
 	int numBytes = 4;
 	int _resistance = 0;
 	int _weakness = 0;
+	int _armourBonus = 0;
 
 	for (int j = numBytes - 1; j >= 0; --j){
 		_resistance = (_resistance << 8) + buffer[i + j];
@@ -514,6 +516,12 @@ int Armour::deserialise(char* buffer, int i)
 		_weakness = (_weakness << 8) + buffer[i + j];
 	}
 	weakness = static_cast<DamageTypes>(_weakness);
+	i += numBytes * 8;
+
+	for (int j = numBytes - 1; j >= 0; --j){
+		_armourBonus = (_armourBonus << 8) + buffer[i + j];
+	}
+	armourBonus = _armourBonus;
 	i += numBytes * 8;
 
 	return i;

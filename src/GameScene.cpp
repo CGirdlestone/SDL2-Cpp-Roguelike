@@ -35,6 +35,7 @@ void GameScene::startOver()
 	}
 	m_dungeon->clearGrid();
 	m_dungeon->reset();
+	m_messageLog->purgeLog();
 }
 
 void GameScene::newGame()

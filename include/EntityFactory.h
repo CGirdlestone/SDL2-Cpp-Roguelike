@@ -39,6 +39,8 @@ public:
 	EquipSlots getEquipSlotEnum(std::string stringEnum);
 	UseableFunctionEnums getFunctionEnum(std::string stringEnum);
 
+	void parseStartingItems(std::string line, GameObject* entity, std::map<int, GameObject*> *entities);
+
 	int simulateNormalDistribution(int level);
 	std::string chooseRandomMob(int level);
 	std::string chooseRandomItem(int level);
@@ -46,8 +48,9 @@ public:
 	void loadData(std::string filename);
 	void generateDistributions();
 
-	void makeEntity(std::string entityName, GameObject* entity, int x, int y); 
-	void makeEntity(int level, EntityType type, GameObject* entity, int x, int y); 
+	void makeEntity(std::string entityName, GameObject* entity, int x, int y, std::map<int, GameObject*> *entities); 
+	void makeEntity(int level, EntityType type, GameObject* entity, int x, int y, std::map<int, GameObject*> *entities); 
+	void makeEntity(std::string entityName, GameObject* entity, std::map<int, GameObject*> *entities); 
 	void makeStairs(GameObject* entity, int x, int y);
 
 	void resetUID() { m_uid = 0; }

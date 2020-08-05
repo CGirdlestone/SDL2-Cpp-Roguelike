@@ -28,6 +28,8 @@ void CombatSystem::doAttack(AttackEvent event)
 {
   int roll = std::rand()%20 + 1;
 
+	
+
   if (roll >= 10 + m_entities->at(event.m_defender_uid)->fighter->defence){
     OnHitEvent onHit = OnHitEvent(event.m_attacker_uid, event.m_defender_uid);
     m_eventManager->pushEvent(onHit);
@@ -127,6 +129,35 @@ bool CombatSystem::isWeakToDamageType(GameObject* defender, DamageTypes type)
 			return false;
 		}
 	}	
+}
+
+int CombatSystem::getAttackerHitModifiers(GameObject* attacker)
+{
+	int attackerHitBonus = 0;
+
+	return attackerHitBonus;
+}
+
+
+int CombatSystem::getDefenderHitModifiers(GameObject* defender)
+{
+	int defenderBonus = 0;
+
+	return defenderBonus;
+}
+
+int CombatSystem::getAttackerDamageModifiers(GameObject* attacker)
+{
+	int attackerDamageBonus = 0;
+
+	return attackerDamageBonus;
+}
+
+int CombatSystem::getDefenderDamageModifiers(GameObject* defender)
+{
+	int defenderBonus = 0;
+
+	return defenderBonus;
 }
 
 void CombatSystem::onDead(DeadEvent event)
