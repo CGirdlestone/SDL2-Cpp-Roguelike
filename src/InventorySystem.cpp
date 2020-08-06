@@ -3,6 +3,7 @@
 #include <map>
 #include <iostream>
 #include <cstdlib>
+#include <string>
 #include "InventorySystem.h"
 #include "EventManager.h"
 #include "Events.h"
@@ -36,15 +37,20 @@ void InventorySystem::pickUpItem(TakeEvent event)
 		if(it->second->item == nullptr){ continue; }
 
     if (it->second->position->x == event.m_x && it->second->position->y == event.m_y){
-      m_entities->at(event.m_uid)->inventory->inventory.push_back(it->second);
+			if (m_entities->at(event.m_uid)->inventory->inventory.size() < 10){
+      	m_entities->at(event.m_uid)->inventory->inventory.push_back(it->second);
 
-			int i = it->second->position->x + it->second->position->y * m_dungeon->Getm_width();
-			m_dungeon->removeObjectFromTile(it->second, i);
+				int i = it->second->position->x + it->second->position->y * m_dungeon->Getm_width();
+				m_dungeon->removeObjectFromTile(it->second, i);
 
-      delete it->second->position;
-      it->second->position = nullptr;
-      m_eventManager->pushEvent(OnPickUpEvent(event.m_uid, it->second->m_name));
-      break;
+      	delete it->second->position;
+      	it->second->position = nullptr;
+      	m_eventManager->pushEvent(OnPickUpEvent(event.m_uid, it->second->m_name));
+      	break;
+			} else {
+				std::string msg = "You don't have the capacity to pick that up!"; 
+				m_eventManager->pushEvent(MessageEvent(msg));
+			}
     }
   }
 }
@@ -85,11 +91,16 @@ void InventorySystem::equipItem(EquipEvent event)
 
 void InventorySystem::unequipItem(UnequipEvent event)
 {
-	GameObject* item = m_entities->at(event.m_actor_uid)->body->slots[static_cast<EquipSlots>(event.m_slotNum)];
+	if (m_entities->at(event.m_actor_uid)->inventory->inventory.size() < 10){
+		GameObject* item = m_entities->at(event.m_actor_uid)->body->slots[static_cast<EquipSlots>(event.m_slotNum)];
 
-	m_entities->at(event.m_actor_uid)->body->slots[static_cast<EquipSlots>(event.m_slotNum)] = nullptr;
+		m_entities->at(event.m_actor_uid)->body->slots[static_cast<EquipSlots>(event.m_slotNum)] = nullptr;
 
-	m_entities->at(event.m_actor_uid)->inventory->inventory.push_back(item);
+		m_entities->at(event.m_actor_uid)->inventory->inventory.push_back(item);
+	else{
+		std::string msg = "You don't have the capacity to pick that up!"; 
+		m_eventManager->pushEvent(MessageEvent(msg));
+	}
 }
 
 void InventorySystem::decreaseUses(GameObject* item, int user_uid, int item_uid)
