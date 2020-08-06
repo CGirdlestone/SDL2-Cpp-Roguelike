@@ -419,7 +419,6 @@ void EntityFactory::parseStartingItems(std::string line, GameObject* entity, std
 		if (itemName.size() == 0){ break; }
 
 		itemName = itemName.substr(1, itemName.size());
-		std::cout << itemName << std::endl;
 		GameObject* item = new GameObject();
 		makeEntity(itemName, item, entities);
 		if (item->wearable != nullptr){

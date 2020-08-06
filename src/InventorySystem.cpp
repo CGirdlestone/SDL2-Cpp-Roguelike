@@ -97,7 +97,7 @@ void InventorySystem::unequipItem(UnequipEvent event)
 		m_entities->at(event.m_actor_uid)->body->slots[static_cast<EquipSlots>(event.m_slotNum)] = nullptr;
 
 		m_entities->at(event.m_actor_uid)->inventory->inventory.push_back(item);
-	else{
+	} else{
 		std::string msg = "You don't have the capacity to pick that up!"; 
 		m_eventManager->pushEvent(MessageEvent(msg));
 	}

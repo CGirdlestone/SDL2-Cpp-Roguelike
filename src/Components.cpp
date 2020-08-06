@@ -6,10 +6,10 @@
 
 void serialiseInt(std::vector<uint8_t> &byteVector, int x)
 {
-	byteVector.push_back(x & 0xFF);
-	byteVector.push_back((x << 8) & 0xFF);
-	byteVector.push_back((x << 16) & 0xFF);
-	byteVector.push_back((x << 24) & 0xFF);
+	byteVector.push_back(static_cast<unsigned int>(x) & 0xFF);
+	byteVector.push_back((static_cast<unsigned int>(x) >> 8) & 0xFF);
+	byteVector.push_back((static_cast<unsigned int>(x) >> 16) & 0xFF);
+	byteVector.push_back((static_cast<unsigned int>(x) >> 24) & 0xFF);
 }
 
 void serialiseString(std::vector<uint8_t> &byteVector, std::string stringToSerialise)
@@ -236,12 +236,16 @@ Player::~Player()
 {
 
 }
-
+#include <stdio.h>
 void Player::serialise(std::vector<uint8_t> &byteVector)
 {
 	serialiseInt(byteVector, level);
 	serialiseInt(byteVector, exp);
 	serialiseInt(byteVector, next);
+
+	for (int i = 1; i < 5; ++i){
+		printf("%x\n", byteVector.at(byteVector.size() - i));
+	}
 }
 
 int Player::deserialise(char* buffer, int i)
@@ -265,11 +269,10 @@ int Player::deserialise(char* buffer, int i)
 	i += numBytes * 8;
 
 	for (int j = numBytes - 1; j >= 0; --j){
-		_next = (_next << 8) + buffer[i + j];
+		_next = (_next << 8) + static_cast<unsigned char>(buffer[i + j]);
 	}
 	next = _next;
 	i += numBytes * 8;
-
 	return i;
 }
 
@@ -360,7 +363,7 @@ int AI::deserialise(char* buffer, int i)
 	int _level = 0;
 	
 	for (int j = numBytes - 1; j >= 0; --j){
-		_exp = (_exp << 8) + buffer[i + j];
+		_exp = (_exp << 8) + static_cast<unsigned char>(buffer[i + j]);
 	}
 	i += numBytes * 8;
 	exp = _exp;
