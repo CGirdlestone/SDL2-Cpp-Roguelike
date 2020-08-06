@@ -220,7 +220,7 @@ void Renderer::drawPlayerInfo(GameObject* player, DungeonGenerator* dungeon)
 {
 	int width = m_console->Getm_width();
 	int buffer = m_console->getXBuffer()-2;
-	char healthBarChar = '=';
+	int healthBarChar = 11 * 16;
 	SDL_Color colour = {0xd0, 0x46, 0x48};
 	int healthBarWidth = (player->fighter->health * buffer) / player->fighter->maxHealth;
 	std::string health = "Health: " + std::to_string(player->fighter->health) + " / " + std::to_string(player->fighter->maxHealth);
@@ -233,9 +233,9 @@ void Renderer::drawPlayerInfo(GameObject* player, DungeonGenerator* dungeon)
 	
 	for (int i = 0; i < buffer; ++i){
 		if (i <= healthBarWidth && healthBarWidth != 0){
-			m_console->render(&healthBarChar, width + 1 + i, yPosition, colour);
+			m_console->render(healthBarChar, width + 1 + i, yPosition, colour);
 		} else {
-			m_console->render(&healthBarChar, width + 1 + i, yPosition, m_defaultColour);
+			m_console->render(healthBarChar, width + 1 + i, yPosition, m_defaultColour);
 		}
 	} 
 	yPosition += 2;
@@ -252,9 +252,9 @@ void Renderer::drawPlayerInfo(GameObject* player, DungeonGenerator* dungeon)
 	
 	for (int i = 0; i < buffer; ++i){
 		if (i <= expBarWidth && expBarWidth != 0){
-			m_console->render(&healthBarChar, width + 1 + i, yPosition, colour);
+			m_console->render(healthBarChar, width + 1 + i, yPosition, colour);
 		} else {
-			m_console->render(&healthBarChar, width + 1 + i, yPosition, m_defaultColour);
+			m_console->render(healthBarChar, width + 1 + i, yPosition, m_defaultColour);
 		}
 	} 
 	yPosition += 2;

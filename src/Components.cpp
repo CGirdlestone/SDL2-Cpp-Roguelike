@@ -242,10 +242,6 @@ void Player::serialise(std::vector<uint8_t> &byteVector)
 	serialiseInt(byteVector, level);
 	serialiseInt(byteVector, exp);
 	serialiseInt(byteVector, next);
-
-	for (int i = 1; i < 5; ++i){
-		printf("%x\n", byteVector.at(byteVector.size() - i));
-	}
 }
 
 int Player::deserialise(char* buffer, int i)
@@ -257,13 +253,13 @@ int Player::deserialise(char* buffer, int i)
 	int _next = 0;
 
 	for (int j = numBytes - 1; j >= 0; --j){
-		_level = (_level << 8) + buffer[i + j];
+		_level = (_level << 8) + static_cast<unsigned char>(buffer[i + j]);
 	}
 	level = _level;
 	i += numBytes * 8;
 
 	for (int j = numBytes - 1; j >= 0; --j){
-		_exp = (_exp << 8) + buffer[i + j];
+		_exp = (_exp << 8) + static_cast<unsigned char>(buffer[i + j]);
 	}
 	exp = _exp;
 	i += numBytes * 8;
