@@ -9,17 +9,17 @@ obj/Game.o: src/Game.cpp include/EntityFactory.h include/GameObject.h \
  include/Message.h include/EventManager.h include/Pathfind.h \
  include/Game.h include/LootManager.h include/Console.h \
  include/Renderer.h include/MessageLog.h include/Camera.h \
- include/KeyPressSurfaces.h include/MoveSystem.h include/CombatSystem.h \
- include/InventorySystem.h include/PlayerSystem.h \
- include/GameStateManager.h include/Scene.h include/GameScene.h \
- include/StartScene.h include/InventoryScene.h include/CharacterScene.h \
- include/TargetingScene.h include/PauseScene.h include/GameOverScene.h \
- include/Renderer.h include/EventTypes.h include/Events.h \
- include/EventManager.h include/MoveSystem.h include/CombatSystem.h \
- include/InventorySystem.h include/PlayerSystem.h include/Scene.h \
- include/StartScene.h include/GameScene.h include/InventoryScene.h \
+ include/Particle.h include/KeyPressSurfaces.h include/MoveSystem.h \
+ include/CombatSystem.h include/InventorySystem.h include/PlayerSystem.h \
+ include/ParticleSystem.h include/GameStateManager.h include/Scene.h \
+ include/GameScene.h include/StartScene.h include/InventoryScene.h \
  include/CharacterScene.h include/TargetingScene.h include/PauseScene.h \
- include/GameOverScene.h
+ include/GameOverScene.h include/Renderer.h include/EventTypes.h \
+ include/Events.h include/EventManager.h include/MoveSystem.h \
+ include/CombatSystem.h include/InventorySystem.h include/PlayerSystem.h \
+ include/ParticleSystem.h include/Scene.h include/StartScene.h \
+ include/GameScene.h include/InventoryScene.h include/CharacterScene.h \
+ include/TargetingScene.h include/PauseScene.h include/GameOverScene.h
 include/EntityFactory.h:
 include/GameObject.h:
 include/DamageTypes.h:
@@ -52,11 +52,13 @@ include/Console.h:
 include/Renderer.h:
 include/MessageLog.h:
 include/Camera.h:
+include/Particle.h:
 include/KeyPressSurfaces.h:
 include/MoveSystem.h:
 include/CombatSystem.h:
 include/InventorySystem.h:
 include/PlayerSystem.h:
+include/ParticleSystem.h:
 include/GameStateManager.h:
 include/Scene.h:
 include/GameScene.h:
@@ -74,6 +76,7 @@ include/MoveSystem.h:
 include/CombatSystem.h:
 include/InventorySystem.h:
 include/PlayerSystem.h:
+include/ParticleSystem.h:
 include/Scene.h:
 include/StartScene.h:
 include/GameScene.h:

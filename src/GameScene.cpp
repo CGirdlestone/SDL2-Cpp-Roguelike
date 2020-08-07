@@ -13,10 +13,11 @@
 #include "SceneTypes.h"
 #include "GameScene.h"
 #include "Slots.h"
+#include "ParticleSystem.h"
 
 
-GameScene::GameScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog):
-m_eventManager(eventManager), m_renderer(renderer), m_entities(entities), m_camera(camera), m_dungeon(dungeon), m_messageLog(messageLog)
+GameScene::GameScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog, ParticleSystem* particleSystem):
+m_eventManager(eventManager), m_renderer(renderer), m_entities(entities), m_camera(camera), m_dungeon(dungeon), m_messageLog(messageLog), m_particleSystem(particleSystem)
 {
   m_playerTurn = true;
 }
@@ -36,6 +37,7 @@ void GameScene::startOver()
 	m_dungeon->clearGrid();
 	m_dungeon->reset();
 	m_messageLog->purgeLog();
+	m_particleSystem->purgeParticles();
 }
 
 void GameScene::newGame()
@@ -471,12 +473,12 @@ void GameScene::handleInput(KeyPressSurfaces keyPress)
 
 void GameScene::render()
 {
-  m_renderer->drawGameScreen(m_camera, m_dungeon, m_entities, m_messageLog);
+  m_renderer->drawGameScreen(m_camera, m_dungeon, m_entities, m_messageLog, m_particleSystem->particles);
 }
 
 void GameScene::update(Uint32 dt)
 {
-
+	m_particleSystem->ageParticles(dt);
   m_messageLog->ageMessages(dt);
 }
 

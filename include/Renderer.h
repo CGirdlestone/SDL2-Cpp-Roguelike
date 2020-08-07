@@ -10,6 +10,7 @@
 #include "MessageLog.h"
 #include "Camera.h"
 #include "DungeonGenerator.h"
+#include "Particle.h"
 
 class Renderer
 {
@@ -21,7 +22,7 @@ public:
   void drawLog(MessageLog* messageLog, int height);
   void drawUI();
   void drawMenuOutline();
-  void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog);
+  void drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog, std::vector<Particle> &particles);
 	void drawPlayerInfo(GameObject* player, DungeonGenerator* dungeon);
   void drawStartMenu(int i, int options);
 	void drawInventory(std::map<int, GameObject*> *actors, int i);
@@ -33,6 +34,7 @@ public:
 	void drawMiniMap(DungeonGenerator* dungeon, std::map<int, GameObject*> *actors);
 	void drawPauseMenu(int i, Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog);
 	void drawGameOver(int i, std::vector<std::string> &deathMessages, int totalLines);
+	void drawParticles(Camera* camera, DungeonGenerator* dungeon, std::vector<Particle> &particles);
 	
 private:
   Console* m_console;

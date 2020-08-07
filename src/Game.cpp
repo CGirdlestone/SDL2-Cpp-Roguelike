@@ -24,6 +24,7 @@
 #include "CombatSystem.h"
 #include "InventorySystem.h"
 #include "PlayerSystem.h"
+#include "ParticleSystem.h"
 #include "Scene.h"
 #include "StartScene.h"
 #include "GameScene.h"
@@ -47,6 +48,7 @@ Game::Game()
   m_combatSystem = nullptr;
   m_inventorySystem = nullptr;
 	m_playerSystem = nullptr;
+	m_particleSystem = nullptr;
   m_startScene = nullptr;
   m_gameScene = nullptr;
 	m_inventoryScene = nullptr;
@@ -94,6 +96,9 @@ Game::~Game()
 	
 	delete m_playerSystem;
 	m_playerSystem = nullptr;
+
+	delete m_particleSystem;
+	m_particleSystem = nullptr;
 
   delete m_startScene;
   m_startScene = nullptr;
@@ -156,10 +161,11 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
   m_inventorySystem = new InventorySystem(m_eventManager, &m_actors, m_dungeon);
   m_moveSystem = new MoveSystem(m_eventManager, &m_actors, m_dungeon);
 	m_playerSystem = new PlayerSystem(m_eventManager, &m_actors);
+	m_particleSystem = new ParticleSystem(m_eventManager, &m_actors);
 
   m_sceneManager = new GameStateManager(m_eventManager, &m_actors);
   m_startScene = new StartScene(m_eventManager, m_renderer);
-  m_gameScene = new GameScene(m_eventManager, m_renderer, &m_actors, m_camera, m_dungeon, m_messageLog);
+  m_gameScene = new GameScene(m_eventManager, m_renderer, &m_actors, m_camera, m_dungeon, m_messageLog, m_particleSystem);
 	m_inventoryScene = new InventoryScene(m_eventManager, m_renderer, &m_actors);
 	m_characterScene = new CharacterScene(m_eventManager, m_renderer, &m_actors);
   m_targetingScene = new TargetingScene(m_eventManager, m_renderer, &m_actors, m_camera, m_dungeon, m_messageLog);

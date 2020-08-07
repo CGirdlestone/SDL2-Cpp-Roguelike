@@ -559,7 +559,20 @@ void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std
 	m_console->update();
 }
 
-void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog)
+void Renderer::drawParticles(Camera* camera, DungeonGenerator* dungeon, std::vector<Particle> &particles)
+{
+	SDL_Color colour;
+	int offsetI;
+	for (auto p : particles){
+		colour = {p.red, p.green, p.blue};
+		offsetI = camera->calculateOffset(p.x, p.y);
+		if (p.steps % 2 == 0){
+			m_console->fillBackgroundTile(0, 0, colour, 255, p.size, offsetI % camera->getWidth() * m_console->getTileSize(), offsetI / camera->getWidth() * m_console->getTileSize());
+		} 
+	}
+}
+
+void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog, std::vector<Particle> &particles)
 {
   m_console->flush();
   drawMap(camera, dungeon, actors);
@@ -568,6 +581,7 @@ void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::ma
   drawUI();
 	drawPlayerInfo(actors->at(0), dungeon);
 	drawMiniMap(dungeon, actors);
+	drawParticles(camera, dungeon, particles);
   m_console->update();
 }
 

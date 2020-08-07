@@ -17,6 +17,7 @@
 #include "CombatSystem.h"
 #include "InventorySystem.h"
 #include "PlayerSystem.h"
+#include "ParticleSystem.h"
 #include "GameStateManager.h"
 #include "StartScene.h"
 #include "GameScene.h"
@@ -51,6 +52,7 @@ class Game
     CombatSystem* m_combatSystem;
     InventorySystem* m_inventorySystem;
 		PlayerSystem* m_playerSystem;
+		ParticleSystem* m_particleSystem;
     std::vector<Scene*> sceneStack;
     int m_width;
     int m_height;
