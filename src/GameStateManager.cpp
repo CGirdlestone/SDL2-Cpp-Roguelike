@@ -110,7 +110,6 @@ void GameStateManager::notify(LoadEvent event)
 	m_sceneStack.push_back(m_gameScene);
 	m_gameScene->loadGame();
 }
-
 void GameStateManager::notify(RestartEvent event)
 {
 	while (m_sceneStack.size() > 1){

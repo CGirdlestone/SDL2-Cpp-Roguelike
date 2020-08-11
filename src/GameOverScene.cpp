@@ -81,8 +81,11 @@ void GameOverScene::handleInput(KeyPressSurfaces keyPress)
     m_i = m_i + 1 > 1 ? 0 : m_i + 1;
   } else if (keyPress == PRESS){
 		if (m_i == 0){
-			m_eventManager->pushEvent(RestartEvent());
 			m_deathMessages.clear();
+			m_deathMessages.push_back(std::string(1, m_completeDeathMessages.at(0)[0]));
+			numLines = 0;
+			numChars = 1;
+			m_eventManager->pushEvent(RestartEvent());
 		} else if (m_i == 1){
 			m_eventManager->pushEvent(QuitEvent());
 		}
