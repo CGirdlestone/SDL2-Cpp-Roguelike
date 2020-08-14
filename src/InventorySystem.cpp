@@ -95,8 +95,13 @@ void InventorySystem::equipItem(EquipEvent event)
 			} else if (m_entities->at(event.m_item_uid)->wearable->slot == RIGHTHAND){
 				if (m_entities->at(event.m_actor_uid)->body->slots.at(LEFTHAND) != nullptr){
 					item = m_entities->at(event.m_actor_uid)->body->slots.at(LEFTHAND);
-					if (item->weapon->twoHanded){
-						m_eventManager->pushEvent(UnequipEvent(event.m_actor_uid, item->m_uid, LEFTHAND));
+					if (item->armour != nullptr){
+							m_eventManager->pushEvent(UnequipEvent(event.m_actor_uid, item->m_uid, LEFTHAND));
+					}
+					if (item->weapon != nullptr){
+						if (item->weapon->twoHanded){
+							m_eventManager->pushEvent(UnequipEvent(event.m_actor_uid, item->m_uid, LEFTHAND));
+						}
 					}
 				}
 			}
