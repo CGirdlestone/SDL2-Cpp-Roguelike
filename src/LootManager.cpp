@@ -94,10 +94,24 @@ void LootManager::generateLoot(DeadEvent event)
 	std::string name = m_entities->at(event.m_uid)->m_name;
 	std::string item = getLoot(name);
 
+	bool placed = false;
+
+	int i, j, x, y;
+
+	while (!placed){
+		i = rand() % 2 - 1;
+		j = rand() % 2 - 1;
+		x = m_entities->at(event.m_uid)->position->x + i;
+		y = m_entities->at(event.m_uid)->position->y + j;
+		if (m_dungeon->m_level[x + m_dungeon->Getm_width() * y] == '.'){
+			break;
+		}
+	}
+
 	if (item != "NONE"){
 		GameObject* entity = new GameObject();
 
-		m_factory->makeEntity(item, entity, m_entities->at(event.m_uid)->position->x, m_entities->at(event.m_uid)->position->y, m_entities);
+		m_factory->makeEntity(item, entity, x, y, m_entities);
 
 		m_entities->insert({entity->m_uid, entity});
 	}
