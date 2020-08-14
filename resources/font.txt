@@ -1,3 +1,6 @@
+Terminus.png
+Msgothic.png
+Runeset_16x16.png
 Talryth_square_15x15.png
 Cheepicus_15x15.png
 Kren_13x13.png

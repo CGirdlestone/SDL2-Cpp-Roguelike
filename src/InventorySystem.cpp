@@ -67,6 +67,9 @@ void InventorySystem::dropItem(DropEvent event)
 
 			int i = x + y * m_dungeon->Getm_width();
 			m_dungeon->moveObjectToTile(m_entities->at(event.m_item_uid), i);
+			
+			std::string msg = "You drop the " + m_entities->at(event.m_item_uid)->m_name + " onto the floor.";
+			m_eventManager->pushEvent(MessageEvent(msg));
 		}
 	}
 }
@@ -74,17 +77,68 @@ void InventorySystem::dropItem(DropEvent event)
 void InventorySystem::equipItem(EquipEvent event)
 {
 	if (m_entities->at(event.m_item_uid)->wearable != nullptr){
+		/* Check whether the entity has an item equipped in the same slot and move it to the inventory if it does. */
 		if (m_entities->at(event.m_actor_uid)->body->slots.at(m_entities->at(event.m_item_uid)->wearable->slot) != nullptr){
 			m_entities->at(event.m_actor_uid)->inventory->inventory.push_back(m_entities->at(event.m_actor_uid)->body->slots.at(m_entities->at(event.m_item_uid)->wearable->slot));
 		}
-	
+
+		/* Check whether the entity has a two handed weapon equipped in the other hand and unequip if it does. */
+		if (m_entities->at(event.m_item_uid)->weapon != nullptr){
+			GameObject* item;
+			if (m_entities->at(event.m_item_uid)->wearable->slot == LEFTHAND){
+				if (m_entities->at(event.m_actor_uid)->body->slots.at(RIGHTHAND) != nullptr){
+					item = m_entities->at(event.m_actor_uid)->body->slots.at(RIGHTHAND);
+					if (item->weapon->twoHanded){
+						m_eventManager->pushEvent(UnequipEvent(event.m_actor_uid, item->m_uid, RIGHTHAND));
+					}
+				}
+			} else if (m_entities->at(event.m_item_uid)->wearable->slot == RIGHTHAND){
+				if (m_entities->at(event.m_actor_uid)->body->slots.at(LEFTHAND) != nullptr){
+					item = m_entities->at(event.m_actor_uid)->body->slots.at(LEFTHAND);
+					if (item->weapon->twoHanded){
+						m_eventManager->pushEvent(UnequipEvent(event.m_actor_uid, item->m_uid, LEFTHAND));
+					}
+				}
+			}
+		}
+		
+		/* Check whether the item is two handed or not and if there is an item in the opposite hand, unequip it if there is space or drop it on the floor. */
+		if (m_entities->at(event.m_item_uid)->weapon != nullptr){
+			if (m_entities->at(event.m_item_uid)->weapon->twoHanded){
+				GameObject* item;
+				if (m_entities->at(event.m_item_uid)->wearable->slot == LEFTHAND){
+					if (m_entities->at(event.m_actor_uid)->body->slots.at(RIGHTHAND) != nullptr){
+						item = m_entities->at(event.m_actor_uid)->body->slots.at(RIGHTHAND);
+						m_eventManager->pushEvent(UnequipEvent(event.m_actor_uid, item->m_uid, RIGHTHAND));
+						m_entities->at(event.m_actor_uid)->body->slots.at(RIGHTHAND) = nullptr;
+					}
+				} else if (m_entities->at(event.m_item_uid)->wearable->slot == RIGHTHAND){
+					if (m_entities->at(event.m_actor_uid)->body->slots.at(LEFTHAND) != nullptr){
+						item = m_entities->at(event.m_actor_uid)->body->slots.at(LEFTHAND);
+						m_eventManager->pushEvent(UnequipEvent(event.m_actor_uid, item->m_uid, LEFTHAND));
+						m_entities->at(event.m_actor_uid)->body->slots.at(LEFTHAND) = nullptr;
+					}
+				}
+			}
+		}	
+
+		/* Equip the chosen item. */
 		m_entities->at(event.m_actor_uid)->body->slots[m_entities->at(event.m_item_uid)->wearable->slot] = m_entities->at(event.m_item_uid);
 
+		/* Search through the inventory and remove the equipped item. */
 		for (int i = 0; i < static_cast<int>(m_entities->at(event.m_actor_uid)->inventory->inventory.size()); ++i){
 			if (m_entities->at(event.m_actor_uid)->inventory->inventory.at(i)->m_uid == event.m_item_uid){
 				m_entities->at(event.m_actor_uid)->inventory->inventory.erase(m_entities->at(event.m_actor_uid)->inventory->inventory.begin() + i);
 				break;
 			}
+		}
+		
+		/* If the actor is the player, return to the game scene, end the player's turn and send a message confirming the item was equipped. */
+		if (event.m_actor_uid == 0){
+			m_eventManager->pushEvent(PopScene(1));
+			m_eventManager->pushEvent(PlayerTurnOverEvent());
+			std::string msg = "You equip the " + m_entities->at(event.m_item_uid)->m_name;
+			m_eventManager->pushEvent(MessageEvent(msg));
 		}
 	}
 }
@@ -98,8 +152,10 @@ void InventorySystem::unequipItem(UnequipEvent event)
 
 		m_entities->at(event.m_actor_uid)->inventory->inventory.push_back(item);
 	} else{
-		std::string msg = "You don't have the capacity to pick that up!"; 
-		m_eventManager->pushEvent(MessageEvent(msg));
+		int x, y;
+		x = m_entities->at(event.m_actor_uid)->position->x;
+		y = m_entities->at(event.m_actor_uid)->position->y;
+		m_eventManager->pushEvent(DropEvent(event.m_actor_uid, event.m_item_uid, x, y));
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "Components.h"
 #include <string>
 #include <vector>
+#include <iostream>
 
 GameObject::GameObject()
 {
@@ -507,6 +508,8 @@ int GameObject::deserialise(char* buffer, int i)
 		stairs = new Stairs();
 		i = stairs->deserialise(buffer, i);
 		hasPointer = 0;
+		std::cout << position->x << std::endl;
+		std::cout << position->y << std::endl;
 	}
 	
 	return i;

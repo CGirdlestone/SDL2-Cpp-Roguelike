@@ -111,6 +111,8 @@ bool Console::loadMedia(const char* path)
     printf("Failed to load image! SDL_image Error: %s\n", IMG_GetError());
     return false;
   } else {
+		uint32_t* pixels = static_cast<uint32_t*>(loadedSurface->pixels); // get pixels from the loaded surface
+		SDL_SetColorKey(loadedSurface, SDL_TRUE, pixels[0]); // make the pixel at (0,0) transparent
     m_texture = SDL_CreateTextureFromSurface(m_renderer, loadedSurface);
     SDL_FreeSurface(loadedSurface);
     loadedSurface = nullptr;

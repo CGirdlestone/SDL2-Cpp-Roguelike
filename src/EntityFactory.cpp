@@ -199,12 +199,13 @@ void EntityFactory::makeWeaponComponent(std::string line, GameObject* entity)
 	std::string damageString;
 	DamageTypes damageType;	
 	int die;
+	int _twoHanded;
 
-	ss >> damageString >> die;
+	ss >> damageString >> die >> _twoHanded;
 
 	damageType = getDamageTypeEnum(damageString);
 	
-	Weapon* weapon = new Weapon(damageType, die);
+	Weapon* weapon = new Weapon(damageType, die, static_cast<bool>(_twoHanded));
 
 	entity->weapon = weapon;
 }

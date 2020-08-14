@@ -430,8 +430,8 @@ int Inventory::deserialise(char* buffer, int i)
 }
 
 
-Weapon::Weapon(DamageTypes _damageType, int _sidedDie):
-damageType(_damageType), sidedDie(_sidedDie)
+Weapon::Weapon(DamageTypes _damageType, int _sidedDie, bool _twoHanded):
+damageType(_damageType), sidedDie(_sidedDie), twoHanded(_twoHanded)
 {
 
 }
@@ -439,6 +439,7 @@ damageType(_damageType), sidedDie(_sidedDie)
 Weapon::Weapon()
 {
 	sidedDie = 0;
+	twoHanded = false;
 }
 
 Weapon::~Weapon()
@@ -450,6 +451,7 @@ void Weapon::serialise(std::vector<uint8_t> &byteVector)
 {
 	serialiseInt(byteVector, static_cast<int>(damageType));
 	serialiseInt(byteVector, sidedDie);
+	serialiseInt(byteVector, static_cast<int>(twoHanded));
 }
 
 int Weapon::deserialise(char* buffer, int i)
@@ -457,7 +459,7 @@ int Weapon::deserialise(char* buffer, int i)
 	int numBytes = 4;
 	int _damageType = 0;
 	int _sidedDie = 0;
-
+	int _twoHanded = 0;
 
 	for (int j = numBytes - 1; j >= 0; --j){
 		_damageType = (_damageType << 8) + buffer[i + j];
@@ -472,6 +474,12 @@ int Weapon::deserialise(char* buffer, int i)
 	sidedDie = _sidedDie;
 	i += numBytes * 8;
 
+	for (int j = numBytes - 1; j >= 0; --j){
+		_twoHanded = (_twoHanded << 8) + buffer[i + j];
+	}
+	twoHanded = _twoHanded;
+	i += numBytes * 8;
+	
 	return i;
 }
 

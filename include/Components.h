@@ -109,7 +109,8 @@ struct Weapon
 {
   DamageTypes damageType;
   int sidedDie;
-  Weapon(DamageTypes _damageType, int _sidedDie);
+	bool twoHanded;
+  Weapon(DamageTypes _damageType, int _sidedDie, bool _twoHanded);
 	Weapon();
   ~Weapon();
 	void serialise(std::vector<uint8_t> &byteVector);
