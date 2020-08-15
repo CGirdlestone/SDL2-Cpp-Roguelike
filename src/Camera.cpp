@@ -2,8 +2,8 @@
 #include <algorithm>
 #include "Camera.h"
 
-Camera::Camera(int width, int height, int mapWidth, int mapHeight):
-m_width(width), m_height(height), m_mapWidth(mapWidth), m_mapHeight(mapHeight)
+Camera::Camera(int width, int height, int mapWidth, int mapHeight, int _xBuffer, int _yBuffer):
+m_width(width), m_height(height), m_mapWidth(mapWidth), m_mapHeight(mapHeight), m_xBuffer(_xBuffer), m_yBuffer(_yBuffer)
 {
 
 }

@@ -8,8 +8,12 @@
 Renderer::Renderer(Console* console)
 {
   m_console = console;
-  m_defaultColour = {0x44, 0x24, 0x34};
-  m_inViewColour = {0xde, 0xed, 0xd6};
+  m_defaultColour = {0x3a, 0x4b, 0x6d};
+  m_inViewColour = {0xb4, 0xc3, 0xa8}; // 0xde, 0xed, 0xd6
+	m_borderColour = {0x99, 0xb4, 0xdd};
+	m_highlightColour = {0xd3, 0xea, 0xd8};
+	m_backgroundColour = {0x0d, 0x0e, 0x1e};
+	m_textColour = {0x94, 0xa5, 0xaa};
 }
 
 Renderer::~Renderer()
@@ -61,7 +65,7 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, 
       }
       if(!occupied){
         offsetI = camera->calculateOffset(x, y);
-        m_console->render(&dungeon->m_level[i], offsetI % camera->getWidth(), offsetI / camera->getWidth(), m_inViewColour);
+        m_console->render(&dungeon->m_level[i], offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), m_inViewColour);
       }
     } else if (dungeon->m_fovMap[i] == 0){
       if (dungeon->m_exploredMap[i] == 1){
@@ -75,7 +79,7 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, 
           }
         }
         offsetI = camera->calculateOffset(x, y);
-        m_console->render(&dungeon->m_level[i], offsetI % camera->getWidth(), offsetI / camera->getWidth(), m_defaultColour);
+        m_console->render(&dungeon->m_level[i], offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), m_defaultColour);
       }
     }
     if (x == dungeon->Getm_width() - 1){
@@ -147,7 +151,7 @@ void Renderer::drawActors(Camera* camera, DungeonGenerator* dungeon, std::map<in
       mapArrayIndex = it->second->position->x + it->second->position->y*dungeon->Getm_width();
       if (dungeon->m_fovMap[mapArrayIndex] == 1){
         offsetI = camera->calculateOffset(it->second->position->x, it->second->position->y);
-        m_console->render(&it->second->renderable->chr, offsetI % camera->getWidth(), offsetI / camera->getWidth(), it->second->renderable->colour);
+        m_console->render(&it->second->renderable->chr, offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), it->second->renderable->colour);
       }
     }
   }
@@ -157,55 +161,46 @@ void Renderer::drawMenuOutline()
 {
 	int tileSize = m_console->getTileSize();
 	int windowHeight = m_console->Getm_height() + m_console->getYBuffer();
-  SDL_Color colour = {0xda, 0xd4, 0x5e};
   int xBuffer = m_console->getXBuffer();
   int yBuffer = m_console->getYBuffer();
   int height = m_console->Getm_height();
   int width = m_console->Getm_width();
-  int verticalBar = 186;
-  int topLeft = 201;
-  int topRight = 187;
-  int bottomLeft = 200;
-  int bottomRight = 188;
-  int horizontalBar = 205;
-  int leftJoin = 185;
-  int topJoin = 202;
-	int rightJoin = 204;
+	int block = 13*16 + 11;
 
 	int miniMapBarTopPos = (windowHeight * tileSize - 160)/tileSize - 2;
 
   for (int i = 0; i < width + xBuffer; ++i){
     for (int j = 0; j < height + yBuffer; ++j){
       if (i == width && j == 0){
-        m_console->render(topLeft, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
       } else if (i == width + xBuffer - 1 && j == 0){
-        m_console->render(topRight, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
       } else if (i == width && j == height + yBuffer -1){
-        m_console->render(topJoin, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
       } else if (i == width + xBuffer - 1 && j == height + yBuffer -1){
-        m_console->render(bottomRight, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
 			} else if (j == miniMapBarTopPos && i == width){
-				m_console->render(rightJoin, i, j, colour);
+				m_console->render(block, i, j, m_borderColour);
       } else if ((j == height && i == width)){
-        m_console->render(leftJoin, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
 			} else if (j == miniMapBarTopPos && i == width + xBuffer - 1){
-        m_console->render(leftJoin, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
       } else if (i == width || i == width + xBuffer - 1){
-        m_console->render(verticalBar, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
 			} else if (j == miniMapBarTopPos && (i > width && i < width + xBuffer) ){
-				m_console->render(horizontalBar, i, j, colour);
+				m_console->render(block, i, j, m_borderColour);
       } else if ((j == 0 || j == height + yBuffer - 1) && i > width){
-        m_console->render(horizontalBar, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
       } else if (i == 0 && j == height){
-        m_console->render(topLeft, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
       } else if (i == 0 && j == height + yBuffer - 1){
-        m_console->render(bottomLeft, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
       } else if (i == 0 && j >= height){
-        m_console->render(verticalBar, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
       } else if (j == height && i < width){
-        m_console->render(horizontalBar, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
       } else if (j == height + yBuffer - 1 && i < width){
-        m_console->render(horizontalBar, i, j, colour);
+        m_console->render(block, i, j, m_borderColour);
       }
     }
   }
@@ -220,14 +215,14 @@ void Renderer::drawPlayerInfo(GameObject* player, DungeonGenerator* dungeon)
 {
 	int width = m_console->Getm_width();
 	int buffer = m_console->getXBuffer()-2;
-	int healthBarChar = 11 * 16;
+	int healthBarChar = 13 * 16 + 11; // solid block
 	SDL_Color colour = {0xd0, 0x46, 0x48};
 	int healthBarWidth = (player->fighter->health * buffer) / player->fighter->maxHealth;
 	std::string health = "Health: " + std::to_string(player->fighter->health) + " / " + std::to_string(player->fighter->maxHealth);
 	int yPosition = 2;
 	
 	for (int i = 0; i < static_cast<int>(health.length()); ++i){
-		m_console->render(&health[i], width + 1 + i, yPosition, m_inViewColour);
+		m_console->render(&health[i], width + 1 + i, yPosition, m_textColour);
 	} 
 	yPosition += 2;
 	
@@ -246,7 +241,7 @@ void Renderer::drawPlayerInfo(GameObject* player, DungeonGenerator* dungeon)
 	std::string exp = "Exp: " + std::to_string(player->player->exp) + " / " + std::to_string(player->player->next);
 
 	for (int i = 0; i < static_cast<int>(exp.length()); ++i){
-		m_console->render(&exp[i], width + 1 + i, yPosition, m_inViewColour);
+		m_console->render(&exp[i], width + 1 + i, yPosition, m_textColour);
 	} 
 	yPosition += 2;
 	
@@ -262,14 +257,14 @@ void Renderer::drawPlayerInfo(GameObject* player, DungeonGenerator* dungeon)
 	std::string level = "Level: " + std::to_string(player->player->level);
 
 	for (int i = 0; i < static_cast<int>(level.length()); ++i){
-		m_console->render(&level[i], width + 1 + i, yPosition, m_inViewColour);
+		m_console->render(&level[i], width + 1 + i, yPosition, m_textColour);
 	}
 	yPosition += 2;
 
 	std::string depth = "Depth: " + std::to_string(dungeon->m_uid);
 
 	for (int i = 0; i < static_cast<int>(depth.length()); ++i){
-		m_console->render(&depth[i], width + 1 + i, yPosition, m_inViewColour);
+		m_console->render(&depth[i], width + 1 + i, yPosition, m_textColour);
 	}
 	yPosition += 2;
 
@@ -285,8 +280,6 @@ void Renderer::drawStartMenu(int i, int options)
   std::string exitText = "EXIT GAME";
 	std::string continueText = "CONTINUE";
 
-	SDL_Color colour = {0x63, 0x9b, 0xff};
-
 	int yPosition = height/2 - 4;
 
 	if ((options == 2 && i == 0) || (options == 3 && i == 1)){
@@ -300,7 +293,7 @@ void Renderer::drawStartMenu(int i, int options)
   m_console->flush();
 
   for (int j = 0; j < static_cast<int>(name.length()); ++j){
-    m_console->render(&name[j], width/2 + j - 5, yPosition, m_inViewColour);
+    m_console->render(&name[j], width/2 + j - 5, yPosition, m_textColour);
   }
 	
 	yPosition += 2;
@@ -309,9 +302,9 @@ void Renderer::drawStartMenu(int i, int options)
 		
   	for (int j = 0; j < static_cast<int>(continueText.length()); ++j){
     	if (i == 0){
-      	m_console->render(&continueText[j], width/2 - 1 + j - 5, yPosition, colour);
+      	m_console->render(&continueText[j], width/2 - 1 + j - 5, yPosition, m_highlightColour);
     	} else {
-      	m_console->render(&continueText[j], width/2 + j - 5, yPosition, m_inViewColour);
+      	m_console->render(&continueText[j], width/2 + j - 5, yPosition, m_textColour);
     	}
   	}
 		yPosition += 2;
@@ -320,18 +313,18 @@ void Renderer::drawStartMenu(int i, int options)
 
   for (int j = 0; j < static_cast<int>(startText.length()); ++j){
     if ((options == 3 && i == 1) || (options == 2 && i == 0)){
-      m_console->render(&startText[j], width/2 - 1 + j - 5, yPosition, colour);
+      m_console->render(&startText[j], width/2 - 1 + j - 5, yPosition, m_highlightColour);
     } else {
-      m_console->render(&startText[j], width/2 + j - 5, yPosition, m_inViewColour);
+      m_console->render(&startText[j], width/2 + j - 5, yPosition, m_textColour);
     }
   }
 	yPosition += 2;
 
   for (int j = 0; j < static_cast<int>(exitText.length()); ++j){
     if ((options == 3 && i == 2) || (options == 2 && i == 1)){
-      m_console->render(&exitText[j], width/2 - 1 + j - 5, yPosition, colour);
+      m_console->render(&exitText[j], width/2 - 1 + j - 5, yPosition, m_highlightColour);
     } else {
-      m_console->render(&exitText[j], width/2 + j - 5, yPosition, m_inViewColour);
+      m_console->render(&exitText[j], width/2 + j - 5, yPosition, m_textColour);
     }
   }
 
@@ -344,10 +337,9 @@ void Renderer::drawInventory(std::map<int, GameObject*> *actors, int i)
 
 	std::string inventoryHeader = "Inventory";
 	std::string selectedItem;
-	SDL_Color colour = {0x63, 0x9b, 0xff};
 
 	for (int k = 0; k < static_cast<int>(inventoryHeader.length()); ++k){
-		m_console->render(&inventoryHeader[k], 2 + k, 1, m_inViewColour);
+		m_console->render(&inventoryHeader[k], 2 + k, 1, m_textColour);
 	}
 
 	if (actors->at(0)->inventory->inventory.size() > 0){
@@ -356,11 +348,11 @@ void Renderer::drawInventory(std::map<int, GameObject*> *actors, int i)
 			if (k == i){
 				selectedItem = ">" + item->m_name;
 				for (int j = 0; j < static_cast<int>(selectedItem.length()); ++j){
-					m_console->render(&selectedItem[j], 1 + j, 2*k + 3, colour);
+					m_console->render(&selectedItem[j], 1 + j, 2*k + 3, m_highlightColour);
 				}
 			} else {
 				for (int j = 0; j < static_cast<int>(item->m_name.length()); ++j){
-					m_console->render(&item->m_name[j], 2 + j, 2*k + 3, m_inViewColour);
+					m_console->render(&item->m_name[j], 2 + j, 2*k + 3, m_textColour);
 				}
 			}
 		}
@@ -372,7 +364,6 @@ void Renderer::drawInventory(std::map<int, GameObject*> *actors, int i)
 void Renderer::drawEquippedItem(std::string slot, std::string item, int y, int index)
 {
 	std::string equipmentSlot = slot + item;
-	SDL_Color colour = {0x63, 0x9b, 0xff};
 
 	if (index == y){
 		equipmentSlot = ">" + equipmentSlot;
@@ -380,9 +371,9 @@ void Renderer::drawEquippedItem(std::string slot, std::string item, int y, int i
 
 	for (int j = 0; j < static_cast<int>(equipmentSlot.length()); ++j){
 		if (index == y){
-			m_console->render(&equipmentSlot[j], j + 2, 3 + 2 * y, colour);
+			m_console->render(&equipmentSlot[j], j + 2, 3 + 2 * y, m_highlightColour);
 		} else {
-			m_console->render(&equipmentSlot[j], j + 3, 3 + 2 * y, m_inViewColour);
+			m_console->render(&equipmentSlot[j], j + 3, 3 + 2 * y, m_textColour);
 		}	
 	}
 }
@@ -390,7 +381,6 @@ void Renderer::drawEquippedItem(std::string slot, std::string item, int y, int i
 void Renderer::drawEquippedItem(std::string slot, int y, int index)
 {
 	std::string equipmentSlot = slot + "empty";
-	SDL_Color colour = {0x63, 0x9b, 0xff};
 	
 	if (index == y){
 		equipmentSlot = ">" + equipmentSlot;
@@ -398,9 +388,9 @@ void Renderer::drawEquippedItem(std::string slot, int y, int index)
 	
 	for (int j = 0; j < static_cast<int>(equipmentSlot.length()); ++j){
 		if (index == y){
-			m_console->render(&equipmentSlot[j], j + 2, 3 + 2 * y, colour);
+			m_console->render(&equipmentSlot[j], j + 2, 3 + 2 * y, m_highlightColour);
 		} else {
-			m_console->render(&equipmentSlot[j], j + 3, 3 + 2 * y, m_inViewColour);
+			m_console->render(&equipmentSlot[j], j + 3, 3 + 2 * y, m_textColour);
 		}
 	}
 } 
@@ -413,7 +403,7 @@ void Renderer::drawCharacterScene(std::map<int, GameObject*> *actors, int index)
 	std::string slot;
 
 	for (int j = 0; j < static_cast<int>(character.length()); ++j){
-		m_console->render(&character[j], j + 3, 1, m_inViewColour);
+		m_console->render(&character[j], j + 3, 1, m_textColour);
 	}	
 
 	for (std::map<EquipSlots, GameObject*>::iterator iter = actors->at(0)->body->slots.begin(); iter != actors->at(0)->body->slots.end(); ++iter){
@@ -440,15 +430,14 @@ void Renderer::drawCharacterScene(std::map<int, GameObject*> *actors, int index)
 void Renderer::drawPauseMenu(int index, Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog)
 {
 	m_console->flush();
-	
+
+	drawGameMapBorder(camera->getXBuffer(), camera->getYBuffer(), camera->getWidth(), camera->getHeight());	
   drawMap(camera, dungeon, actors);
   drawActors(camera, dungeon, actors);
-  drawLog(messageLog, camera->getHeight());
+  drawLog(messageLog, camera->getHeight()+2*camera->getYBuffer());
   drawUI();
 	drawPlayerInfo(actors->at(0), dungeon);
 	drawMiniMap(dungeon, actors);
-
-	SDL_Color highlightColour = {0x63, 0x9b, 0xff};
 
   int width = m_console->Getm_width();
   int height = m_console->Getm_height();
@@ -457,35 +446,31 @@ void Renderer::drawPauseMenu(int index, Camera* camera, DungeonGenerator* dungeo
 
 	int xOrigin = width/2 - 5;
 	int yOrigin = height/2 - 2;
-	int boxWidth = startText.size() < exitText.size() ? static_cast<int>(exitText.size())+2 : static_cast<int>(startText.size())+2;
+	int boxWidth = startText.size() < exitText.size() ? static_cast<int>(exitText.size())+4 : static_cast<int>(startText.size())+4;
 	int boxHeight = 7;
 
-	SDL_Color colour = {0x14, 0x0c, 0x1c};
-  SDL_Color borderColour = {0xda, 0xd4, 0x5e};
-  int verticalBar = 186;
-  int topLeft = 201;
-  int topRight = 187;
-  int bottomLeft = 200;
-  int bottomRight = 188;
-  int horizontalBar = 205;
+	int block = 13*16 + 11;
 	
 	for (int h = 0; h < boxHeight; ++h){
 		for (int j = 0; j < boxWidth; ++j){
+			m_console->fillBackgroundTile(xOrigin+j, yOrigin+h, m_backgroundColour, 255, m_console->getTileSize(), 0, 0);
+		}
+	}
 
-			m_console->fillBackgroundTile(xOrigin+j, yOrigin+h, colour, 255, m_console->getTileSize(), 0, 0);
-
+	for (int h = 0; h < boxHeight; ++h){
+		for (int j = 0; j < boxWidth; ++j){
 			if (j == 0 && h == 0){
-				m_console->render(topLeft, xOrigin+j, yOrigin+h, borderColour);
+				m_console->render(block, xOrigin+j, yOrigin+h, m_borderColour);
 			} else if (j == 0 && h == boxHeight - 1){
-				m_console->render(bottomLeft, xOrigin+j, yOrigin+h, borderColour);
+				m_console->render(block, xOrigin+j, yOrigin+h, m_borderColour);
 			} else if (j == boxWidth - 1 && h == 0){
-				m_console->render(topRight, xOrigin+j, yOrigin+h, borderColour);
+				m_console->render(block, xOrigin+j, yOrigin+h, m_borderColour);
 			} else if (j == boxWidth - 1 && h == boxHeight - 1){
-				m_console->render(bottomRight, xOrigin+j, yOrigin+h, borderColour);
+				m_console->render(block, xOrigin+j, yOrigin+h, m_borderColour);
 			} else if (j == 0 || j == boxWidth -1){
-				m_console->render(verticalBar, xOrigin+j, yOrigin+h, borderColour);
+				m_console->render(block, xOrigin+j, yOrigin+h, m_borderColour);
 			}	else if (h == 0 || h == boxHeight - 1){
-				m_console->render(horizontalBar, xOrigin+j, yOrigin+h, borderColour);
+				m_console->render(block, xOrigin+j, yOrigin+h, m_borderColour);
 			}
 
 			if (h == 2){
@@ -493,17 +478,17 @@ void Renderer::drawPauseMenu(int index, Camera* camera, DungeonGenerator* dungeo
 				if (j == 0){ continue; }
 
     		if (index == 0){
-      		m_console->render(&startText[j-1], xOrigin+j, yOrigin+h, highlightColour);
+      		m_console->render(&startText[j-1], xOrigin+j+1, yOrigin+h, m_highlightColour);
    			} else {
-      		m_console->render(&startText[j-1], xOrigin+j, yOrigin+h, m_inViewColour);
+      		m_console->render(&startText[j-1], xOrigin+j+1, yOrigin+h, m_textColour);
 				}
 			} else if (h == 4){
 				if (j > static_cast<int>(exitText.size())){ continue; }
 				if (j == 0){ continue; }
 				if (index == 1){
-      		m_console->render(&exitText[j-1], xOrigin+j, yOrigin+h, highlightColour);
+      		m_console->render(&exitText[j-1], xOrigin+j+1, yOrigin+h, m_highlightColour);
     		} else {
-      		m_console->render(&exitText[j-1], xOrigin+j, yOrigin+h, m_inViewColour);
+      		m_console->render(&exitText[j-1], xOrigin+j+1, yOrigin+h, m_textColour);
 				}
 			}
 		}
@@ -517,9 +502,10 @@ void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std
 	int offsetI, x, y;
 	
   m_console->flush();
+	drawGameMapBorder(camera->getXBuffer(), camera->getYBuffer(), camera->getWidth(), camera->getHeight());
   drawMap(camera, dungeon, actors);
   drawActors(camera, dungeon, actors);
-  drawLog(messageLog, camera->getHeight());
+  drawLog(messageLog, camera->getHeight()+2*camera->getYBuffer());
   drawUI();
 	drawPlayerInfo(actors->at(0), dungeon);
 	drawMiniMap(dungeon, actors);
@@ -532,10 +518,10 @@ void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std
 
 		if (checkInRange(x, y, actors->at(0)->position->x, actors->at(0)->position->y, radius)){
 			SDL_Color colour = {0x6d, 0xaa, 0x2c};
- 			m_console->fillBackgroundTile(offsetI % camera->getWidth(), offsetI / camera->getWidth(), colour);
+ 			m_console->fillBackgroundTile(offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), colour);
   	} else {
 			SDL_Color colour = {0xd0, 0x46, 0x48};
- 			m_console->fillBackgroundTile(offsetI % camera->getWidth(), offsetI / camera->getWidth(), colour);
+ 			m_console->fillBackgroundTile(offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), colour);
 		}
 	}
 
@@ -547,10 +533,10 @@ void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std
 							
 				if (checkInRange(_x, _y, actors->at(0)->position->x, actors->at(0)->position->y, radius)){
 					SDL_Color colour = {0x6d, 0xaa, 0x2b};
- 					m_console->fillBackgroundTile(offsetI % camera->getWidth(), offsetI / camera->getWidth(), colour);
+ 					m_console->fillBackgroundTile(offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), colour);
   			} else {
 					SDL_Color colour = {0xd0, 0x46, 0x48};
- 					m_console->fillBackgroundTile(offsetI % camera->getWidth(), offsetI / camera->getWidth(), colour);
+ 					m_console->fillBackgroundTile(offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), colour);
 				}
 			}
 		} 
@@ -567,17 +553,48 @@ void Renderer::drawParticles(Camera* camera, DungeonGenerator* dungeon, std::vec
 		colour = {p.red, p.green, p.blue};
 		offsetI = camera->calculateOffset(p.x, p.y);
 		if (p.steps % 2 == 0){
-			m_console->fillBackgroundTile(0, 0, colour, 255, p.size, offsetI % camera->getWidth() * m_console->getTileSize(), offsetI / camera->getWidth() * m_console->getTileSize());
+			m_console->fillBackgroundTile(0, 0, colour, 255, p.size, (offsetI % camera->getWidth() +camera->getXBuffer()) * m_console->getTileSize(), (offsetI / camera->getWidth() + camera->getYBuffer()) * m_console->getTileSize());
 		} 
+	}
+}
+
+void Renderer::drawGameMapBorder(int xBuffer, int yBuffer, int width, int height)
+{
+	int block = 13*16 + 11;
+
+	for (int i = 0; i < width + 2 * xBuffer; ++i){
+		for (int j = 0; j < height + 2 * yBuffer; ++j){
+			if (i == 0 && j == 0){
+				m_console->render(block, i, j, m_borderColour);
+			} else if (i == width + xBuffer && j == 0){
+				m_console->render(block, i, j, m_borderColour);
+			} else if (i == 0 && j == height + yBuffer){
+				m_console->render(block, i, j, m_borderColour);
+			} else if (i == width + xBuffer && j == height + yBuffer){
+				m_console->render(block, i, j, m_borderColour);
+			} else if (i == 0 or i == width + xBuffer){
+				m_console->render(block, i, j, m_borderColour);
+			} else if (j == 0){
+				m_console->render(block, i, j, m_borderColour);
+			} else if (j == height + yBuffer){
+				m_console->render(block, i, j, m_borderColour);
+			}
+		}
+	}
+
+	std::string inputs = "[i]nventory [c]haracter [s]hoot [esc]ape [g]rab";
+	for (int i = 0; i < static_cast<int>(inputs.length()); ++i){
+		m_console->render(&inputs[i], 1 + i, height + yBuffer, m_backgroundColour);
 	}
 }
 
 void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog, std::vector<Particle> &particles)
 {
   m_console->flush();
+	drawGameMapBorder(camera->getXBuffer(), camera->getYBuffer(), camera->getWidth(), camera->getHeight());
   drawMap(camera, dungeon, actors);
   drawActors(camera, dungeon, actors);
-  drawLog(messageLog, camera->getHeight());
+  drawLog(messageLog, camera->getHeight()+2*camera->getYBuffer());
   drawUI();
 	drawPlayerInfo(actors->at(0), dungeon);
 	drawMiniMap(dungeon, actors);
@@ -590,8 +607,6 @@ void Renderer::drawGameOver(int i, std::vector<std::string> &deathMessages, int 
 	std::string restart = "Play again";
 	std::string exitGame = "Exit game";
 	
-	SDL_Color highlightColour = {0x63, 0x9b, 0xff};
-	 
   int width = m_console->Getm_width() + m_console->getXBuffer();
   int height = m_console->Getm_height() + m_console->getYBuffer();
 
@@ -609,7 +624,7 @@ void Renderer::drawGameOver(int i, std::vector<std::string> &deathMessages, int 
 
 	for (std::string line : deathMessages){
   	for (int j = 0; j < static_cast<int>(line.length()); ++j){
-    	m_console->render(&line[j], xPosition + j, yPosition, m_inViewColour);
+    	m_console->render(&line[j], xPosition + j, yPosition, m_textColour);
   	}
 		yPosition += 2;
 	}
@@ -622,18 +637,18 @@ void Renderer::drawGameOver(int i, std::vector<std::string> &deathMessages, int 
 	
   for (int j = 0; j < static_cast<int>(restart.length()); ++j){
     if (i == 0){
-      m_console->render(&restart[j], xPosition - 1 + j + 10, yPosition, highlightColour);
+      m_console->render(&restart[j], xPosition - 1 + j + 10, yPosition, m_highlightColour);
     } else {
-      m_console->render(&restart[j], xPosition + j + 10, yPosition, m_inViewColour);
+      m_console->render(&restart[j], xPosition + j + 10, yPosition, m_textColour);
     }
   }
 	yPosition += 2;
 	
   for (int j = 0; j < static_cast<int>(exitGame.length()); ++j){
 		if (i == 1){
-      m_console->render(&exitGame[j], xPosition - 1 + j + 10, yPosition, highlightColour);
+      m_console->render(&exitGame[j], xPosition - 1 + j + 10, yPosition, m_highlightColour);
     } else {
-      m_console->render(&exitGame[j], xPosition + j + 10, yPosition, m_inViewColour);
+      m_console->render(&exitGame[j], xPosition + j + 10, yPosition, m_textColour);
     }
   }
 	yPosition += 2;

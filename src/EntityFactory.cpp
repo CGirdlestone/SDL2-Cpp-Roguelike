@@ -572,7 +572,7 @@ void EntityFactory::makeEntity(int level, EntityType type, GameObject* entity, i
 	std::string entityName;
 
 	if (type == PLAYERENTITY){
-		entityName = "PLAYER";
+		entityName = "Player";
 	} else if (type == MOBENTITY){
 		entityName = chooseRandomMob(level);
 	} else if (type == ITEMENTITY){

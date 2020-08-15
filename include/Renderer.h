@@ -19,6 +19,7 @@ public:
   ~Renderer();
   void drawActors(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors);
   void drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors);
+	void drawGameMapBorder(int xBuffer, int yBuffer, int width, int height);
   void drawLog(MessageLog* messageLog, int height);
   void drawUI();
   void drawMenuOutline();
@@ -40,6 +41,10 @@ private:
   Console* m_console;
   SDL_Color m_defaultColour;
   SDL_Color m_inViewColour;
+	SDL_Color m_borderColour;
+	SDL_Colour m_highlightColour;
+	SDL_Colour m_backgroundColour;
+	SDL_Colour m_textColour;
 };
 
 #endif

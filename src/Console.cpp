@@ -87,7 +87,7 @@ bool Console::createRenderer()
         printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     } else {
-        SDL_SetRenderDrawColor(m_renderer, 0x14, 0x0c, 0x1c, 0x00);
+        SDL_SetRenderDrawColor(m_renderer, 0x07, 0x1b, 0x2c, 0x00); //0x14, 0x0c, 0x1c
         return true;
     }
 }
@@ -131,7 +131,7 @@ void Console::fillBackgroundTile(int x, int y, SDL_Color colour)
 	SDL_SetRenderDrawColor(m_renderer, colour.r, colour.g, colour.b, 128);
 	SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
 	SDL_RenderFillRect(m_renderer, &rect);
-  SDL_SetRenderDrawColor(m_renderer, 0x14, 0x0c, 0x1c, 0x00);
+  SDL_SetRenderDrawColor(m_renderer, 0x07, 0x1b, 0x2c, 0x00);
 }
 
 void Console::fillBackgroundTile(int x, int y, SDL_Color colour, int alpha, int tileSize, int originX, int originY)
@@ -145,7 +145,7 @@ void Console::fillBackgroundTile(int x, int y, SDL_Color colour, int alpha, int 
 	SDL_SetRenderDrawColor(m_renderer, colour.r, colour.g, colour.b, alpha);
 	SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
 	SDL_RenderFillRect(m_renderer, &rect);
-  SDL_SetRenderDrawColor(m_renderer, 0x14, 0x0c, 0x1c, 0x00);
+  SDL_SetRenderDrawColor(m_renderer, 0x07, 0x1b, 0x2c, 0x00);
 }
 
 void Console::createTiles()

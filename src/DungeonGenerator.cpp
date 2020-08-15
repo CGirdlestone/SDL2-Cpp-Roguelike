@@ -648,7 +648,7 @@ void DungeonGenerator::createPlayer(std::map<int, GameObject*> *actors)
 			break;
 		}
 	}
-	m_factory->makeEntity("POTION OF HEALING", entity, healthPotionX, healthPotionY, actors);
+	m_factory->makeEntity("Potion Of Healing", entity, healthPotionX, healthPotionY, actors);
 	
 	actors->insert({entity->m_uid, entity});
 }

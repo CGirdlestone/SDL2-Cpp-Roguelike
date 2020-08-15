@@ -149,7 +149,7 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
 
 	m_factory = new EntityFactory();
   m_dungeon = new DungeonGenerator(mapWidth, mapHeight, m_factory);
-  m_camera = new Camera(width, height, mapWidth, mapHeight);
+  m_camera = new Camera(width-2, height-2, mapWidth, mapHeight, 1, 1);
 	createConsole(width, height, title, tileSize);
   m_renderer = new Renderer(m_console);
 
