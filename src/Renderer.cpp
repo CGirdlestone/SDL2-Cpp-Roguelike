@@ -434,7 +434,7 @@ void Renderer::drawPauseMenu(int index, Camera* camera, DungeonGenerator* dungeo
 	drawGameMapBorder(camera->getXBuffer(), camera->getYBuffer(), camera->getWidth(), camera->getHeight());	
   drawMap(camera, dungeon, actors);
   drawActors(camera, dungeon, actors);
-  drawLog(messageLog, camera->getHeight()+2*camera->getYBuffer());
+  drawLog(messageLog, camera->getHeight()+camera->getYBuffer());
   drawUI();
 	drawPlayerInfo(actors->at(0), dungeon);
 	drawMiniMap(dungeon, actors);
@@ -505,7 +505,7 @@ void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std
 	drawGameMapBorder(camera->getXBuffer(), camera->getYBuffer(), camera->getWidth(), camera->getHeight());
   drawMap(camera, dungeon, actors);
   drawActors(camera, dungeon, actors);
-  drawLog(messageLog, camera->getHeight()+2*camera->getYBuffer());
+  drawLog(messageLog, camera->getHeight()+camera->getYBuffer());
   drawUI();
 	drawPlayerInfo(actors->at(0), dungeon);
 	drawMiniMap(dungeon, actors);
@@ -572,19 +572,12 @@ void Renderer::drawGameMapBorder(int xBuffer, int yBuffer, int width, int height
 				m_console->render(block, i, j, m_borderColour);
 			} else if (i == width + xBuffer && j == height + yBuffer){
 				m_console->render(block, i, j, m_borderColour);
-			} else if (i == 0 or i == width + xBuffer){
+			} else if (i == 0){
 				m_console->render(block, i, j, m_borderColour);
 			} else if (j == 0){
 				m_console->render(block, i, j, m_borderColour);
-			} else if (j == height + yBuffer){
-				m_console->render(block, i, j, m_borderColour);
 			}
 		}
-	}
-
-	std::string inputs = "[i]nventory [c]haracter [s]hoot [esc]ape [g]rab";
-	for (int i = 0; i < static_cast<int>(inputs.length()); ++i){
-		m_console->render(&inputs[i], 1 + i, height + yBuffer, m_backgroundColour);
 	}
 }
 
@@ -594,7 +587,7 @@ void Renderer::drawGameScreen(Camera* camera, DungeonGenerator* dungeon, std::ma
 	drawGameMapBorder(camera->getXBuffer(), camera->getYBuffer(), camera->getWidth(), camera->getHeight());
   drawMap(camera, dungeon, actors);
   drawActors(camera, dungeon, actors);
-  drawLog(messageLog, camera->getHeight()+2*camera->getYBuffer());
+  drawLog(messageLog, camera->getHeight()+camera->getYBuffer());
   drawUI();
 	drawPlayerInfo(actors->at(0), dungeon);
 	drawMiniMap(dungeon, actors);
