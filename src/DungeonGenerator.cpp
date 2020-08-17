@@ -81,125 +81,21 @@ int DungeonGenerator::getNeigbourWallCount(int i)
 {
   int wallCount = 0;
 
-  if (i == 0){
-      // top left
-      // ignore W, NW N
-      for (int m = 0; m < 2; m++){
-          for (int n = 0; n < 2; n++){
-              if (n == 0 && m == 0){
-                  continue;
-              }
-              if (m_level[i + m + n * m_width] == '#'){
-                  wallCount++;
-              }
-          }
-      }
-  } else if (i == m_width - 1){
-      // top right
-      // ignore E, NE, N
-      for (int m = -1; m < 1; m++){
-          for (int n = 0; n < 2; n++){
-              if (n == 0 && m == 0){
-                  continue;
-              }
-              if (m_level[i + m + n * m_width] == '#'){
-                  wallCount++;
-              }
-          }
-      }
-  } else if (i == m_width * m_height - 1){
-      // bottom right
-      // ignore E, SE, S
-      for (int m = -1; m < 1; m++){
-          for (int n = -1; n < 1; n++){
-              if (n == 0 && m == 0){
-                  continue;
-              }
-              if (m_level[i + m + n * m_width] == '#'){
-                  wallCount++;
-              }
-          }
-      }
-  } else if (i == m_width * (m_height - 1)){
-      // bottom left
-      // ignore W, SW, S
-      for (int m = 0; m < 2; m++){
-          for (int n = -1; n < 1; n++){
-              if (n == 0 && m == 0){
-                  continue;
-              }
-              if (m_level[i + m + n * m_width] == '#'){
-                  wallCount++;
-              }
-          }
-      }
-  } else if (i % m_width == 0){
-      // left boundary
-      // ignore W
-      for (int m = 0; m < 2; m++){
-          for (int n = -1; n < 2; n++){
-              if (n == 0 && m == 0){
-                  continue;
-              }
-              if (m_level[i + m + n * m_width] == '#'){
-                  wallCount++;
-              }
-          }
-      }
-  } else if (i > 0 && i < m_width){
-      // top boundary
-      // ignore N
-      for (int m = -1; m < 2; m++){
-          for (int n = 0; n < 2; n++){
-              if (n == 0 && m == 0){
-                  continue;
-              }
-              if (m_level[i + m + n * m_width] == '#'){
-                  wallCount++;
-              }
-          }
-      }
-  } else if (i % m_width == m_width - 1){
-      // right boundary
-      // ignore E
-      for (int m = -1; m < 1; m++){
-          for (int n = -1; n < 2; n++){
-              if (n == 0 && m == 0){
-                  continue;
-              }
-              if (m_level[i + m + n * m_width] == '#'){
-                  wallCount++;
-              }
-          }
-      }
-  } else if (i > m_width * (m_height - 1) && i < m_width * m_height){
-      // bottom boundary
-      // ignore S
-      for (int m = -1; m < 2; m++){
-          for (int n = -1; n < 1; n++){
-              if (n == 0 && m == 0){
-                  continue;
-              }
-              if (m_level[i + m + n * m_width] == '#'){
-                  wallCount++;
-              }
-          }
-      }
-  } else {
-      // all other points
-      for (int m = -1; m < 2; m++){
-          for (int n = -1; n < 2; n++){
-              if (n == 0 && m == 0){
-                  continue;
-              }
-              if (m_level[i + m + n * m_width] == '#'){
-                  wallCount++;
-              }
-          }
-      }
-  }
+	int x = i % m_width;
+	int y = i / m_width;
 
-  return wallCount;
+	for (int m = -1; m < 2; ++m){
+		for (int n = -1; n < 2; ++n){
+			if (n == 0 && m == 0){ continue; }
+
+			if (x + m >= 0 && x + m < m_width && y + n >= 0 && y + n < m_height){
+				if (m_level[i + m + n * m_width] == '#'){
+					++wallCount;
+				}
+			}
+		}
+	}
+	return wallCount;
 }
 
 void DungeonGenerator::simulationStep(int underPop, int overPop)
@@ -222,123 +118,20 @@ void DungeonGenerator::simulationStep(int underPop, int overPop)
 
 void DungeonGenerator::getNeighbours(std::vector<int>* neighbours, int i)
 {
-  if (i == 0){
-      // top left
-      // ignore W, NW N
-      for (int m = 0; m < 2; m++){
-          for (int n = 0; n < 2; n++){
-              if (n * m != 0){
-                  continue;
-              }
-              if (std::find(neighbours->begin(), neighbours->end(), i + m + n * m_width) == neighbours->end()){
-                  neighbours->push_back(i + m + n * m_width);
-              }
-          }
-      }
-  } else if (i == m_width - 1){
-      // top right
-      // ignore E, NE, N
-      for (int m = -1; m < 1; m++){
-          for (int n = 0; n < 2; n++){
-              if (n * m != 0){
-                  continue;
-              }
-              if (std::find(neighbours->begin(), neighbours->end(), i + m + n * m_width) == neighbours->end()){
-                  neighbours->push_back(i + m + n * m_width);
-              }
-          }
-      }
-  } else if (i == m_width * m_height - 1){
-      // bottom right
-      // ignore E, SE, S
-      for (int m = -1; m < 1; m++){
-          for (int n = -1; n < 1; n++){
-              if (n * m != 0){
-                  continue;
-              }
-              if (std::find(neighbours->begin(), neighbours->end(), i + m + n * m_width) == neighbours->end()){
-                  neighbours->push_back(i + m + n * m_width);
-              }
-          }
-      }
-  } else if (i == m_width * (m_height - 1)){
-      // bottom left
-      // ignore W, SW, S
-      for (int m = 0; m < 2; m++){
-          for (int n = -1; n < 1; n++){
-              if (n * m != 0){
-                  continue;
-              }
-              if (std::find(neighbours->begin(), neighbours->end(), i + m + n * m_width) == neighbours->end()){
-                  neighbours->push_back(i + m + n * m_width);
-              }
-          }
-      }
-  } else if (i % m_width == 0){
-      // left boundary
-      // ignore W
-      for (int m = 0; m < 2; m++){
-          for (int n = -1; n < 2; n++){
-              if (n * m != 0){
-                  continue;
-              }
-              if (std::find(neighbours->begin(), neighbours->end(), i + m + n * m_width) == neighbours->end()){
-                  neighbours->push_back(i + m + n * m_width);
-              }
-          }
-      }
-  } else if (i > 0 && i < m_width){
-      // top boundary
-      // ignore N
-      for (int m = -1; m < 2; m++){
-          for (int n = 0; n < 2; n++){
-              if (n * m != 0){
-                  continue;
-              }
-              if (std::find(neighbours->begin(), neighbours->end(), i + m + n * m_width) == neighbours->end()){
-                  neighbours->push_back(i + m + n * m_width);
-              }
-          }
-      }
-  } else if (i % m_width == m_width - 1){
-      // right boundary
-      // ignore E
-      for (int m = -1; m < 1; m++){
-          for (int n = -1; n < 2; n++){
-              if (n * m != 0){
-                  continue;
-              }
-              if (std::find(neighbours->begin(), neighbours->end(), i + m + n * m_width) == neighbours->end()){
-                  neighbours->push_back(i + m + n * m_width);
-              }
-          }
-      }
-  } else if (i > m_width * (m_height - 1) && i < m_width * m_height){
-      // bottom boundary
-      // ignore S
-      for (int m = -1; m < 2; m++){
-          for (int n = -1; n < 1; n++){
-              if (n * m != 0){
-                  continue;
-              }
-              if (std::find(neighbours->begin(), neighbours->end(), i + m + n * m_width) == neighbours->end()){
-                  neighbours->push_back(i + m + n * m_width);
-              }
-          }
-      }
-  } else {
-      // all other points
-      for (int m = -1; m < 2; m++){
-          for (int n = -1; n < 2; n++){
-              if (n * m != 0){
-                  continue;
-              }
-              if (std::find(neighbours->begin(), neighbours->end(), i + m + n * m_width) == neighbours->end()){
-                  neighbours->push_back(i + m + n * m_width);
-              }
-          }
-      }
-  }
+	int x = i % m_width;
+	int y = i / m_width;
+
+	for (int m = -1; m < 2; ++m){
+		for (int n = -1; n < 2; ++n){
+			if (n == 0 && m == 0){ continue; }
+
+			if (x + m >= 0 && x + m < m_width && y + n >= 0 && y + n < m_height){
+      	if (std::find(neighbours->begin(), neighbours->end(), i + m + n * m_width) == neighbours->end()){
+        	neighbours->push_back(i + m + n * m_width);
+      	}
+			}
+		}
+	}
 }
 
 int DungeonGenerator::floodFill()

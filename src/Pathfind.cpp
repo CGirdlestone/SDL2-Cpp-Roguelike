@@ -39,123 +39,15 @@ int calculate_h(int x1, int y1, int xf, int yf)
 void getNeighbours(vector<int> *neighbours, int width, int height, int x, int y){
   int i = x + y * width;
 
-  if (i == 0){
-    // top left
-    // ignore W, NW N
-    for (int m = 0; m < 2; m++){
-      for (int n = 0; n < 2; n++){
-        if (n == 0 && m == 0){
-          continue;
-        }
-        if (x + m >= 0 && x + m < width && y + n >= 0 && y + n < height){
-          neighbours->push_back(i + m + n * width);
-        }
+	for (int m = -1; m < 2; ++m){
+		for (int n = -1; n < 2; ++n){
+			if (n == 0 && m == 0){ continue; }
+
+      if (x + m >= 0 && x + m < width && y + n >= 0 && y + n < height){
+        neighbours->push_back(i + m + n * width);
       }
-    }
-  } else if (i == width - 1){
-    // top right
-    // ignore E, NE, N
-    for (int m = -1; m < 1; m++){
-      for (int n = 0; n < 2; n++){
-        if (n == 0 && m == 0){
-          continue;
-        }
-        if (x + m >= 0 && x + m < width && y + n >= 0 && y + n < height){
-          neighbours->push_back(i + m + n * width);
-        }
-      }
-    }
-  } else if (i == width * height - 1){
-    // bottom right
-    // ignore E, SE, S
-    for (int m = -1; m < 1; m++){
-      for (int n = -1; n < 1; n++){
-        if (n == 0 && m == 0){
-          continue;
-        }
-        if (x + m >= 0 && x + m < width && y + n >= 0 && y + n < height){
-          neighbours->push_back(i + m + n * width);
-        }
-      }
-    }
-  } else if (i == width * (height - 1)){
-    // bottom left
-    // ignore W, SW, S
-    for (int m = 0; m < 2; m++){
-      for (int n = -1; n < 1; n++){
-        if (n == 0 && m == 0){
-          continue;
-        }
-        if (x + m >= 0 && x + m < width && y + n >= 0 && y + n < height){
-          neighbours->push_back(i + m + n * width);
-        }
-      }
-    }
-  } else if (i % width == 0){
-    // left boundary
-    // ignore W
-    for (int m = 0; m < 2; m++){
-      for (int n = -1; n < 2; n++){
-        if (n == 0 && m == 0){
-          continue;
-        }
-        if (x + m >= 0 && x + m < width && y + n >= 0 && y + n < height){
-          neighbours->push_back(i + m + n * width);
-        }
-      }
-    }
-  } else if (i > 0 && i < width){
-    // top boundary
-    // ignore N
-    for (int m = -1; m < 2; m++){
-      for (int n = 0; n < 2; n++){
-        if (n == 0 && m == 0){
-          continue;
-        }
-        if (x + m >= 0 && x + m < width && y + n >= 0 && y + n < height){
-          neighbours->push_back(i + m + n * width);
-        }
-      }
-    }
-  } else if (i % width == width - 1){
-    // right boundary
-    // ignore E
-    for (int m = -1; m < 1; m++){
-      for (int n = -1; n < 2; n++){
-        if (n == 0 && m == 0){
-          continue;
-        }
-        if (x + m >= 0 && x + m < width && y + n >= 0 && y + n < height){
-          neighbours->push_back(i + m + n * width);
-        }
-      }
-    }
-  } else if (i > width * (height - 1) && i < width * height){
-    // bottom boundary
-    // ignore S
-    for (int m = -1; m < 2; m++){
-      for (int n = -1; n < 1; n++){
-        if (n == 0 && m == 0){
-          continue;
-        }
-        if (x + m >= 0 && x + m < width && y + n >= 0 && y + n < height){
-          neighbours->push_back(i + m + n * width);
-        }
-      }
-    }
-  } else {
-    // all other points
-    for (int m = -1; m < 2; m++){
-      for (int n = -1; n < 2; n++){
-        if (n == 0 && m == 0){
-          continue;
-        }
-        if (x + m >= 0 && x + m < width && y + n >= 0 && y + n < height){
-          neighbours->push_back(i + m + n * width);
-        }
-      }
-    }
-  }
+		}
+	}
 }
 
 bool compareNodes(Node* n, Node* m){
