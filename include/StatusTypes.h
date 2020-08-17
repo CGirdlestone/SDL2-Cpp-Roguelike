@@ -6,7 +6,7 @@ enum StatusTypes
 {
 	BURNED,
 	POISONED,
-	FROZEN,
+	FROST,
 	STUNNED,
 	BLEEDING,
 };

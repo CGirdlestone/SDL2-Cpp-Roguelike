@@ -16,6 +16,7 @@ m_eventManager(eventManager), m_entities(entities)
   m_eventManager->registerSystem(ONHIT, this);
   m_eventManager->registerSystem(DAMAGE, this);
   m_eventManager->registerSystem(DEAD, this);
+  m_eventManager->registerSystem(SETSTATUS, this);
 }
 
 CombatSystem::~CombatSystem()
@@ -28,8 +29,6 @@ void CombatSystem::doAttack(AttackEvent event)
 {
   int roll = std::rand()%20 + 1;
 
-	
-
   if (roll >= 10 + m_entities->at(event.m_defender_uid)->fighter->defence){
     OnHitEvent onHit = OnHitEvent(event.m_attacker_uid, event.m_defender_uid);
     m_eventManager->pushEvent(onHit);
@@ -37,6 +36,19 @@ void CombatSystem::doAttack(AttackEvent event)
     OnMissEvent onMiss = OnMissEvent(event.m_attacker_uid, event.m_defender_uid);
     m_eventManager->pushEvent(onMiss);
   }
+}
+
+void CombatSystem::checkForStatusEffect(SetStatusEvent event)
+{
+	int baseChance = 2;
+	int _chance;
+	_chance = event.m_chance != -1 ? event.m_chance : baseChance;
+
+	if (rand()%100+1 < _chance){
+		m_eventManager->pushEvent(MessageEvent("Status effect applied"));
+		m_entities->at(event.m_defender_uid)->statusContainer->statuses.at(event.m_status).first = rand()%event.m_damage+1;
+		m_entities->at(event.m_defender_uid)->statusContainer->statuses.at(event.m_status).second = rand()%event.m_duration+1;
+	}
 }
 
 void CombatSystem::calculateDamage(OnHitEvent event)
@@ -53,9 +65,10 @@ void CombatSystem::calculateDamage(OnHitEvent event)
 		dmg = dmg * 2;
 	}
 
+	m_eventManager->pushEvent(SetStatusEvent(BLEEDING, 5, 5, event.m_attacker_uid, event.m_defender_uid, 80));	
+
   DamageEvent damageEvent = DamageEvent(event.m_defender_uid, dmg);
   m_eventManager->pushEvent(damageEvent);
-
 }
 
 void CombatSystem::calculateDamage(OnCriticalHitEvent event)
@@ -63,6 +76,16 @@ void CombatSystem::calculateDamage(OnCriticalHitEvent event)
 	int dmg;
 
 	dmg = std::rand()%6 + 1 + m_entities->at(event.m_attacker_uid)->fighter->power;
+
+	DamageTypes type = getDamageType(m_entities->at(event.m_attacker_uid));
+	if (isResistantToDamageType(m_entities->at(event.m_defender_uid), type)){
+		dmg = dmg / 2;
+	}
+	if (isWeakToDamageType(m_entities->at(event.m_defender_uid), type)){
+		dmg = dmg * 2;
+	}
+
+	m_eventManager->pushEvent(SetStatusEvent(BLEEDING, 5, 5, event.m_attacker_uid, event.m_defender_uid, 5));	
 
 	DamageEvent damageEvent = DamageEvent(event.m_defender_uid, dmg*2);
 	m_eventManager->pushEvent(damageEvent);
@@ -167,6 +190,29 @@ void CombatSystem::onDead(DeadEvent event)
   m_entities->at(event.m_uid)->renderable->chr = '%';
 }
 
+void CombatSystem::onTick()
+{
+	int dmg;
+	std::map<int, GameObject*>::iterator it;
+	for (it = m_entities->begin(); it != m_entities->end(); ++it){
+
+		if (it->second->statusContainer == nullptr){ break; }
+
+		for (int i = 0; i <= static_cast<int>(BLEEDING); ++i){
+			if (it->second->statusContainer->statuses.at(static_cast<StatusTypes>(i)).first > 0){
+				it->second->statusContainer->statuses.at(static_cast<StatusTypes>(i)).first -= 1;
+				if (it->second->statusContainer->statuses.at(static_cast<StatusTypes>(i)).first == 0){
+					it->second->statusContainer->statuses.at(static_cast<StatusTypes>(i)).second = 0;
+				}
+				dmg = it->second->statusContainer->statuses.at(static_cast<StatusTypes>(i)).second;
+				if (dmg > 0){
+					m_eventManager->pushEvent(DamageEvent(it->first, dmg));
+				}
+			}
+		}
+	}
+}
+
 // notify overrides below
 
 void CombatSystem::notify(AttackEvent event)
@@ -192,4 +238,9 @@ void CombatSystem::notify(DamageEvent event)
 void CombatSystem::notify(DeadEvent event)
 {
   onDead(event);
+}
+
+void CombatSystem::notify(SetStatusEvent event)
+{
+  checkForStatusEffect(event);
 }

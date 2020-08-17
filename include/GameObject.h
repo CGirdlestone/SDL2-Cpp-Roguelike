@@ -23,6 +23,7 @@ struct AreaDamage;
 struct Status;
 struct Consumable;
 struct Stairs;
+struct StatusContainer;
 
 class GameObject
 {
@@ -55,6 +56,7 @@ public:
 	Status *status;
 	Consumable *consumable;
 	Stairs *stairs;
+	StatusContainer *statusContainer;
 
 protected:
 

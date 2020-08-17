@@ -30,6 +30,7 @@ public:
 	virtual void notify(PlayerTurnOverEvent event) {};
 	virtual void notify(LoadEvent event) {};
 	virtual void notify(RestartEvent event) {};
+	virtual void notify(SetStatusEvent event) {};
 };
 
 #endif

@@ -42,6 +42,7 @@ void PlayerSystem::checkLevelUp()
 void PlayerSystem::onDead(DeadEvent event)
 {
 	if (event.m_uid != 0){
+
 		int xp = m_entities->at(event.m_uid)->ai->exp;
 
 		m_entities->at(0)->player->exp += xp;

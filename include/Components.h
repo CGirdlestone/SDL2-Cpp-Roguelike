@@ -225,4 +225,13 @@ struct Stairs
 	int deserialise(char* buffer, int i);
 };
 
+struct StatusContainer
+{
+	StatusContainer();
+	~StatusContainer();
+	void serialise(std::vector<uint8_t> &byteVector);
+	int deserialise(char* buffer, int i);
+	std::map<StatusTypes, std::pair<int, int>> statuses;
+};
+
 #endif

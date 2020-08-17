@@ -431,6 +431,13 @@ void EntityFactory::parseStartingItems(std::string line, GameObject* entity, std
 	}
 }
 
+void EntityFactory::makeStatusContainerComponent(GameObject* entity)
+{
+	StatusContainer* s = new StatusContainer();
+
+	entity->statusContainer = s;
+}
+
 void EntityFactory::makeEntity(std::string entityName, GameObject* entity, std::map<int, GameObject*> *entities)
 {
 	std::vector<std::string> components;
@@ -493,6 +500,8 @@ void EntityFactory::makeEntity(std::string entityName, GameObject* entity, std::
 			makeConsumableComponent(entity);
 		} else if (component == "STARTING ITEMS"){
 			parseStartingItems(stats, entity, entities);
+		} else if (component == "STATUS CONTAINER"){
+			makeStatusContainerComponent(entity);
 		}
 	}
 }
@@ -560,6 +569,8 @@ void EntityFactory::makeEntity(std::string entityName, GameObject* entity, int x
 			makeConsumableComponent(entity);
 		} else if (component == "STARTING ITEMS"){
 			parseStartingItems(stats, entity, entities);
+		} else if (component == "STATUS CONTAINER"){
+			makeStatusContainerComponent(entity);
 		}
 	}
 
@@ -639,6 +650,8 @@ void EntityFactory::makeEntity(int level, EntityType type, GameObject* entity, i
 			makeConsumableComponent(entity);
 		} else if (component == "STARTING ITEMS"){
 			parseStartingItems(stats, entity, entities);
+		} else if (component == "STATUS CONTAINER"){
+			makeStatusContainerComponent(entity);
 		}
 	}
 	Position* p = new Position(x, y);

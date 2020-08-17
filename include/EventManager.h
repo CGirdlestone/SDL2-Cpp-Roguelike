@@ -35,6 +35,7 @@ public:
 	void pushEvent(PlayerTurnOverEvent event);
 	void pushEvent(LoadEvent event);
 	void pushEvent(RestartEvent event);
+	void pushEvent(SetStatusEvent event);
 
 private:
   std::map<EventTypes, std::vector<System*>> m_subscribers;

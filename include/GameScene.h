@@ -14,11 +14,12 @@
 #include "Camera.h"
 #include "MessageLog.h"
 #include "ParticleSystem.h"
+#include "CombatSystem.h"
 
 class GameScene : public Scene
 {
 public:
-  GameScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog, ParticleSystem* particleSystem);
+  GameScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog, ParticleSystem* particleSystem, CombatSystem* combatSystem);
   virtual ~GameScene();
   enum KeyPressSurfaces getEvent(SDL_Event* e);
   void render();
@@ -50,6 +51,7 @@ private:
   DungeonGenerator *m_dungeon;
   MessageLog *m_messageLog;
 	ParticleSystem *m_particleSystem;
+	CombatSystem *m_combatSystem;
   bool m_playerTurn;
 };
 

@@ -14,10 +14,11 @@
 #include "GameScene.h"
 #include "Slots.h"
 #include "ParticleSystem.h"
+#include "CombatSystem.h"
 
 
-GameScene::GameScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog, ParticleSystem* particleSystem):
-m_eventManager(eventManager), m_renderer(renderer), m_entities(entities), m_camera(camera), m_dungeon(dungeon), m_messageLog(messageLog), m_particleSystem(particleSystem)
+GameScene::GameScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog, ParticleSystem* particleSystem, CombatSystem* combatSystem):
+m_eventManager(eventManager), m_renderer(renderer), m_entities(entities), m_camera(camera), m_dungeon(dungeon), m_messageLog(messageLog), m_particleSystem(particleSystem), m_combatSystem(combatSystem)
 {
   m_playerTurn = true;
 }
@@ -316,7 +317,6 @@ void GameScene::processEntities()
       }
     }
   }
-  m_playerTurn = true;
 }
 
 bool GameScene::checkDescend()
@@ -484,9 +484,15 @@ void GameScene::update(Uint32 dt)
 
 void GameScene::onTick()
 {
-  if (m_dungeon->recomputeFOV){
-    m_dungeon->doRecomputeFOV(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
-  }
+	if (!m_playerTurn){
+  	if (m_dungeon->recomputeFOV){
+    	m_dungeon->doRecomputeFOV(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
+ 	 	}
 
-  m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
+  	m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
+	
+		m_combatSystem->onTick();
+	
+  	m_playerTurn = true;
+	}
 }

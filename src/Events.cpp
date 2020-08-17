@@ -236,3 +236,14 @@ RestartEvent::~RestartEvent()
 {
 
 }
+
+SetStatusEvent::SetStatusEvent(StatusTypes _status, int _damage, int _duration, int _attacker_uid, int _defender_uid, int _chance):
+m_status(_status), m_damage(_damage), m_duration(_duration), m_attacker_uid(_attacker_uid), m_defender_uid(_defender_uid), m_chance(_chance)
+{
+	m_type = SETSTATUS;
+}
+
+SetStatusEvent::~SetStatusEvent()
+{
+
+}

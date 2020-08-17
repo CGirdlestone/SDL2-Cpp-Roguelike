@@ -28,12 +28,15 @@ public:
 	int getDefenderHitModifiers(GameObject* defender);
 	int getAttackerDamageModifiers(GameObject* attacker);
 	int getDefenderDamageModifiers(GameObject* defender);
+	void checkForStatusEffect(SetStatusEvent event);
+	void onTick();
 
   virtual void notify(AttackEvent event);
   virtual void notify(OnHitEvent event);
   virtual void notify(OnCriticalHitEvent event);
   virtual void notify(DamageEvent event);
   virtual void notify(DeadEvent event);
+  virtual void notify(SetStatusEvent event);
 private:
   EventManager* m_eventManager;
   std::map<int, GameObject*> *m_entities;

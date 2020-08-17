@@ -165,7 +165,7 @@ bool Game::init(int mapWidth, int mapHeight, int width, int height, int tileSize
 
   m_sceneManager = new GameStateManager(m_eventManager, &m_actors);
   m_startScene = new StartScene(m_eventManager, m_renderer);
-  m_gameScene = new GameScene(m_eventManager, m_renderer, &m_actors, m_camera, m_dungeon, m_messageLog, m_particleSystem);
+  m_gameScene = new GameScene(m_eventManager, m_renderer, &m_actors, m_camera, m_dungeon, m_messageLog, m_particleSystem, m_combatSystem);
 	m_inventoryScene = new InventoryScene(m_eventManager, m_renderer, &m_actors);
 	m_characterScene = new CharacterScene(m_eventManager, m_renderer, &m_actors);
   m_targetingScene = new TargetingScene(m_eventManager, m_renderer, &m_actors, m_camera, m_dungeon, m_messageLog);

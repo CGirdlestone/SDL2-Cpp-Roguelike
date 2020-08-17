@@ -26,6 +26,7 @@ GameObject::GameObject()
 	status = nullptr;
 	consumable = nullptr;
 	stairs = nullptr;
+	statusContainer = nullptr;
 }
 
 GameObject::~GameObject()
@@ -123,6 +124,11 @@ GameObject::~GameObject()
 	if(stairs != nullptr){
 		delete stairs;
 		stairs = nullptr;
+	}
+
+	if(statusContainer != nullptr){
+		delete statusContainer;
+		statusContainer = nullptr;
 	}
 }
 
@@ -263,6 +269,13 @@ void GameObject::serialise(std::vector<uint8_t> &byteVector)
 	} else {
 		serialiseInt(byteVector, 1);
 		stairs->serialise(byteVector);
+	}
+
+	if (statusContainer == nullptr){
+		serialiseInt(byteVector, 0);
+	} else {
+		serialiseInt(byteVector, 1);
+		statusContainer->serialise(byteVector);
 	}
 }
 
@@ -508,10 +521,18 @@ int GameObject::deserialise(char* buffer, int i)
 		stairs = new Stairs();
 		i = stairs->deserialise(buffer, i);
 		hasPointer = 0;
-		std::cout << position->x << std::endl;
-		std::cout << position->y << std::endl;
 	}
 	
+	for (int j = numBytes - 1; j >= 0; --j){
+		hasPointer = (hasPointer << 8) + buffer[i+j]; 
+	}
+	i += numBytes * 8;
+
+	if (hasPointer == 1){
+		statusContainer = new StatusContainer();
+		i = statusContainer->deserialise(buffer, i);
+		hasPointer = 0;
+	}
 	return i;
 }
 

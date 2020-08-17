@@ -34,6 +34,7 @@ public:
 	void makeAreaDamageComponent(std::string line, GameObject* entity);
 	void makeStatusComponent(std::string line, GameObject* entity);
 	void makeConsumableComponent(GameObject* entity);
+	void makeStatusContainerComponent(GameObject* entity);
 
 	DamageTypes getDamageTypeEnum(std::string stringEnum);
 	EquipSlots getEquipSlotEnum(std::string stringEnum);

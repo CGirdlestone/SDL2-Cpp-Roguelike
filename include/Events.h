@@ -5,6 +5,7 @@
 #include <string>
 #include "EventTypes.h"
 #include "SceneTypes.h"
+#include "StatusTypes.h"
 #include "GameObject.h"
 
 struct Event
@@ -173,6 +174,18 @@ struct RestartEvent : Event
 {
 	RestartEvent();
 	~RestartEvent();
+};
+
+struct SetStatusEvent : Event
+{
+	SetStatusEvent(StatusTypes _status, int _damage, int _duration, int _attacker_uid, int _defender_uid, int _chance);
+	~SetStatusEvent();
+	StatusTypes m_status;
+	int m_damage;
+	int m_duration;
+	int m_attacker_uid;
+	int m_defender_uid;
+	int m_chance;
 };
 
 #endif

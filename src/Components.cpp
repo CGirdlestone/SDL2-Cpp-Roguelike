@@ -997,3 +997,46 @@ int Stairs::deserialise(char* buffer, int i)
 	return i;
 }
 
+StatusContainer::StatusContainer()
+{
+	for (int i = 0; i <= static_cast<int>(BLEEDING); ++i){
+		statuses.insert({static_cast<StatusTypes>(i), std::make_pair(0, 0)}); // pair<damage, duration>
+	}
+}
+
+StatusContainer::~StatusContainer()
+{
+}
+
+void StatusContainer::serialise(std::vector<uint8_t> &byteVector)
+{
+	for (int i = 0; i <= static_cast<int>(BLEEDING); ++i){
+		serialiseInt(byteVector, std::get<0>(statuses.at(static_cast<StatusTypes>(i))));
+		serialiseInt(byteVector, std::get<1>(statuses.at(static_cast<StatusTypes>(i))));
+	}
+}
+
+int StatusContainer::deserialise(char* buffer, int i)
+{
+	int numBytes = 4;
+	int _damage;
+	int _duration;	
+
+	for (int k = 0; k <= static_cast<int>(BLEEDING); ++k){	
+		_damage = 0;
+		for (int j = numBytes - 1; j >= 0; --j){
+			_damage = (_damage << 8) + buffer[i + j];
+		}
+		i += numBytes * 8;
+		statuses.at(static_cast<StatusTypes>(k)).first = _damage;
+
+		_duration = 0;
+		for (int j = numBytes - 1; j >= 0; --j){
+			_duration = (_duration << 8) + buffer[i + j];
+		}
+		i += numBytes * 8;
+		statuses.at(static_cast<StatusTypes>(k)).second = _duration;
+	}
+
+	return i;
+}
