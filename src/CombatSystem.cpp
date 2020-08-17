@@ -188,6 +188,11 @@ void CombatSystem::onDead(DeadEvent event)
   SDL_Color c = {0x55, 0x0f, 0x0a};
   m_entities->at(event.m_uid)->renderable->colour = c;
   m_entities->at(event.m_uid)->renderable->chr = '%';
+
+	for (int i = 0; i <= static_cast<int>(BLEEDING); ++i){
+		m_entities->at(event.m_uid)->statusContainer->statuses.at(static_cast<StatusTypes>(i)).first = 0;
+		m_entities->at(event.m_uid)->statusContainer->statuses.at(static_cast<StatusTypes>(i)).second = 0;
+	}
 }
 
 void CombatSystem::onTick()
@@ -195,8 +200,8 @@ void CombatSystem::onTick()
 	int dmg;
 	std::map<int, GameObject*>::iterator it;
 	for (it = m_entities->begin(); it != m_entities->end(); ++it){
-
-		if (it->second->statusContainer == nullptr){ break; }
+		if (it->second->fighter == nullptr) { continue; }
+		if (it->second->statusContainer == nullptr){ continue; }
 
 		for (int i = 0; i <= static_cast<int>(BLEEDING); ++i){
 			if (it->second->statusContainer->statuses.at(static_cast<StatusTypes>(i)).first > 0){

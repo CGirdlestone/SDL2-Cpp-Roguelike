@@ -133,7 +133,6 @@ void GameStateManager::update(Uint32 dt)
 
 void GameStateManager::onTick()
 {
-  m_sceneStack.back()->onTick();
 }
 
 void GameStateManager::render()

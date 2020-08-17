@@ -317,6 +317,8 @@ void GameScene::processEntities()
       }
     }
   }
+	m_playerTurn = true;
+	onTick();
 }
 
 bool GameScene::checkDescend()
@@ -484,15 +486,11 @@ void GameScene::update(Uint32 dt)
 
 void GameScene::onTick()
 {
-	if (!m_playerTurn){
-  	if (m_dungeon->recomputeFOV){
-    	m_dungeon->doRecomputeFOV(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
- 	 	}
+  if (m_dungeon->recomputeFOV){
+    m_dungeon->doRecomputeFOV(m_entities->at(0)->position->x, m_entities->at(0)->position->y, 10);
+ 	}
 
-  	m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
+  m_camera->updatePosition(m_entities->at(0)->position->x, m_entities->at(0)->position->y);
 	
-		m_combatSystem->onTick();
-	
-  	m_playerTurn = true;
-	}
+	m_combatSystem->onTick();
 }
