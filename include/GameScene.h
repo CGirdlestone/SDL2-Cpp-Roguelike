@@ -2,12 +2,14 @@
 #define GAMESCENE_H
 
 #include <map>
+#include <fstream>
 #include "SDL2/SDL.h"
 #include "EntityFactory.h"
 #include "LootManager.h"
 #include "Renderer.h"
 #include "KeyPressSurfaces.h"
 #include "EventManager.h"
+#include "SceneTypes.h"
 #include "Scene.h"
 #include "GameObject.h"
 #include "DungeonGenerator.h"
@@ -15,6 +17,9 @@
 #include "MessageLog.h"
 #include "ParticleSystem.h"
 #include "CombatSystem.h"
+#include "Slots.h"
+#include "Pathfind.h"
+
 
 class GameScene : public Scene
 {

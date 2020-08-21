@@ -1,10 +1,6 @@
 
 #include <iostream>
-#include <map>
 #include "MoveSystem.h"
-#include "Events.h"
-#include "EventTypes.h"
-#include "EventManager.h"
 
 
 MoveSystem::MoveSystem(EventManager* eventManager, std::map<int, GameObject*> *entities, DungeonGenerator* dungeon):

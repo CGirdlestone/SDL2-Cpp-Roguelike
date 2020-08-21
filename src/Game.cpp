@@ -1,38 +1,4 @@
-#include <iostream>
-#include <SDL2/SDL.h>
-#include <cstdlib>
-#include <time.h>
-#include <string>
-#include <fstream>
-
-#include "EntityFactory.h"
-#include "LootManager.h"
-#include "DungeonGenerator.h"
-#include "Console.h"
-#include "KeyPressSurfaces.h"
-#include "Components.h"
-#include "GameObject.h"
-#include "Message.h"
-#include "MessageLog.h"
-#include "Pathfind.h"
 #include "Game.h"
-#include "Renderer.h"
-#include "EventTypes.h"
-#include "Events.h"
-#include "EventManager.h"
-#include "MoveSystem.h"
-#include "CombatSystem.h"
-#include "InventorySystem.h"
-#include "PlayerSystem.h"
-#include "ParticleSystem.h"
-#include "Scene.h"
-#include "StartScene.h"
-#include "GameScene.h"
-#include "InventoryScene.h"
-#include "CharacterScene.h"
-#include "TargetingScene.h"
-#include "PauseScene.h"
-#include "GameOverScene.h"
 
 Game::Game()
 {

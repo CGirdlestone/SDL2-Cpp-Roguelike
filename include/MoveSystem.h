@@ -1,13 +1,12 @@
 #ifndef MOVESYSTEM_H
 #define MOVESYSTEM_H
 
+#include <map>
 #include "System.h"
-#include "Events.h"
+#include "EventManager.h"
 #include "Components.h"
 #include "GameObject.h"
 #include "DungeonGenerator.h"
-
-#include <map>
 
 class EventManager;
 

@@ -1,20 +1,5 @@
 #include <iostream>
-#include <map>
-#include <fstream>
-#include "GameObject.h"
-#include "StartScene.h"
-#include "SDL2/SDL.h"
-#include "Renderer.h"
-#include "KeyPressSurfaces.h"
-#include "Pathfind.h"
-#include "EventManager.h"
-#include "Events.h"
-#include "EventTypes.h"
-#include "SceneTypes.h"
 #include "GameScene.h"
-#include "Slots.h"
-#include "ParticleSystem.h"
-#include "CombatSystem.h"
 
 
 GameScene::GameScene(EventManager *eventManager, Renderer *renderer, std::map<int, GameObject*> *entities, Camera* camera, DungeonGenerator* dungeon, MessageLog* messageLog, ParticleSystem* particleSystem, CombatSystem* combatSystem):

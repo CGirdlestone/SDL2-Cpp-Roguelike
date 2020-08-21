@@ -3,9 +3,14 @@
 #define INVENTORYSYSTEM_H
 
 #include <map>
+#include <cstdlib>
+#include <string>
+
 #include "System.h"
-#include "Events.h"
+#include "EventManager.h"
+#include "Components.h"
 #include "GameObject.h"
+#include "UseableFunctionEnum.h"
 #include "DungeonGenerator.h"
 
 class EventManager;

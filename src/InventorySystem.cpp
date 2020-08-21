@@ -1,16 +1,7 @@
 
 
-#include <map>
 #include <iostream>
-#include <cstdlib>
-#include <string>
 #include "InventorySystem.h"
-#include "EventManager.h"
-#include "Events.h"
-#include "EventTypes.h"
-#include "Components.h"
-#include "UseableFunctionEnum.h"
-#include "DungeonGenerator.h"
 
 InventorySystem::InventorySystem(EventManager* eventManager, std::map<int, GameObject*> *entities, DungeonGenerator *dungeon):
 m_eventManager(eventManager), m_entities(entities), m_dungeon(dungeon)

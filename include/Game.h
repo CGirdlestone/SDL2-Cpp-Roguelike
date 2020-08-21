@@ -1,6 +1,11 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <SDL2/SDL.h>
+#include <cstdlib>
+#include <time.h>
+#include <string>
+#include <fstream>
 #include <map>
 #include "EntityFactory.h"
 #include "LootManager.h"
