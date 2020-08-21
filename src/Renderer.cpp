@@ -333,13 +333,30 @@ void Renderer::drawStartMenu(int i, int options)
 
 void Renderer::drawInventory(std::map<int, GameObject*> *actors, int i)
 {
+  int xBuffer = m_console->getXBuffer();
+  int yBuffer = m_console->getYBuffer();
+  int height = m_console->Getm_height();
+  int width = m_console->Getm_width();
+	int block = 13*16 + 11;
+
 	m_console->flush();
+
+	for (int i = 0; i < width + xBuffer; ++i){
+		for (int j = 0; j < height + yBuffer; ++j){
+			if (i == 0 || i == width + xBuffer - 1){
+				m_console->render(block, i, j, m_borderColour);
+			}
+			if (j == 0 || j == height + yBuffer - 1){
+				m_console->render(block, i, j, m_borderColour);
+			}
+		}
+	}
 
 	std::string inventoryHeader = "Inventory";
 	std::string selectedItem;
 
 	for (int k = 0; k < static_cast<int>(inventoryHeader.length()); ++k){
-		m_console->render(&inventoryHeader[k], 2 + k, 1, m_textColour);
+		m_console->render(&inventoryHeader[k], 3 + k, 2, m_textColour);
 	}
 
 	if (actors->at(0)->inventory->inventory.size() > 0){
@@ -348,11 +365,11 @@ void Renderer::drawInventory(std::map<int, GameObject*> *actors, int i)
 			if (k == i){
 				selectedItem = ">" + item->m_name;
 				for (int j = 0; j < static_cast<int>(selectedItem.length()); ++j){
-					m_console->render(&selectedItem[j], 1 + j, 2*k + 3, m_highlightColour);
+					m_console->render(&selectedItem[j], 2 + j, 2*k + 4, m_highlightColour);
 				}
 			} else {
 				for (int j = 0; j < static_cast<int>(item->m_name.length()); ++j){
-					m_console->render(&item->m_name[j], 2 + j, 2*k + 3, m_textColour);
+					m_console->render(&item->m_name[j], 3 + j, 2*k + 4, m_textColour);
 				}
 			}
 		}
@@ -550,7 +567,7 @@ void Renderer::drawParticles(Camera* camera, DungeonGenerator* dungeon, std::vec
 	SDL_Color colour;
 	int offsetI;
 	for (auto p : particles){
-		colour = {p.red, p.green, p.blue};
+		colour = {static_cast<uint8_t>(p.red), static_cast<uint8_t>(p.green), static_cast<uint8_t>(p.blue)};
 		offsetI = camera->calculateOffset(p.x, p.y);
 		if (p.steps % 2 == 0){
 			m_console->fillBackgroundTile(0, 0, colour, 255, p.size, (offsetI % camera->getWidth() +camera->getXBuffer()) * m_console->getTileSize(), (offsetI / camera->getWidth() + camera->getYBuffer()) * m_console->getTileSize());
