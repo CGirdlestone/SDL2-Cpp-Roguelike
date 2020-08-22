@@ -21,6 +21,45 @@ Renderer::~Renderer()
   m_console = nullptr;
 }
 
+void Renderer::toggleAsciiMode()
+{
+	m_console->toggleAsciiMode();
+}
+
+void Renderer::drawObject(GameObject* entity, int x, int y)
+{
+	if (m_console->getDisplayAscii()){	
+  	m_console->render(&entity->renderable->chr, x, y, entity->renderable->colour);
+	} else {
+		m_console->renderSprite(x, y, entity->renderable->spriteX, entity->renderable->spriteY, entity->renderable->sheet);
+	}
+}
+
+void Renderer::drawTile(char* c, int x, int y, bool inView)
+{
+	if (m_console->getDisplayAscii()){
+		if (inView){
+			m_console->render(c, x, y, m_inViewColour);
+		} else {
+			m_console->render(c, x, y, m_defaultColour);
+		}
+	} else {
+		if ((*c) == '#'){
+			if (inView){
+				m_console->renderSprite(x, y, 1, 10, 16);
+			} else {
+				m_console->renderSprite(x, y, 1, 13, 16);
+			}
+		} else if ((*c) == '.'){
+			if (inView){
+				m_console->renderSprite(x, y, 1, 16, 16);
+			} else {
+				m_console->renderSprite(x, y, 1, 25, 16);
+			}
+		}
+	}
+}
+
 void Renderer::drawLog(MessageLog* messageLog, int height)
 {
   std::vector<Message> messages = messageLog->getMessages();
@@ -63,23 +102,24 @@ void Renderer::drawMap(Camera* camera, DungeonGenerator* dungeon, std::map<int, 
           occupied = true;
         }
       }
+
       if(!occupied){
         offsetI = camera->calculateOffset(x, y);
-        m_console->render(&dungeon->m_level[i], offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), m_inViewColour);
+				drawTile(&dungeon->m_level[i], offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), true);
+        //m_console->render(&dungeon->m_level[i], offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), m_inViewColour);
       }
+
+			if (!m_console->getDisplayAscii()){
+        offsetI = camera->calculateOffset(x, y);
+				drawTile(&dungeon->m_level[i], offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), true);
+			}
+
     } else if (dungeon->m_fovMap[i] == 0){
       if (dungeon->m_exploredMap[i] == 1){
 
-				std::map<int, GameObject*>::iterator it;
-        for (it = actors->begin(); it != actors->end(); ++it){
-          if (it->second->position == nullptr){ continue; }
-
-          if (it->second->position->x + it->second->position->y*dungeon->Getm_width() == i){
-            occupied = true;
-          }
-        }
         offsetI = camera->calculateOffset(x, y);
-        m_console->render(&dungeon->m_level[i], offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), m_defaultColour);
+				drawTile(&dungeon->m_level[i], offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), false);
+
       }
     }
     if (x == dungeon->Getm_width() - 1){
@@ -151,7 +191,8 @@ void Renderer::drawActors(Camera* camera, DungeonGenerator* dungeon, std::map<in
       mapArrayIndex = it->second->position->x + it->second->position->y*dungeon->Getm_width();
       if (dungeon->m_fovMap[mapArrayIndex] == 1){
         offsetI = camera->calculateOffset(it->second->position->x, it->second->position->y);
-        m_console->render(&it->second->renderable->chr, offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), it->second->renderable->colour);
+				drawObject(it->second, offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer());
+       // m_console->render(&it->second->renderable->chr, offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), it->second->renderable->colour);
       }
     }
   }

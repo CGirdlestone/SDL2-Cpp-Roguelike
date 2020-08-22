@@ -11,23 +11,21 @@
 
 Console::Console(int width, int height, const char* title, const char* path, int tileSize)
 {
-    //ctor
     m_width = width;
     m_height = height;
     m_title = title;
     m_root = nullptr;
     m_rootSurface = nullptr;
     m_renderer = nullptr;
-    m_texture = nullptr;
     m_tileSize = tileSize;
     m_xBuffer = 20;
     m_yBuffer = 10;
+		displayAscii = true; // default mode is traditional ascii graphics
     init(path);
 }
 
 Console::~Console()
 {
-    //dtor
     SDL_DestroyWindow(m_root);
     m_root = nullptr;
 
@@ -37,8 +35,10 @@ Console::~Console()
     SDL_FreeSurface(m_rootSurface);
     m_rootSurface = nullptr;
 
-    SDL_DestroyTexture(m_texture);
-    m_texture = nullptr;
+		for (auto tex : m_spriteSheets){
+    	SDL_DestroyTexture(tex);
+    	tex = nullptr;
+		}
 }
 
 bool Console::init(const char* path)
@@ -61,8 +61,27 @@ bool Console::init(const char* path)
         return false;
     }
 
-    loadMedia(path);
+    loadMedia(path, true);
     createTiles();
+
+		loadMedia("./resources/sprites/Player0.png", true);
+		loadMedia("./resources/sprites/Avian0.png", true);
+		loadMedia("./resources/sprites/Rodent0.png", true);
+		loadMedia("./resources/sprites/Humanoid0.png", true);
+		loadMedia("./resources/sprites/Demon0.png", true);
+		loadMedia("./resources/sprites/Elemental0.png", true);
+		loadMedia("./resources/sprites/Undead0.png", true);
+		loadMedia("./resources/sprites/Armor.png", true);
+		loadMedia("./resources/sprites/ShortWep.png", true);
+		loadMedia("./resources/sprites/MedWep.png", true);
+		loadMedia("./resources/sprites/LongWep.png", true);
+		loadMedia("./resources/sprites/Shield.png", true);
+		loadMedia("./resources/sprites/Scroll.png", true);
+		loadMedia("./resources/sprites/Potion.png", true);
+		loadMedia("./resources/sprites/Ammo.png", true);
+		loadMedia("./resources/sprites/Floor.png", false);
+		loadMedia("./resources/sprites/Tile.png", false);
+		loadMedia("./resources/sprites/Ground0.png", false);
 
     m_fullscreen = 0;
 
@@ -102,18 +121,20 @@ bool Console::initImage()
     return true;
 }
 
-bool Console::loadMedia(const char* path)
+bool Console::loadMedia(const char* path, bool setColourKey)
 {
-
   SDL_Surface *loadedSurface = IMG_Load(path);
 
   if(loadedSurface == nullptr){
     printf("Failed to load image! SDL_image Error: %s\n", IMG_GetError());
     return false;
   } else {
-		uint32_t* pixels = static_cast<uint32_t*>(loadedSurface->pixels); // get pixels from the loaded surface
-		SDL_SetColorKey(loadedSurface, SDL_TRUE, pixels[0]); // make the pixel at (0,0) transparent
-    m_texture = SDL_CreateTextureFromSurface(m_renderer, loadedSurface);
+		if (setColourKey){
+			uint32_t* pixels = static_cast<uint32_t*>(loadedSurface->pixels); // get pixels from the loaded surface
+			SDL_SetColorKey(loadedSurface, SDL_TRUE, pixels[0]); // make the pixel at (0,0) transparent
+		}
+   	SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, loadedSurface);
+		m_spriteSheets.push_back(texture);
     SDL_FreeSurface(loadedSurface);
     loadedSurface = nullptr;
     return true;
@@ -174,27 +195,45 @@ void Console::render(char* c, int x, int y, SDL_Color colour){
     srcrect.x = m_glyphs.at(i).m_x;
     srcrect.y = m_glyphs.at(i).m_y;
 
-    SDL_SetTextureColorMod(m_texture, colour.r, colour.g, colour.b);
-    SDL_RenderCopy(m_renderer, m_texture, &srcrect, &dstrect);
+    SDL_SetTextureColorMod(m_spriteSheets.at(0), colour.r, colour.g, colour.b);
+    SDL_RenderCopy(m_renderer, m_spriteSheets.at(0), &srcrect, &dstrect);
 }
 
 void Console::render(int i, int x, int y, SDL_Color colour){
 
-    SDL_Rect dstrect;
-    dstrect.x = x  * m_tileSize;
-    dstrect.y = y * m_tileSize;
-    dstrect.w = m_tileSize;
-    dstrect.h = m_tileSize;
+  SDL_Rect dstrect;
+  dstrect.x = x  * m_tileSize;
+  dstrect.y = y * m_tileSize;
+  dstrect.w = m_tileSize;
+  dstrect.h = m_tileSize;
 
-    SDL_Rect srcrect;
-    srcrect.w = m_tileSize;
-    srcrect.h = m_tileSize;
+  SDL_Rect srcrect;
+  srcrect.w = m_tileSize;
+  srcrect.h = m_tileSize;
 
-    srcrect.x = m_glyphs.at(i).m_x;
-    srcrect.y = m_glyphs.at(i).m_y;
+  srcrect.x = m_glyphs.at(i).m_x;
+  srcrect.y = m_glyphs.at(i).m_y;
 
-    SDL_SetTextureColorMod(m_texture, colour.r, colour.g, colour.b);
-    SDL_RenderCopy(m_renderer, m_texture, &srcrect, &dstrect);
+  SDL_SetTextureColorMod(m_spriteSheets.at(0), colour.r, colour.g, colour.b);
+  SDL_RenderCopy(m_renderer, m_spriteSheets.at(0), &srcrect, &dstrect);
+}
+
+void Console::renderSprite(int x, int y, int spriteX, int spriteY, int sheet)
+{
+	SDL_Rect dstrect; // rect to draw on the screen
+	dstrect.x = x * m_tileSize;
+	dstrect.y = y * m_tileSize;
+	dstrect.w = m_tileSize;
+	dstrect.h = m_tileSize;
+
+	SDL_Rect srcrect; // rect to copy from texture
+	srcrect.w = m_tileSize;
+	srcrect.h = m_tileSize;
+
+	srcrect.x = spriteX * m_tileSize;
+	srcrect.y = spriteY * m_tileSize;
+
+	SDL_RenderCopy(m_renderer, m_spriteSheets.at(sheet), &srcrect, &dstrect);
 }
 
 void Console::update()

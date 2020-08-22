@@ -160,11 +160,12 @@ void EntityFactory::makeRenderableComponent(std::string line, GameObject* entity
 
 	char chr;
 	int red, green, blue;
-	ss >> chr >> std::hex >> red >> std::hex >> green >> std::hex >> blue;
+	int spriteX, spriteY, sheet;
+	ss >> chr >> std::hex >> red >> std::hex >> green >> std::hex >> blue >> std::dec >> spriteX >> spriteY >> sheet;
 	
 	SDL_Color colour = {static_cast<uint8_t>(red),static_cast<uint8_t>(green),static_cast<uint8_t>(blue)};
 
-	Renderable* r = new Renderable(chr, colour); 
+	Renderable* r = new Renderable(chr, colour, spriteX, spriteY, sheet); 
 
 	entity->renderable = r;
 }
@@ -660,7 +661,7 @@ void EntityFactory::makeEntity(int level, EntityType type, GameObject* entity, i
 
 void EntityFactory::makeStairs(GameObject* entity, int x, int y)
 {
-	std::string line = "< 0xef 0xd8 0xa1";
+	std::string line = "< 0xef 0xd8 0xa1 3 7 17";
 	makePositionComponent(entity, x, y);
 	makeRenderableComponent(line, entity);
 	Stairs *stairs = new Stairs();

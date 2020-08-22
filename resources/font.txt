@@ -1,6 +1,6 @@
+Cheepicus_16x16.png
 Talryth_square_15x15.png
 Cheepicus_15x15.png
-Cheepicus_16x16.png
 Cheepicus_8x8x2.png
 Kren_13x13.png
 Runeset_16x16.png

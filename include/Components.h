@@ -30,7 +30,10 @@ struct Renderable
 {
   char chr;
   SDL_Color colour;
-  Renderable(char _chr, SDL_Color _colour);
+	int spriteX;
+	int spriteY;
+	int sheet;
+  Renderable(char _chr, SDL_Color _colour, int _spriteX, int _spriteY, int _sheet);
 	Renderable();
   ~Renderable();
 	void serialise(std::vector<uint8_t> &byteVector);

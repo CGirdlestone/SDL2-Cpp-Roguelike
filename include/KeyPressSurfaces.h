@@ -32,6 +32,7 @@ enum KeyPressSurfaces
 		USE,
 		EXITGAME,
 		SHOOT,
+		ASCII,
 };
 
 extern KeyPressSurfaces Key;

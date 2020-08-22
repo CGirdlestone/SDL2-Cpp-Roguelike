@@ -1,33 +1,33 @@
 NAME: Sword
-RENDERABLE: | 0xb4 0xc3 0xa8
+RENDERABLE: | 0xb4 0xc3 0xa8 0 0 10
 ITEM: A simple but sharp sword.; 1
 WEARABLE: RIGHTHAND
 WEAPON: SLASHING 8 0
 POSITION:
 
 NAME: Dagger
-RENDERABLE: | 0xb4 0xc3 0xa8
+RENDERABLE: | 0xb4 0xc3 0xa8 0 0 9
 ITEM: A plain dagger.; 1
 WEARABLE: RIGHTHAND
 WEAPON: PIERCING 4 0
 POSITION:
 
 NAME: Spear
-RENDERABLE: / 0xa5 0x6e 0x66
+RENDERABLE: / 0xa5 0x6e 0x66 0 0 11
 ITEM: A spear.; 1
 WEARABLE: RIGHTHAND
 WEAPON: PIERCING 6 1
 POSITION:
 
-NAME: Mace
-RENDERABLE: | 0xbe 0xa8 0xbf
-ITEM: A crude mace.; 1
+NAME: Axe
+RENDERABLE: | 0xbe 0xa8 0xbf 0 1 10
+ITEM: A crude Axe.; 1
 WEARABLE: RIGHTHAND
-WEAPON: BLUDGEONING 6 0
+WEAPON: SLASHING 6 0
 POSITION:
 
 NAME: Hunting Bow
-RENDERABLE: } 0xcb 0x96 0x70
+RENDERABLE: } 0xcb 0x96 0x70 0 1 15
 ITEM: A simple hunting bow.; 1
 WEARABLE: LEFTHAND
 WEAPON: PIERCING 6 1
@@ -36,35 +36,35 @@ USEABLE: DIRECTDAMAGE -1
 DIRECTDAMAGE: 8 6 PIERCING 0
 
 NAME: Shield
-RENDERABLE: ) 0xcd 0x96 0x70
+RENDERABLE: ) 0xcd 0x96 0x70 0 0 12
 ITEM: A round shield.; 1
 WEARABLE: LEFTHAND
 POSITION:
 ARMOUR: NODAMAGETYPE NODAMAGETYPE 2
 
 NAME: Leather Armour
-RENDERABLE: ( 0x66 0x39 0x31
+RENDERABLE: ( 0x66 0x39 0x31 0 6 8
 ITEM: Boiled leather inlaid with metal strips.; 2
 WEARABLE: BODY
 ARMOUR: SLASHING NODAMAGETYPE 2
 POSITION:
 
 NAME: Fur Armour
-RENDERABLE: ( 0xcb 0xdb 0xfc
+RENDERABLE: ( 0xcb 0xdb 0xfc 3 7 8
 ITEM: This was probably a wolf at one point...; 1
 WEARABLE: BODY
 ARMOUR: ICE NODAMAGETYPE 2
 POSITION:
 
-NAME: Chainmail
-RENDERABLE: ( 0x9b 0xad 0xb7
+NAME: Chainmail 
+RENDERABLE: ( 0x9b 0xad 0xb7 0 8 8
 ITEM: A riveted mail hauberk.; 3
 WEARABLE: BODY
 ARMOUR: SLASHING FIRE 4
 POSITION:
 
 NAME: Potion Of Healing
-RENDERABLE: ! 0xd9 0x57 0x63
+RENDERABLE: ! 0xd9 0x57 0x63 0 0 14
 ITEM: It doesn't taste great, but you always feel better after drinking it!; 1
 POSITION:
 USEABLE: HEALING 1
@@ -72,7 +72,7 @@ HEALING: 10
 CONSUMABLE:
 
 NAME: Potion Of Greater Healing
-RENDERABLE: ! 0xd9 0x57 0x63
+RENDERABLE: ! 0xd9 0x57 0x63 1 4 14
 ITEM: It doesn't taste great, but you always feel better after drinking it!; 3
 POSITION:
 USEABLE: HEALING 1
@@ -80,14 +80,14 @@ HEALING: 20
 CONSUMABLE:
 
 NAME: Scroll Of Fireball
-RENDERABLE: ? 0xd9 0x57 0x63
+RENDERABLE: ? 0xd9 0x57 0x63 0 0 13
 ITEM: Burn, baby burn!; 2
 POSITION:
 USEABLE: AREADAMAGE 1
 AREADAMAGE: 6 2 10 FIRE 10
 
 NAME: Scroll Of Lightning
-RENDERABLE: ? 0xcb 0xdb 0xfc
+RENDERABLE: ? 0xcb 0xdb 0xfc 0 0 13
 ITEM: Electric!; 1
 POSITION:
 USEABLE: DIRECTDAMAGE 1

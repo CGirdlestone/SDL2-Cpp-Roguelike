@@ -36,6 +36,11 @@ public:
 	void drawPauseMenu(int i, Camera* camera, DungeonGenerator* dungeon, std::map<int, GameObject*> *actors, MessageLog* messageLog);
 	void drawGameOver(int i, std::vector<std::string> &deathMessages, int totalLines);
 	void drawParticles(Camera* camera, DungeonGenerator* dungeon, std::vector<Particle> &particles);
+
+	void drawObject(GameObject* entity, int x, int y);
+	void drawTile(char* c, int x, int y, bool inView);
+
+	void toggleAsciiMode();
 	
 private:
   Console* m_console;

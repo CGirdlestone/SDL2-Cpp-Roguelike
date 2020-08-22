@@ -386,6 +386,9 @@ enum KeyPressSurfaces GameScene::getEvent(SDL_Event *e)
 							
 							case SDLK_s:
 							return SHOOT;
+
+							case SDLK_F11:
+							return ASCII;
           }
       }
   }
@@ -442,6 +445,8 @@ void GameScene::handleInput(KeyPressSurfaces keyPress)
 		if(checkDescend()){
 			nextLevel();
 		}
+	} else if (keyPress == ASCII){ 
+		m_renderer->toggleAsciiMode();
 	} else if (keyPress == EXITGAME){
 		m_eventManager->pushEvent(QuitEvent());
 	} else if (keyPress == SHOOT){

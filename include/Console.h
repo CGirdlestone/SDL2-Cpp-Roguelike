@@ -19,12 +19,14 @@ class Console
 				int getTileSize() { return m_tileSize; } 
         int getXBuffer(){return m_xBuffer;}
         int getYBuffer(){return m_yBuffer;}
+				void toggleAsciiMode(){ displayAscii = !displayAscii; }
+				bool getDisplayAscii(){ return displayAscii; }
 
         bool init(const char* path);
         bool createWindow();
         bool createRenderer();
         bool initImage();
-        bool loadMedia(const char* path);
+        bool loadMedia(const char* path, bool setColourKey);
         void createTiles();
         void render(char* c, int x, int y, SDL_Color colour);
         void render(int i, int x, int y, SDL_Color colour);
@@ -36,13 +38,14 @@ class Console
 				void fillBackgroundTile(int x, int y, SDL_Color colour);
 				void fillBackgroundTile(int x, int y, SDL_Color colour, int alpha, int tileSize, int originX, int originY);
 
+				void renderSprite(int x, int y, int spriteX, int spriteY, int spriteSheet);
+
     protected:
 
     private:
         SDL_Window *m_root;
         SDL_Surface *m_rootSurface;
         SDL_Renderer *m_renderer;
-        SDL_Texture *m_texture;
         int m_width;
         int m_height;
         const char *m_title;
@@ -51,6 +54,8 @@ class Console
         int m_xBuffer;
         int m_yBuffer;
         std::vector<Tile> m_glyphs;
+				bool displayAscii;
+				std::vector<SDL_Texture*> m_spriteSheets;
 };
 
 #endif // CONSOLE_H

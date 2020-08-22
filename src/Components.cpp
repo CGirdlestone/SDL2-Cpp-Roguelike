@@ -70,15 +70,18 @@ int Position::deserialise(char* buffer, int i)
 }
 
 
-Renderable::Renderable(char _chr, SDL_Color _colour)
+Renderable::Renderable(char _chr, SDL_Color _colour, int _spriteX, int _spriteY, int _sheet)
 {
-    chr = _chr;
-    colour = _colour;
+  chr = _chr;
+  colour = _colour;
+	spriteX = _spriteX;
+	spriteY = _spriteY;
+	sheet = _sheet;
 }
 
 Renderable::Renderable()
 {
-	chr = ' ';
+
 }
 
 Renderable::~Renderable()
@@ -92,6 +95,9 @@ void Renderable::serialise(std::vector<uint8_t> &byteVector)
 	serialiseInt(byteVector, colour.r);
 	serialiseInt(byteVector, colour.g);
 	serialiseInt(byteVector, colour.b);
+	serialiseInt(byteVector, spriteX);
+	serialiseInt(byteVector, spriteY);
+	serialiseInt(byteVector, sheet);
 }
 
 int Renderable::deserialise(char* buffer, int i)
@@ -101,6 +107,9 @@ int Renderable::deserialise(char* buffer, int i)
 	int _red = 0;
 	int _green = 0;
 	int _blue = 0;
+	int _spriteX = 0;
+	int _spriteY = 0;
+	int _sheet = 0;
 
 	for (int j = numBytes - 1; j >= 0; --j){
 		_chr = (_chr << 8) + buffer[i + j];
@@ -124,6 +133,24 @@ int Renderable::deserialise(char* buffer, int i)
 	i += numBytes * 8;
 
 	colour = {_red, _green, _blue};
+
+	for (int j = numBytes - 1; j >= 0; --j){
+		_spriteX = (_spriteX << 8) + buffer[i + j];
+	}
+	i += numBytes * 8;
+	spriteX = _spriteX;
+
+	for (int j = numBytes - 1; j >= 0; --j){
+		_spriteY = (_spriteY << 8) + buffer[i + j];
+	}
+	i += numBytes * 8;
+	spriteY = _spriteY;
+
+	for (int j = numBytes - 1; j >= 0; --j){
+		_sheet = (_sheet << 8) + buffer[i + j];
+	}
+	i += numBytes * 8;
+	sheet = _sheet;
 
 	return i;
 }

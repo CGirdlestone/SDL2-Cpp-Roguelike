@@ -1,1 +1,1 @@
-120 80 70 35 15 Hrafnheim
+120 80 60 30 16 Hrafnheim
