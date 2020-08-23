@@ -661,7 +661,7 @@ void EntityFactory::makeEntity(int level, EntityType type, GameObject* entity, i
 
 void EntityFactory::makeStairs(GameObject* entity, int x, int y)
 {
-	std::string line = "< 0xef 0xd8 0xa1 3 7 17";
+	std::string line = "< 0xef 0xd8 0xa1 7 3 17";
 	makePositionComponent(entity, x, y);
 	makeRenderableComponent(line, entity);
 	Stairs *stairs = new Stairs();
