@@ -574,12 +574,21 @@ void Renderer::drawTargetingScene(Camera* camera, DungeonGenerator* dungeon, std
 	
 	  offsetI = camera->calculateOffset(x, y);
 
+		std::cout << "here" << std::endl;
 		if (checkInRange(x, y, actors->at(0)->position->x, actors->at(0)->position->y, radius)){
-			SDL_Color colour = {0x6d, 0xaa, 0x2c};
- 			m_console->fillBackgroundTile(offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), colour);
+			if (m_console->getDisplayAscii()){
+				SDL_Color colour = {0x6d, 0xaa, 0x2c};
+ 				m_console->fillBackgroundTile(offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), colour);
+			} else {
+				m_console->renderSprite(offsetI % camera->getWidth() + camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), 15, 1, 16);
+			}
   	} else {
-			SDL_Color colour = {0xd0, 0x46, 0x48};
- 			m_console->fillBackgroundTile(offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), colour);
+			if (m_console->getDisplayAscii()){
+				SDL_Color colour = {0xd0, 0x46, 0x48};
+ 				m_console->fillBackgroundTile(offsetI % camera->getWidth()+camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), colour);
+			} else {
+				m_console->renderSprite(offsetI % camera->getWidth() + camera->getXBuffer(), offsetI / camera->getWidth()+camera->getYBuffer(), 16, 1, 16);
+			}
 		}
 	}
 

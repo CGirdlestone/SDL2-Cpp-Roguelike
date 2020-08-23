@@ -64,24 +64,25 @@ bool Console::init(const char* path)
     loadMedia(path, true);
     createTiles();
 
-		loadMedia("./resources/sprites/Player0.png", true);
-		loadMedia("./resources/sprites/Avian0.png", true);
-		loadMedia("./resources/sprites/Rodent0.png", true);
-		loadMedia("./resources/sprites/Humanoid0.png", true);
-		loadMedia("./resources/sprites/Demon0.png", true);
-		loadMedia("./resources/sprites/Elemental0.png", true);
-		loadMedia("./resources/sprites/Undead0.png", true);
-		loadMedia("./resources/sprites/Armor.png", true);
-		loadMedia("./resources/sprites/ShortWep.png", true);
-		loadMedia("./resources/sprites/MedWep.png", true);
-		loadMedia("./resources/sprites/LongWep.png", true);
-		loadMedia("./resources/sprites/Shield.png", true);
-		loadMedia("./resources/sprites/Scroll.png", true);
-		loadMedia("./resources/sprites/Potion.png", true);
-		loadMedia("./resources/sprites/Ammo.png", true);
-		loadMedia("./resources/sprites/Floor.png", false);
-		loadMedia("./resources/sprites/Tile.png", false);
-		loadMedia("./resources/sprites/Ground0.png", false);
+		loadMedia("./resources/sprites/Player0.png", true); // 1
+		loadMedia("./resources/sprites/Avian0.png", true); // 2
+		loadMedia("./resources/sprites/Rodent0.png", true); // 3
+		loadMedia("./resources/sprites/Humanoid0.png", true); // 4
+		loadMedia("./resources/sprites/Demon0.png", true); // 5
+		loadMedia("./resources/sprites/Elemental0.png", true); // 6
+		loadMedia("./resources/sprites/Undead0.png", true); // 7
+		loadMedia("./resources/sprites/Armor.png", true); // 8
+		loadMedia("./resources/sprites/ShortWep.png", true); // 9
+		loadMedia("./resources/sprites/MedWep.png", true); // 10
+		loadMedia("./resources/sprites/LongWep.png", true); // 11
+		loadMedia("./resources/sprites/Shield.png", true); // 12
+		loadMedia("./resources/sprites/Scroll.png", true); // 13
+		loadMedia("./resources/sprites/Potion.png", true); // 14
+		loadMedia("./resources/sprites/Ammo.png", true); // 15
+		loadMedia("./resources/sprites/Floor.png", false); // 16
+		loadMedia("./resources/sprites/Tile.png", false); // 17
+		loadMedia("./resources/sprites/Ground0.png", false); // 18
+		loadMedia("./resources/sprites/Fence.png", false); // 19
 
     m_fullscreen = 0;
 

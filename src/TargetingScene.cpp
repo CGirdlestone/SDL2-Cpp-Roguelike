@@ -84,26 +84,35 @@ void TargetingScene::handleInput(KeyPressSurfaces keyPress)
   
 	if (keyPress == ESCAPE){
     m_eventManager->pushEvent(PopScene(1));
+		bresenhamLine.clear();
   }else if (keyPress == NORTH){
 		m_y -= 1;
+		onTick();
 	} else if (keyPress == SOUTH){
 		m_y += 1;
+		onTick();
 	} else if (keyPress == WEST){
 		m_x -= 1;
+		onTick();
 	} else if (keyPress == EAST){
 		m_x += 1;
+		onTick();
 	} else if (keyPress == SOUTHEAST){
 		m_y += 1;
 		m_x += 1;
+		onTick();
 	} else if (keyPress == SOUTHWEST){
 		m_y += 1;
 		m_x -= 1;
+		onTick();
 	} else if (keyPress == NORTHWEST){
 		m_y -= 1;
 		m_x -= 1;
+		onTick();
 	} else if (keyPress == NORTHEAST){
 		m_y -= 1;
 		m_x +=1 ;
+		onTick();
 	} else if (keyPress == USE){
 		targetUID = getTargetUID();
 		if (targetUID != -1){
