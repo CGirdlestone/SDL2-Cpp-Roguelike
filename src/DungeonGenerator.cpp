@@ -369,6 +369,7 @@ void DungeonGenerator::castOctant(int x, int y, int radius, float bottomSlope, f
 
           topSlope = getGradient(static_cast<float>(x+l+0.5), static_cast<float>(y+k-0.5), static_cast<float>(x), static_cast<float>(y));
         }
+
         if (a*a + b*b <= radius*radius){
           m_fovMap[(y+b)*m_width+x+a] = 1;
           m_exploredMap[(y+b)*m_width+x+a] = 1;

@@ -15,27 +15,13 @@ public:
   EventManager();
   ~EventManager();
   void registerSystem(EventTypes eventType, System* s);
-  void pushEvent(MoveEvent event);
-  void pushEvent(AttackEvent event);
-  void pushEvent(OnHitEvent event);
-  void pushEvent(OnMissEvent event);
-  void pushEvent(DamageEvent event);
-  void pushEvent(DeadEvent event);
-  void pushEvent(TakeEvent event);
-  void pushEvent(OnPickUpEvent event);
-  void pushEvent(PushScene event);
-  void pushEvent(PopScene event);
-  void pushEvent(QuitEvent event);
-	void pushEvent(DropEvent event);
-	void pushEvent(EquipEvent event);
-	void pushEvent(UnequipEvent event);
-	void pushEvent(UseItemEvent event);
-	void pushEvent(PassUserInfoEvent event);
-	void pushEvent(MessageEvent event);
-	void pushEvent(PlayerTurnOverEvent event);
-	void pushEvent(LoadEvent event);
-	void pushEvent(RestartEvent event);
-	void pushEvent(SetStatusEvent event);
+
+	template<typename T>
+	void pushEvent(const T& event){
+		for (unsigned int i = 0; i < m_subscribers.at(event.m_type).size(); ++i){
+			m_subscribers.at(event.m_type).at(i)->notify(event);
+		}
+	}
 
 private:
   std::map<EventTypes, std::vector<System*>> m_subscribers;
