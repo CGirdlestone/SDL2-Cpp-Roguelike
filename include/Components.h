@@ -14,6 +14,7 @@
 
 void serialiseInt(std::vector<uint8_t> &byteVector, int x);
 void serialiseString(std::vector<uint8_t> &byteVector, std::string stringToSerialise);
+int deserialiseInt(char* buffer, int& i); 
 
 struct Position
 {

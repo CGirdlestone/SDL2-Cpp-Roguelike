@@ -25,6 +25,19 @@ void serialiseString(std::vector<uint8_t> &byteVector, std::string stringToSeria
 	}
 }
 
+int deserialiseInt(char* buffer, int& i)
+{
+	int numBytes = 4;
+	int value = 0;
+
+	for (int j = numBytes - 1; j >= 0; --j){
+		value = (value << 8) + buffer[i + j];
+	}
+	i += numBytes * 8;
+
+	return value;
+}
+
 Position::Position(int i, int j)
 {
   x = i;
@@ -50,21 +63,8 @@ void Position::serialise(std::vector<uint8_t> &byteVector)
 
 int Position::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int _x = 0;
-	int _y = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_x = (_x << 8) + buffer[i + j];
-	}
-	x = _x;
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_y = (_y << 8) + buffer[i + j];
-	}
-	y = _y;
-	i += numBytes * 8;
+	x = deserialiseInt(buffer, i);
+	y = deserialiseInt(buffer, i);
 
 	return i;
 }
@@ -102,55 +102,20 @@ void Renderable::serialise(std::vector<uint8_t> &byteVector)
 
 int Renderable::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int _chr = 0;
-	int _red = 0;
-	int _green = 0;
-	int _blue = 0;
-	int _spriteX = 0;
-	int _spriteY = 0;
-	int _sheet = 0;
+	int red = 0;
+	int green = 0;
+	int blue = 0;
 
-	for (int j = numBytes - 1; j >= 0; --j){
-		_chr = (_chr << 8) + buffer[i + j];
-	}
-	chr = static_cast<char>(_chr);
-	i += numBytes * 8;
+	chr = deserialiseInt(buffer, i);
+	red = deserialiseInt(buffer, i);	
+	green = deserialiseInt(buffer, i);	
+	blue = deserialiseInt(buffer, i);	
 	
-	for (int j = numBytes - 1; j >= 0; --j){
-		_red = (_red << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	
-	for (int j = numBytes - 1; j >= 0; --j){
-		_green = (_green << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
+	colour = {red, green, blue};
 
-	for (int j = numBytes - 1; j >= 0; --j){
-		_blue = (_blue << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	colour = {_red, _green, _blue};
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_spriteX = (_spriteX << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	spriteX = _spriteX;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_spriteY = (_spriteY << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	spriteY = _spriteY;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_sheet = (_sheet << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	sheet = _sheet;
+	spriteX = deserialiseInt(buffer, i);
+	spriteY = deserialiseInt(buffer, i);
+	sheet = deserialiseInt(buffer, i);
 
 	return i;
 }
@@ -189,43 +154,11 @@ void Fighter::serialise(std::vector<uint8_t> &byteVector)
 
 int Fighter::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-
-	int _health = 0;
-	int _maxHealth = 0;
-	int _power = 0;
-	int _defence = 0;
-	int _isAlive = 0;	
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_health = (_health << 8) + buffer[i + j];
-	}
-	health = _health;
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_maxHealth = (_maxHealth << 8) + buffer[i + j];
-	}
-	maxHealth = _maxHealth;
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_power = (_power << 8) + buffer[i + j];
-	}
-	power = _power;
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_defence = (_defence << 8) + buffer[i + j];
-	}
-	defence = _defence;
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_isAlive = (_isAlive << 8) + buffer[i + j];
-	}
-	isAlive = _isAlive == 1 ? true : false;
-	i += numBytes * 8;
+	health = deserialiseInt(buffer, i);
+	maxHealth = deserialiseInt(buffer, i);
+	power = deserialiseInt(buffer, i);
+	defence = deserialiseInt(buffer, i);
+	isAlive = deserialiseInt(buffer, i) == 1 ? true : false;
 
 	return i;
 }
@@ -273,29 +206,10 @@ void Player::serialise(std::vector<uint8_t> &byteVector)
 
 int Player::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
+	level = deserialiseInt(buffer, i);
+	exp = deserialiseInt(buffer, i);
+	next = deserialiseInt(buffer, i);
 
-	int _level = 0;
-	int _exp = 0;
-	int _next = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_level = (_level << 8) + static_cast<unsigned char>(buffer[i + j]);
-	}
-	level = _level;
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_exp = (_exp << 8) + static_cast<unsigned char>(buffer[i + j]);
-	}
-	exp = _exp;
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_next = (_next << 8) + static_cast<unsigned char>(buffer[i + j]);
-	}
-	next = _next;
-	i += numBytes * 8;
 	return i;
 }
 
@@ -324,35 +238,17 @@ void Item::serialise(std::vector<uint8_t> &byteVector)
 
 int Item::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int descLength = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		descLength = (descLength << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
+	int descLength = deserialiseInt(buffer, i);
 
 	char* desc = new char[descLength];
-	int letter;
 	for (int k = 0; k < descLength; ++k){
-		letter = 0;
-		for (int j = numBytes - 1; j >= 0; --j){
-			letter = (letter << 8) + buffer[i + j];
-		}
-		i += numBytes * 8;
-		desc[k] = static_cast<char>(letter);
+		desc[k] = static_cast<char>(deserialiseInt(buffer, i));
 	}
 	description.assign(desc, descLength);
 
 	delete[] desc;
 
-	int _level = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_level = (_level << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	level = _level;
+	level = deserialiseInt(buffer, i);
 
 	return i;
 }
@@ -381,21 +277,8 @@ void AI::serialise(std::vector<uint8_t> &byteVector)
 
 int AI::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int _exp = 0;
-	int _level = 0;
-	
-	for (int j = numBytes - 1; j >= 0; --j){
-		_exp = (_exp << 8) + static_cast<unsigned char>(buffer[i + j]);
-	}
-	i += numBytes * 8;
-	exp = _exp;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_level = (_level << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	level = _level;
+	exp = deserialiseInt(buffer, i);
+	level = deserialiseInt(buffer, i);
 
 	return i;
 }
@@ -429,30 +312,14 @@ void Inventory::serialise(std::vector<uint8_t> &byteVector)
 
 int Inventory::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int _capacity = 0;
-	int _inventorySize = 0;
+	capacity = deserialiseInt(buffer, i);
 
-	for (int j = numBytes - 1; j >= 0; --j){
-		_capacity = (_capacity << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	capacity = _capacity;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_inventorySize = (_inventorySize << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
+	int inventorySize = deserialiseInt(buffer, i);	
 	
-	int uid = 0;
-	for (int k = 0; k < _inventorySize; ++k){
-		uid = 0;
-		for (int j = numBytes - 1; j >= 0; --j){
-			uid = (uid << 8) + buffer[i + j];
-		}
-		i += numBytes * 8;
-		inventoryMirror.push_back(uid);
+	for (int k = 0; k < inventorySize; ++k){
+		inventoryMirror.push_back(deserialiseInt(buffer, i));
 	}
+
 	return i;
 }
 
@@ -483,29 +350,9 @@ void Weapon::serialise(std::vector<uint8_t> &byteVector)
 
 int Weapon::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int _damageType = 0;
-	int _sidedDie = 0;
-	int _twoHanded = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_damageType = (_damageType << 8) + buffer[i + j];
-	}
-	damageType = static_cast<DamageTypes>(_damageType);
-	i += numBytes * 8;
-
-	
-	for (int j = numBytes - 1; j >= 0; --j){
-		_sidedDie = (_sidedDie << 8) + buffer[i + j];
-	}
-	sidedDie = _sidedDie;
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_twoHanded = (_twoHanded << 8) + buffer[i + j];
-	}
-	twoHanded = _twoHanded;
-	i += numBytes * 8;
+	damageType = static_cast<DamageTypes>(deserialiseInt(buffer, i));
+	sidedDie = deserialiseInt(buffer, i);
+	twoHanded = deserialiseInt(buffer, i);
 	
 	return i;
 }
@@ -535,28 +382,9 @@ void Armour::serialise(std::vector<uint8_t> &byteVector)
 
 int Armour::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int _resistance = 0;
-	int _weakness = 0;
-	int _armourBonus = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_resistance = (_resistance << 8) + buffer[i + j];
-	}
-	resistance = static_cast<DamageTypes>(_resistance);
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_weakness = (_weakness << 8) + buffer[i + j];
-	}
-	weakness = static_cast<DamageTypes>(_weakness);
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_armourBonus = (_armourBonus << 8) + buffer[i + j];
-	}
-	armourBonus = _armourBonus;
-	i += numBytes * 8;
+	resistance = static_cast<DamageTypes>(deserialiseInt(buffer, i));
+	weakness = static_cast<DamageTypes>(deserialiseInt(buffer, i));
+	armourBonus = deserialiseInt(buffer, i);
 
 	return i;
 }
@@ -585,14 +413,7 @@ void Wearable::serialise(std::vector<uint8_t> &byteVector)
 
 int Wearable::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int _slot = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_slot = (_slot << 8) + buffer[i + j];
-	}
-	slot = static_cast<EquipSlots>(_slot);
-	i += numBytes * 8;
+	slot = static_cast<EquipSlots>(deserialiseInt(buffer, i));
 
 	return i;
 }
@@ -630,8 +451,6 @@ void Body::serialise(std::vector<uint8_t> &byteVector)
 
 int Body::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	
 	int headKey = 0;
 	int headValue = 0;
 	int leftKey = 0;
@@ -646,65 +465,18 @@ int Body::deserialise(char* buffer, int i)
 	int backValue = 0;
 
 	
-	for (int j = numBytes - 1; j >= 0; --j){
-		headKey = (headKey << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		headValue = (headValue << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		leftKey = (leftKey << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		leftValue = (leftValue << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		rightKey = (rightKey << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		rightValue = (rightValue << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		bodyKey = (bodyKey << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		bodyValue = (bodyValue << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		neckKey = (neckKey << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		neckValue = (neckValue << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		backKey = (backKey << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		backValue = (backValue << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
+	headKey = deserialiseInt(buffer, i);
+	headValue = deserialiseInt(buffer, i);
+	leftKey = deserialiseInt(buffer, i);
+	leftValue = deserialiseInt(buffer, i);
+	rightKey = deserialiseInt(buffer, i);
+	rightValue = deserialiseInt(buffer, i);
+	bodyKey = deserialiseInt(buffer, i);
+	bodyValue = deserialiseInt(buffer, i);
+	neckKey = deserialiseInt(buffer, i);
+	neckValue = deserialiseInt(buffer, i);
+	backKey = deserialiseInt(buffer, i);
+	backValue = deserialiseInt(buffer, i);
 
 	slotsMirror.insert({headKey, headValue});
 	slotsMirror.insert({leftKey, leftValue});
@@ -741,21 +513,8 @@ void Useable::serialise(std::vector<uint8_t> &byteVector)
 
 int Useable::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int _func = 0;
-	int _numUses = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_func = (_func << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	funcToDo = static_cast<UseableFunctionEnums>(_func);
-	
-	for (int j = numBytes - 1; j >= 0; --j){
-		_numUses = (_numUses << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	numUses = _numUses;
+	funcToDo = static_cast<UseableFunctionEnums>(deserialiseInt(buffer, i));
+	numUses = deserialiseInt(buffer, i);
 
 	return i;
 }
@@ -784,14 +543,7 @@ void Healing::serialise(std::vector<uint8_t> &byteVector)
 
 int Healing::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int _roll = 0;
-	
-	for (int j = numBytes - 1; j >= 0; --j){
-		_roll = (_roll << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	roll = _roll;
+	roll = deserialiseInt(buffer, i);
 
 	return i;
 }
@@ -824,36 +576,10 @@ void Damage::serialise(std::vector<uint8_t> &byteVector)
 
 int Damage::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	
-	int _radius = 0;
-	int _roll = 0;
-	int _type = 0;
-	int _chance = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_radius = (_radius << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	radius = _radius;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_roll = (_roll << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	roll = _roll;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_roll = (_roll << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	type = static_cast<DamageTypes>(_type);
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_chance = (_chance << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	chance = _chance;
+	radius = deserialiseInt(buffer, i);
+	roll = deserialiseInt(buffer, i);
+	type = static_cast<DamageTypes>(deserialiseInt(buffer, i));
+	chance = deserialiseInt(buffer, i);
 
 	return i;
 }
@@ -886,43 +612,11 @@ void AreaDamage::serialise(std::vector<uint8_t> &byteVector)
 
 int AreaDamage::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	
-	int _radius = 0;
-	int _roll = 0;
-	int _splashRadius = 0;
-	int _type = 0;
-	int _chance = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_radius = (_radius << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	radius = _radius;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_roll = (_roll << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	roll = _roll;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_splashRadius = (_splashRadius << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	splashRadius = _splashRadius;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_type = (_type << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	type = static_cast<DamageTypes>(_type);
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_chance = (_chance << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	chance = _chance;
+	radius = deserialiseInt(buffer, i);
+	roll = deserialiseInt(buffer, i);
+	splashRadius = deserialiseInt(buffer, i);
+	type = static_cast<DamageTypes>(deserialiseInt(buffer, i));
+	chance = deserialiseInt(buffer, i);
 
 	return i;
 }
@@ -954,29 +648,9 @@ void Status::serialise(std::vector<uint8_t> &byteVector)
 
 int Status::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	
-	int _radius = 0;
-	int _status = 0;
-	int _splashRadius = 0;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_radius = (_radius << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	radius = _radius;
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_status = (_status << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	statusType = static_cast<StatusTypes>(_status);
-
-	for (int j = numBytes - 1; j >= 0; --j){
-		_splashRadius = (_splashRadius << 8) + buffer[i + j];
-	}
-	i += numBytes * 8;
-	splashRadius = _splashRadius;
+	radius = deserialiseInt(buffer, i);
+	statusType = static_cast<StatusTypes>(deserialiseInt(buffer, i));
+	splashRadius = deserialiseInt(buffer, i);
 
 	return i;
 }
@@ -999,7 +673,6 @@ void Consumable::serialise(std::vector<uint8_t> &byteVector)
 
 int Consumable::deserialise(char* buffer, int i)
 {
-
 	return i;
 }
 
@@ -1020,7 +693,6 @@ void Stairs::serialise(std::vector<uint8_t> &byteVector)
 
 int Stairs::deserialise(char* buffer, int i)
 {
-
 	return i;
 }
 
@@ -1045,24 +717,9 @@ void StatusContainer::serialise(std::vector<uint8_t> &byteVector)
 
 int StatusContainer::deserialise(char* buffer, int i)
 {
-	int numBytes = 4;
-	int _damage;
-	int _duration;	
-
 	for (int k = 0; k <= static_cast<int>(BLEEDING); ++k){	
-		_damage = 0;
-		for (int j = numBytes - 1; j >= 0; --j){
-			_damage = (_damage << 8) + buffer[i + j];
-		}
-		i += numBytes * 8;
-		statuses.at(static_cast<StatusTypes>(k)).first = _damage;
-
-		_duration = 0;
-		for (int j = numBytes - 1; j >= 0; --j){
-			_duration = (_duration << 8) + buffer[i + j];
-		}
-		i += numBytes * 8;
-		statuses.at(static_cast<StatusTypes>(k)).second = _duration;
+		statuses.at(static_cast<StatusTypes>(k)).first = deserialiseInt(buffer, i);
+		statuses.at(static_cast<StatusTypes>(k)).second = deserialiseInt(buffer, i);
 	}
 
 	return i;
